@@ -36,8 +36,6 @@
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 350px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; }
         .modal-content input { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; }
-        .modal-content input:focus { border-color: var(--accent); }
-
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
         /* --- UI ELEMENTS --- */
@@ -54,7 +52,6 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
-        
         .news-cell { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); }
 
         .category-section { display: none; }
@@ -67,7 +64,6 @@
 </head>
 <body>
 
-    <!-- MODAL DE ACCESO PROFESIONAL -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
@@ -82,16 +78,13 @@
         <div class="logo-box" onclick="showCategory('inicio')">
             <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
         </div>
-        
         <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> INICIO</div>
         <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> RANGOS EXCLUSIVOS</div>
         <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> LLAVES/CRATES</div>
         <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> DONACIONES</div>
-        
         <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;">COMUNIDAD</p>
         <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
         <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> PREGUNTAS / FAQ</div>
-
         <div style="margin-top: 30px;">
             <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;">REDES SOCIALES</p>
             <a href="https://discord.gg/TU_LINK" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
@@ -102,30 +95,23 @@
 
     <div class="main-content">
         <div class="top-bar">
-            <!-- ÁREA DE USUARIO LOGUEADO -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
                 <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
             </div>
-            
-            <!-- BOTONES DE ACCESO -->
             <div id="authButtons" style="display: flex; gap: 10px;">
                 <button class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
                 <button class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
-
-            <label class="theme-switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span>
-            </label>
+            <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
         <div id="inicio" class="category-section active">
-            <h1 style="font-size:2.5rem; margin-bottom:30px;">NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
+            <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
             <div class="news-cell">
                 <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
-                <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC. Revisa los nuevos rangos y llaves disponibles.</p>
+                <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
             </div>
         </div>
 
@@ -133,22 +119,9 @@
         <div id="rangos" class="category-section">
             <h1>RANGOS <span style="color:var(--accent)">EXCLUSIVOS</span></h1>
             <div class="grid">
-                <div class="card">
-                    <h2>VIP</h2>
-                    <p style="font-size:0.7rem; color:#666; text-transform:none;">Todavía no hay beneficios definidos.</p>
-                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$5.00 USD</div>
-                    <button class="btn-action" style="width:100%">ADQUIRIR</button>
-                </div>
-                <div class="card" style="border-color:gold;">
-                    <h2 style="color:gold;">VIP+</h2>
-                    <p style="font-size:0.7rem; color:#666; text-transform:none;">Todavía no hay beneficios definidos.</p>
-                    <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$10.00 USD</div>
-                    <button class="btn-action" style="background:gold; width:100%">ADQUIRIR</button>
-                </div>
-                <div class="card" style="border: 2px dashed #333; opacity:0.6;">
-                    <i class="fas fa-plus" style="font-size:2rem; margin-bottom:15px;"></i>
-                    <h3>MÁS RANGOS PRONTO...</h3>
-                </div>
+                <div class="card"><h2>VIP</h2><div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$5.00 USD</div><button class="btn-action" style="width:100%">ADQUIRIR</button></div>
+                <div class="card" style="border-color:gold;"><h2 style="color:gold;">VIP+</h2><div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$10.00 USD</div><button class="btn-action" style="background:gold; width:100%">ADQUIRIR</button></div>
+                <div class="card" style="border: 2px dashed #333; opacity:0.6;"><i class="fas fa-plus" style="font-size:2rem; margin-bottom:15px;"></i><h3>MÁS RANGOS PRONTO...</h3></div>
             </div>
         </div>
 
@@ -157,19 +130,27 @@
             <div class="grid" id="llavesContainer"></div>
         </div>
 
+        <!-- DONACIONES CORREGIDO -->
         <div id="donaciones" class="category-section">
-            <h1>SISTEMA DE <span style="color:var(--accent)">DONACIONES</span></h1>
+            <h1><span style="color:var(--accent)">DONACIONES</span></h1>
             <div class="grid">
                 <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900;">$1.00 USD</div><button class="btn-action" style="width:100%">DONAR</button></div>
                 <div class="card"><h3>MEDIANA</h3><div style="color:var(--accent); font-weight:900;">$5.00 USD</div><button class="btn-action" style="width:100%">DONAR</button></div>
                 <div class="card"><h3>GRANDE</h3><div style="color:var(--accent); font-weight:900;">$20.00 USD</div><button class="btn-action" style="width:100%">DONAR</button></div>
-                <div class="card" style="border-style:dashed;"><h3>LIBRE</h3><p style="font-size:0.6rem;">TU ELIGES EL MONTO</p><button class="btn-action" style="width:100%">DONAR</button></div>
+                <div class="card" style="border-style:dashed;"><h3>LIBRE</h3><button class="btn-action" style="width:100%">DONAR</button></div>
             </div>
         </div>
 
+        <!-- STAFF CORREGIDO -->
         <div id="staff" class="category-section">
             <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
-            <div id="staffGrid" class="grid"></div>
+            <div class="grid">
+                <div class="card" style="border-color: gold;">
+                    <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
+                    <h3 style="color:gold;">PERROLOLXD</h3>
+                    <p style="font-size: 0.7rem; letter-spacing: 2px;">OWNER & DEVELOPER</p>
+                </div>
+            </div>
         </div>
 
         <div id="faq" class="category-section">
@@ -196,34 +177,15 @@
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
         }
 
-        // FUNCIONES DE AUTH VISUAL
-        function openAuth(type) {
-            document.getElementById('modalTitle').innerText = type;
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
+        function openAuth(type) { document.getElementById('modalTitle').innerText = type; document.getElementById('authModal').style.display = 'flex'; }
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
-
-        function handleAuth() {
-            const user = document.getElementById('authVoxel').value;
-            if(user) {
-                localStorage.setItem('u', user);
-                location.reload();
-            }
-        }
-
+        function handleAuth() { const user = document.getElementById('authVoxel').value; if(user) { localStorage.setItem('u', user); location.reload(); } }
         function logout() { localStorage.clear(); location.reload(); }
 
         window.onload = () => {
             const container = document.getElementById('llavesContainer');
             RAREZAS.forEach(r => {
-                container.innerHTML += `
-                    <div class="card" style="border-top: 4px solid ${r.c}">
-                        <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
-                        <h2 style="color:${r.c}">${r.n} x5</h2>
-                        <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
-                        <button class="btn-action" style="background:${r.c}; color:#000; width:100%;">COMPRAR</button>
-                    </div>`;
+                container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><button class="btn-action" style="background:${r.c}; color:#000; width:100%;">COMPRAR</button></div>`;
             });
 
             const u = localStorage.getItem('u');
@@ -232,40 +194,10 @@
                 document.getElementById('userLogged').style.display = 'flex';
                 document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
-                
-                if(u === "PERROLOLXD") {
-                    document.getElementById('staffGrid').innerHTML = `
-                        <div class="card" style="border-color: gold;">
-                            <img src="https://mc-heads.net/avatar/${u}" style="width:60px; margin-bottom:15px;">
-                            <h3 style="color:gold;">${u}</h3>
-                            <p>ADMINISTRADOR</p>
-                        </div>`;
-                }
             }
-            renderFaqs();
         };
 
-        function postFaq() {
-            const t = document.getElementById('faqTxt').value; if(!t) return;
-            let f = JSON.parse(localStorage.getItem('fs') || "[]");
-            f.unshift({id: Date.now(), u: localStorage.getItem('u') || 'Invitado', t: t, r: null});
-            localStorage.setItem('fs', JSON.stringify(f));
-            document.getElementById('faqTxt').value = "";
-            renderFaqs();
-        }
-
-        function renderFaqs() {
-            const list = document.getElementById('faqList');
-            const fs = JSON.parse(localStorage.getItem('fs') || "[]");
-            list.innerHTML = fs.map(x => `
-                <div class="news-cell" style="margin-bottom:15px;">
-                    <strong>${x.u}:</strong> <p style="text-transform:none; margin:10px 0;">${x.t}</p>
-                </div>`).join('');
-        }
-
-        document.getElementById('theme-toggle').onclick = () => {
-            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-        };
+        document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
     </script>
 </body>
 </html>
