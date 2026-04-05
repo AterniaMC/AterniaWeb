@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aternia Network | Tienda Oficial</title>
+    <title>Aternia Network | Tienda</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             /* Variables Modo Claro */
             --bg: #f4f4f4;
             --card-bg: #ffffff;
+            --sidebar-bg: #e0e0e0; /* Un gris claro para el menú */
             --text: #333333;
-            --accent: #00e5e5; /* Cian Aternia */
+            --accent: #00e5e5; /* Cian brillante */
+            --accent-dark: #004d4d; /* Cian muy oscuro para el 'MC' */
             --accent-hover: #00b3b3;
             --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -20,6 +22,7 @@
             /* Variables Modo Oscuro */
             --bg: #121212;
             --card-bg: #1e1e1e;
+            --sidebar-bg: #181818; /* Un gris casi negro para el menú */
             --text: #e0e0e0;
             --shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
@@ -29,27 +32,69 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
+            display: flex; /* Esto alinea el sidebar con el contenido */
+            min-height: 100vh;
             transition: all 0.3s ease;
         }
 
-        header {
-            background-color: var(--card-bg);
-            padding: 1rem 5%;
+        /* --- BARRA LATERAL (SIDEBAR) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            padding: 30px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: fixed; /* Mantiene el menú quieto al hacer scroll */
+            height: 100%;
+        }
+
+        /* Logo Actualizado: ATERNIA (cian) MC (cian oscuro) */
+        .logo-box {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-main { color: var(--accent); }
+        .logo-sub { color: var(--accent-dark); }
+
+        /* Botones del Menú */
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-item i { margin-right: 15px; width: 25px; text-align: center;}
+
+        /* Efecto Hover y Pestaña Activa */
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-content {
+            margin-left: 290px; /* Ancho del sidebar + margen */
+            padding: 50px;
+            width: 100%;
+        }
+
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-bottom: 30px;
         }
 
         .theme-toggle {
@@ -57,146 +102,144 @@
             font-size: 1.2rem;
             color: var(--accent);
             border: 2px solid var(--accent);
-            padding: 5px 10px;
+            padding: 8px 20px;
             border-radius: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
+        /* Contenedor de las Cards */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        /* Estilo de las Cards de Rangos */
         .rank-card {
             background-color: var(--card-bg);
             border-radius: 15px;
             padding: 2rem;
             box-shadow: var(--shadow);
             border-top: 5px solid var(--accent);
-            transition: transform 0.3s ease;
+            text-align: center;
         }
 
-        .rank-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .rank-name {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 1rem 0;
-            color: var(--accent);
-        }
-
-        .benefits {
-            list-style: none;
-            padding: 0;
-            margin: 2rem 0;
-            text-align: left;
-        }
-
-        .benefits li {
-            margin-bottom: 10px;
-        }
-
-        .benefits li i {
-            color: var(--accent);
-            margin-right: 10px;
-        }
-
+        .price { font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: var(--accent); }
+        
         .btn-buy {
             background-color: var(--accent);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
         }
 
-        .btn-buy:hover {
-            background-color: var(--accent-hover);
-        }
+        /* --- LÓGICA DE SECCIONES --- */
+        .category-section { display: none; } /* Oculto por defecto */
+        .category-section.active { display: block; } /* Visible si está activa */
 
-        footer {
-            margin-top: 5rem;
-            padding: 2rem;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">Aternia <span style="color: var(--text);">Network</span></div>
-        <div class="theme-toggle" id="theme-btn">
-            <i class="fas fa-moon"></i>
+    
+<div class="sidebar">
+        <div class="logo-box">
+            <span class="logo-main">Aternia</span><span class="logo-sub">MC</span>
         </div>
-    </header>
-
-    <div class="container">
-        <h1>Tienda de Rangos</h1>
-        <p>Apoya al servidor y obtén beneficios exclusivos</p>
-
-        <div class="grid">
-            <!-- RANGO VIP -->
-            <div class="rank-card">
-                <div class="rank-name">VIP</div>
-                <div class="price">$5.00</div>
-                <ul class="benefits">
-                    <li><i class="fas fa-check"></i> Prefijo [VIP] en el chat</li>
-                    <li><i class="fas fa-check"></i> Acceso a /fly en el Lobby</li>
-                    <li><i class="fas fa-check"></i> Kit Semanal exclusivo</li>
-                </ul>
-                <button class="btn-buy">Comprar Ahora</button>
-            </div>
-
-            <!-- RANGO VIP+ -->
-            <div class="rank-card">
-                <div class="rank-name">VIP+</div>
-                <div class="price">$10.00</div>
-                <ul class="benefits">
-                    <li><i class="fas fa-check"></i> Todo lo del rango VIP</li>
-                    <li><i class="fas fa-check"></i> Prioridad en la cola</li>
-                    <li><i class="fas fa-check"></i> 5 Hogares (/sethome)</li>
-                </ul>
-                <button class="btn-buy">Comprar Ahora</button>
-            </div>
-
-            <!-- ESPACIO PARA NUEVOS RANGOS (VACÍO) -->
-            <div class="rank-card" style="border-top: 5px dashed #ccc;">
-                <div class="rank-name" style="color: #ccc;">PRÓXIMAMENTE</div>
-                <div class="price" style="color: #ccc;">$--.--</div>
-                <ul class="benefits">
-                    <li style="color: #ccc;">Espacio reservado para nuevo rango</li>
-                </ul>
-                <button class="btn-buy" style="background: #ccc; cursor: not-allowed;">Pronto</button>
-            </div>
+        
+        <div class="nav-item active" onclick="showCategory('inicio')">
+            <i class="fas fa-home"></i> Inicio
+        </div>
+        <div class="nav-item" onclick="showCategory('rangos')">
+            <i class="fas fa-crown"></i> Rangos VIP
+        </div>
+        <div class="nav-item" onclick="showCategory('llaves')">
+            <i class="fas fa-key"></i> Llaves Crates
+        </div>
+        <div class="nav-item" onclick="showCategory('cosmeticos')">
+            <i class="fas fa-paint-brush"></i> Cosméticos
         </div>
     </div>
 
-    <footer>
-        &copy; 2026 Aternia Network - No afiliado con Mojang AB.
-    </footer>
+    
+<div class="main-content">
+        
+<div class="top-bar">
+            <h2>Tienda Oficial</h2>
+            <div class="theme-toggle" id="theme-btn"><i class="fas fa-moon"></i></div>
+        </div>
+
+        
+        
+<div id="inicio" class="category-section active">
+            <h1>Bienvenido a la Tienda</h1>
+            <p>Selecciona una categoría en el menú de la izquierda para ver los productos disponibles.</p>
+            <div style="background: var(--card-bg); padding: 2rem; border-radius: 15px; margin-top: 2rem; box-shadow: var(--shadow);">
+                <h3>Anuncio Importante</h3>
+                <p>Todas las compras ayudan a mantener el servidor activo 24/7. ¡Gracias por tu apoyo!</p>
+            </div>
+        </div>
+
+        
+<div id="rangos" class="category-section">
+            <h1>Rangos VIP</h1>
+            <p>Beneficios exclusivos dentro del juego.</p>
+            <div class="grid">
+                <div class="rank-card">
+                    <h2>VIP</h2>
+                    <div class="price">$5.00</div>
+                    <button class="btn-buy">COMPRAR</button>
+                </div>
+                <div class="rank-card">
+                    <h2>VIP+</h2>
+                    <div class="price">$10.00</div>
+                    <button class="btn-buy">COMPRAR</button>
+                </div>
+            </div>
+        </div>
+
+        
+<div id="llaves" class="category-section">
+            <h1>Llaves Crates</h1>
+            <p>Prueba tu suerte con nuestras cajas de botín.</p>
+            <div class="grid">
+                <div class="rank-card">
+                    <h2>5x Key Common</h2>
+                    <div class="price">$2.50</div>
+                    <button class="btn-buy">COMPRAR</button>
+                </div>
+            </div>
+        </div>
+
+        
+<div id="cosmeticos" class="category-section">
+            <h1>Cosméticos</h1>
+            <p>¡Próximamente!</p>
+        </div>
+
+    </div>
 
     <script>
+        // Función para cambiar entre pestañas/secciones
+        function showCategory(categoryId) {
+            // 1. Ocultar todas las secciones de productos
+            const allSections = document.querySelectorAll('.category-section');
+            allSections.forEach(section => section.classList.remove('active'));
+
+            // 2. Desactivar todos los botones del menú lateral
+            const allNavItems = document.querySelectorAll('.nav-item');
+            allNavItems.forEach(item => item.classList.remove('active'));
+
+            // 3. Mostrar la sección seleccionada y activar su botón
+            document.getElementById(categoryId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Lógica para el Modo Oscuro/Claro (se mantiene igual)
         const themeBtn = document.getElementById('theme-btn');
         const body = document.documentElement;
 
