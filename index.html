@@ -7,248 +7,217 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            /* Variables Modo Claro */
             --bg: #f4f4f4;
             --card-bg: #ffffff;
-            --sidebar-bg: #e0e0e0; /* Un gris claro para el menú */
+            --sidebar-bg: #e0e0e0;
             --text: #333333;
             --accent: #00e5e5; /* Cian brillante */
-            --accent-dark: #004d4d; /* Cian muy oscuro para el 'MC' */
-            --accent-hover: #00b3b3;
+            --accent-dark: #004d4d; /* Cian oscuro */
             --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         [data-theme="dark"] {
-            /* Variables Modo Oscuro */
             --bg: #121212;
             --card-bg: #1e1e1e;
-            --sidebar-bg: #181818; /* Un gris casi negro para el menú */
+            --sidebar-bg: #181818;
             --text: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            display: flex; /* Esto alinea el sidebar con el contenido */
+            display: flex;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        /* --- BARRA LATERAL (SIDEBAR) --- */
+        /* SIDEBAR */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
             padding: 30px 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            position: fixed; /* Mantiene el menú quieto al hacer scroll */
+            position: fixed;
             height: 100%;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
-        /* Logo Actualizado: ATERNIA (cian) MC (cian oscuro) */
-        .logo-box {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        .logo-box { font-size: 2rem; font-weight: bold; text-align: center; margin-bottom: 40px; }
         .logo-main { color: var(--accent); }
         .logo-sub { color: var(--accent-dark); }
 
-        /* Botones del Menú */
         .nav-item {
-            padding: 15px 20px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 8px;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
-            font-size: 1.1rem;
-            font-weight: 500;
+            transition: 0.3s;
         }
 
-        .nav-item i { margin-right: 15px; width: 25px; text-align: center;}
+        .nav-item:hover, .nav-item.active { background: var(--accent); color: white; }
+        .nav-item i { margin-right: 15px; width: 20px; }
 
-        /* Efecto Hover y Pestaña Activa */
-        .nav-item:hover, .nav-item.active {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-content {
-            margin-left: 290px; /* Ancho del sidebar + margen */
-            padding: 50px;
-            width: 100%;
-        }
+        /* MAIN CONTENT */
+        .main-content { margin-left: 290px; padding: 40px; width: 100%; }
 
         .top-bar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
+            gap: 15px;
             margin-bottom: 30px;
         }
+
+        /* BOTONES LOGIN / REGISTRO */
+        .auth-btns button {
+            background: none;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .auth-btns button:hover { background: var(--accent); color: white; }
 
         .theme-toggle {
             cursor: pointer;
             font-size: 1.2rem;
             color: var(--accent);
             border: 2px solid var(--accent);
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 50%;
         }
 
-        /* Contenedor de las Cards */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+        /* ANIMACIÓN RANGOS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
 
         .rank-card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
             box-shadow: var(--shadow);
             border-top: 5px solid var(--accent);
-            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
         }
 
-        .price { font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: var(--accent); }
+        /* Efecto al pasar el mouse */
+        .rank-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,229,229,0.3);
+        }
+
+        .price { font-size: 2.2rem; font-weight: bold; color: var(--accent); margin: 15px 0; }
         
         .btn-buy {
-            background-color: var(--accent);
+            background: var(--accent);
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 8px;
             width: 100%;
+            border-radius: 10px;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
         }
 
-        /* --- LÓGICA DE SECCIONES --- */
-        .category-section { display: none; } /* Oculto por defecto */
-        .category-section.active { display: block; } /* Visible si está activa */
+        .category-section { display: none; }
+        .category-section.active { display: block; }
 
     </style>
 </head>
 <body>
 
-    
-<div class="sidebar">
+    <div class="sidebar">
         <div class="logo-box">
             <span class="logo-main">Aternia</span><span class="logo-sub">MC</span>
         </div>
-        
-        <div class="nav-item active" onclick="showCategory('inicio')">
-            <i class="fas fa-home"></i> Inicio
-        </div>
-        <div class="nav-item" onclick="showCategory('rangos')">
-            <i class="fas fa-crown"></i> Rangos VIP
-        </div>
-        <div class="nav-item" onclick="showCategory('llaves')">
-            <i class="fas fa-key"></i> Llaves Crates
-        </div>
-        <div class="nav-item" onclick="showCategory('cosmeticos')">
-            <i class="fas fa-paint-brush"></i> Cosméticos
-        </div>
+        <div class="nav-item active" onclick="showCategory('inicio')"><i class="fas fa-home"></i> Inicio</div>
+        <div class="nav-item" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> Rangos VIP</div>
+        <div class="nav-item" onclick="showCategory('llaves')"><i class="fas fa-key"></i> Llaves Crates</div>
     </div>
 
-    
-<div class="main-content">
-        
-<div class="top-bar">
-            <h2>Tienda Oficial</h2>
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="auth-btns">
+                <button onclick="alert('Próximamente: Login')">Iniciar Sesión</button>
+                <button onclick="alert('Próximamente: Registro')">Registrarse</button>
+            </div>
             <div class="theme-toggle" id="theme-btn"><i class="fas fa-moon"></i></div>
         </div>
 
-        
-        
-<div id="inicio" class="category-section active">
-            <h1>Bienvenido a la Tienda</h1>
-            <p>Selecciona una categoría en el menú de la izquierda para ver los productos disponibles.</p>
-            <div style="background: var(--card-bg); padding: 2rem; border-radius: 15px; margin-top: 2rem; box-shadow: var(--shadow);">
-                <h3>Anuncio Importante</h3>
-                <p>Todas las compras ayudan a mantener el servidor activo 24/7. ¡Gracias por tu apoyo!</p>
-            </div>
+        <div id="inicio" class="category-section active">
+            <h1>Bienvenido, <span id="user-country">Jugador</span></h1>
+            <p>Tu moneda actual se ha ajustado automáticamente.</p>
         </div>
 
-        
-<div id="rangos" class="category-section">
+        <div id="rangos" class="category-section">
             <h1>Rangos VIP</h1>
-            <p>Beneficios exclusivos dentro del juego.</p>
             <div class="grid">
                 <div class="rank-card">
                     <h2>VIP</h2>
-                    <div class="price">$5.00</div>
+                    <div class="price" data-usd="5.00">$5.00 USD</div>
                     <button class="btn-buy">COMPRAR</button>
                 </div>
                 <div class="rank-card">
                     <h2>VIP+</h2>
-                    <div class="price">$10.00</div>
+                    <div class="price" data-usd="10.00">$10.00 USD</div>
                     <button class="btn-buy">COMPRAR</button>
                 </div>
             </div>
         </div>
-
-        
-<div id="llaves" class="category-section">
-            <h1>Llaves Crates</h1>
-            <p>Prueba tu suerte con nuestras cajas de botín.</p>
-            <div class="grid">
-                <div class="rank-card">
-                    <h2>5x Key Common</h2>
-                    <div class="price">$2.50</div>
-                    <button class="btn-buy">COMPRAR</button>
-                </div>
-            </div>
-        </div>
-
-        
-<div id="cosmeticos" class="category-section">
-            <h1>Cosméticos</h1>
-            <p>¡Próximamente!</p>
-        </div>
-
     </div>
 
     <script>
-        // Función para cambiar entre pestañas/secciones
-        function showCategory(categoryId) {
-            // 1. Ocultar todas las secciones de productos
-            const allSections = document.querySelectorAll('.category-section');
-            allSections.forEach(section => section.classList.remove('active'));
+        // 1. LÓGICA DE MONEDA POR PAÍS (IP-API)
+        async function updateCurrency() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                const currencyMap = {
+                    'PE': { symbol: 'S/', rate: 3.70 }, // Perú
+                    'MX': { symbol: '$', rate: 17.00 }, // México
+                    'AR': { symbol: '$', rate: 840.00 }, // Argentina
+                    'ES': { symbol: '€', rate: 0.92 },  // España
+                    'CO': { symbol: '$', rate: 3900.00 } // Colombia
+                };
 
-            // 2. Desactivar todos los botones del menú lateral
-            const allNavItems = document.querySelectorAll('.nav-item');
-            allNavItems.forEach(item => item.classList.remove('active'));
+                const userCurrency = currencyMap[data.country_code] || { symbol: '$', rate: 1 };
+                document.getElementById('user-country').innerText = `Jugador de ${data.country_name}`;
 
-            // 3. Mostrar la sección seleccionada y activar su botón
-            document.getElementById(categoryId).classList.add('active');
+                document.querySelectorAll('.price').forEach(el => {
+                    const usd = parseFloat(el.getAttribute('data-usd'));
+                    const localPrice = (usd * userCurrency.rate).toFixed(2);
+                    el.innerText = `${userCurrency.symbol}${localPrice} ${data.currency}`;
+                });
+            } catch (error) {
+                console.log("Error al detectar país, usando USD por defecto.");
+            }
+        }
+        updateCurrency();
+
+        // 2. NAVEGACIÓN Y TEMA
+        function showCategory(id) {
+            document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // Lógica para el Modo Oscuro/Claro (se mantiene igual)
         const themeBtn = document.getElementById('theme-btn');
-        const body = document.documentElement;
-
         themeBtn.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
                 themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
             } else {
-                body.setAttribute('data-theme', 'dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
                 themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
             }
         });
