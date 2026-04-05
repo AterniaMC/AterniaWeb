@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aternia Network | Tienda Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Variables Modo Claro */
+            --bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --accent: #00e5e5; /* Cian Aternia */
+            --accent-hover: #00b3b3;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            /* Variables Modo Oscuro */
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Estilo de las Cards de Rangos */
+        .rank-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-top: 5px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .rank-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .rank-name {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--accent);
+        }
+
+        .benefits {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .benefits li {
+            margin-bottom: 10px;
+        }
+
+        .benefits li i {
+            color: var(--accent);
+            margin-right: 10px;
+        }
+
+        .btn-buy {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-buy:hover {
+            background-color: var(--accent-hover);
+        }
+
+        footer {
+            margin-top: 5rem;
+            padding: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Aternia <span style="color: var(--text);">Network</span></div>
+        <div class="theme-toggle" id="theme-btn">
+            <i class="fas fa-moon"></i>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Tienda de Rangos</h1>
+        <p>Apoya al servidor y obtén beneficios exclusivos</p>
+
+        <div class="grid">
+            <!-- RANGO VIP -->
+            <div class="rank-card">
+                <div class="rank-name">VIP</div>
+                <div class="price">$5.00</div>
+                <ul class="benefits">
+                    <li><i class="fas fa-check"></i> Prefijo [VIP] en el chat</li>
+                    <li><i class="fas fa-check"></i> Acceso a /fly en el Lobby</li>
+                    <li><i class="fas fa-check"></i> Kit Semanal exclusivo</li>
+                </ul>
+                <button class="btn-buy">Comprar Ahora</button>
+            </div>
+
+            <!-- RANGO VIP+ -->
+            <div class="rank-card">
+                <div class="rank-name">VIP+</div>
+                <div class="price">$10.00</div>
+                <ul class="benefits">
+                    <li><i class="fas fa-check"></i> Todo lo del rango VIP</li>
+                    <li><i class="fas fa-check"></i> Prioridad en la cola</li>
+                    <li><i class="fas fa-check"></i> 5 Hogares (/sethome)</li>
+                </ul>
+                <button class="btn-buy">Comprar Ahora</button>
+            </div>
+
+            <!-- ESPACIO PARA NUEVOS RANGOS (VACÍO) -->
+            <div class="rank-card" style="border-top: 5px dashed #ccc;">
+                <div class="rank-name" style="color: #ccc;">PRÓXIMAMENTE</div>
+                <div class="price" style="color: #ccc;">$--.--</div>
+                <ul class="benefits">
+                    <li style="color: #ccc;">Espacio reservado para nuevo rango</li>
+                </ul>
+                <button class="btn-buy" style="background: #ccc; cursor: not-allowed;">Pronto</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Aternia Network - No afiliado con Mojang AB.
+    </footer>
+
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const body = document.documentElement;
+
+        themeBtn.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+    </script>
+</body>
+</html>
