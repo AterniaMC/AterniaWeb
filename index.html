@@ -174,6 +174,8 @@
         <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> RANGOS EXCLUSIVOS</div>
         <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> LLAVES/CRATES</div>
         <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> DONACIONES</div>
+        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> SOBRE EL SERVIDOR</div>
+        
         <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;">COMUNIDAD</p>
         <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
         <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> PREGUNTAS / FAQ</div>
@@ -261,6 +263,37 @@
             </div>
         </div>
 
+        <!-- NUEVA SECCIÓN: SOBRE EL SERVIDOR -->
+        <div id="sobre" class="category-section">
+            <h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
+            <div class="grid">
+                <div class="card" style="text-align: left; grid-column: span 2;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                        Aternia MC nace con el objetivo de crear una comunidad sólida y divertida. Somos un servidor enfocado en la experiencia del jugador, ofreciendo un entorno equilibrado y competitivo.
+                    </p>
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
+                    <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2;">
+                        <li><b style="color:var(--lore-color)">1.</b> Prohibido el uso de hacks, cheats o clientes modificados.</li>
+                        <li><b style="color:var(--lore-color)">2.</b> Respeto absoluto hacia todos los jugadores y miembros del Staff.</li>
+                        <li><b style="color:var(--lore-color)">3.</b> Prohibido el spam o la difusión de otros servidores de Minecraft.</li>
+                        <li><b style="color:var(--lore-color)">4.</b> No se permite el aprovechamiento de bugs (reportarlos al Staff).</li>
+                        <li><b style="color:var(--lore-color)">5.</b> Mantener un lenguaje apropiado en el chat global.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
+                    <div style="text-align: left; margin-top:20px;">
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.16.5 - 1.20.x</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL / PRÓXIMAMENTE</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">LOCALIZACIÓN:</span> LATAM</p>
+                    </div>
+                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
+                </div>
+            </div>
+        </div>
+
         <div id="staff" class="category-section">
             <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
             <div class="grid">
@@ -344,7 +377,6 @@
             }
         }
 
-        // --- FUNCIÓN DE AUTENTICACIÓN CORREGIDA ---
         function openAuth(type) { 
             currentAuthType = type;
             const modalTitle = document.getElementById('modalTitle');
@@ -354,14 +386,12 @@
             const errorBox = document.getElementById('authError');
             const toggleIcon = document.querySelector('.toggle-pass');
 
-            // Reset
             modalTitle.innerText = type; 
             errorBox.style.display = 'none';
             passInp.type = "password"; 
             toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
             userInp.value = ""; emailInp.value = ""; passInp.value = "";
 
-            // Mostrar/Ocultar usuario según el tipo
             if(type === 'REGISTRARSE') {
                 userInp.style.display = 'block';
             } else {
