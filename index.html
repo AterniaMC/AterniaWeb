@@ -5,18 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATERNIA MC | OFICIAL</title>
     
-    <!-- CONFIGURACIÓN DEL FAVICON (ICONO DE PESTAÑA) -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/EpxuqFO.png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/EpxuqFO.png">
-    
-    <!-- META TAGS PARA PREVISUALIZACIÓN -->
-    <meta property="og:title" content="ATERNIA MC | TIENDA OFICIAL" />
-    <meta property="og:description" content="Adquiere rangos exclusivos y apoya al servidor oficial." />
-    <meta property="og:image" content="https://i.imgur.com/EpxuqFO.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -32,35 +21,290 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
-        /* AJUSTE SIDEBAR */
-        .sidebar { 
-            width: 280px; 
-            background-color: var(--sidebar-bg); 
-            padding: 40px 20px 80px 20px; 
-            position: fixed; 
-            height: 100dvh; 
-            border-right: 1px solid rgba(255,255,255,0.05); 
-            z-index: 100; 
-            transition: 0.4s; 
-            overflow-y: auto; 
-            box-sizing: border-box;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) transparent;
-        }
-        
+        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px; position: fixed; height: 100dvh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; overflow-y: auto; box-sizing: border-box; }
         .logo-box { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .logo-box img { width: 45px; height: auto; filter: drop-shadow(0 0 5px var(--accent-glow)); }
+        .logo-box img { width: 45px; }
         
         .nav-item { padding: 15px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; transition: 0.4s; color: #888; font-weight: 600; }
         .nav-item:hover { background: rgba(0, 225, 225, 0.1); color: var(--accent); transform: translateX(8px); }
         .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
 
-        /* SERVER STATUS CARD & COPY IP */
         .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
+        .ip-copy-box { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; cursor: pointer; position: relative; }
+        .copy-tooltip { position: absolute; top: -30px; background: var(--accent); color: #000; padding: 4px 8px; border-radius: 5px; font-size: 0.6rem; font-weight: 900; opacity: 0; transition: 0.3s; }
+        .copy-tooltip.show { opacity: 1; top: -35px; }
+
+        .main-content { margin-left: 320px; padding: 60px; width: calc(100% - 320px); transition: 0.4s; }
+        .top-bar { display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 50px; }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); position: relative; box-sizing: border-box; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; }
         
-        .ip-copy-box { 
+        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; }
+
+        .btn-action { background: var(--accent); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+        .btn-topbar-edit { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent); color: var(--text); padding: 8px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 900; cursor: pointer; display: none; align-items: center; gap: 8px; }
+
+        .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; position: relative; }
+        .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
+        .faq-text { text-transform: none; color: var(--lore-color); line-height: 1.5; font-size: 0.9rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+
+        .category-section { display: none; }
+        .category-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 992px) {
+            .sidebar { left: -320px; }
+            .main-content { margin-left: 0; width: 100%; padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL AUTH -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">INICIAR SESIÓN</h2>
+            <div id="authError" class="auth-error-msg"></div>
+            <div id="authInputs">
+                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT">
+                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
+                <input type="password" id="authPass" placeholder="CONTRASEÑA">
+            </div>
+            <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
+            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR PERFIL -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--accent)">PANEL DE PERFIL</h2>
+            <p style="font-size: 0.7rem; color: #888; margin-bottom: 20px;">CAMBIA TU NOMBRE DE USUARIO DE MINECRAFT</p>
+            <input type="text" id="editNickInput" placeholder="NUEVO NICKNAME">
+            <button class="btn-action" style="width: 100%;" onclick="updateProfile()">ACTUALIZAR NICKNAME</button>
+            <p onclick="closeEditProfile()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CERRAR</p>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="logo-box" onclick="showCategory('inicio')">
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
+            <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
+        </div>
+        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> INICIO</div>
+        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> RANGOS</div>
+        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> PREGUNTAS / FAQ</div>
+        
+        <div class="server-status-card">
+            <div class="ip-copy-box" onclick="copyIP()">
+                <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
+                <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
+            </div>
+            <div style="margin-top: 10px; font-size: 0.75rem;">
+                <span id="statusIcon" class="status-dot offline-dot"></span>
+                <span id="statusText">OFFLINE</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 15px; border-radius:50px; border:1px solid var(--accent);">
+                <img id="headImg" src="" style="width:25px; border-radius:3px;">
+                <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
+                <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer;"></i>
+            </div>
+
+            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openEditProfile()">
+                <i class="fas fa-user-edit"></i> EDITAR PERFIL
+            </button>
+
+            <div id="authButtons" style="display: flex; gap: 10px;">
+                <button class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
+                <button class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
+            </div>
+        </div>
+
+        <div id="inicio" class="category-section active">
+            <h1>BIENVENIDO A <span style="color:var(--accent)">ATERNIA MC</span></h1>
+            <div class="card"><p style="text-transform:none">Explora nuestra tienda y comunidad oficial.</p></div>
+        </div>
+
+        <div id="rangos" class="category-section">
+            <h1>NUESTROS <span style="color:var(--accent)">RANGOS</span></h1>
+            <div class="grid">
+                <div class="card"><h2>VIP</h2><p style="color:var(--accent)">$3.00 USD</p></div>
+                <div class="card"><h2>VIP+</h2><p style="color:gold">$5.00 USD</p></div>
+            </div>
+        </div>
+
+        <div id="faq" class="category-section">
+            <h1>PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
+            <div id="faqInputArea" style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; display:none;">
+                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none;" rows="3" placeholder="ESCRIBE TU DUDA..."></textarea>
+                <button class="btn-action" onclick="postFaq()">PUBLICAR PREGUNTA</button>
+            </div>
+            <div id="faqList"></div>
+        </div>
+    </div>
+
+    <!-- FIREBASE SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // CONFIGURACIÓN DE TU PROYECTO
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
+            authDomain: "aterniamc-web.firebaseapp.com",
+            projectId: "aterniamc-web",
+            storageBucket: "aterniamc-web.firebasestorage.app",
+            messagingSenderId: "748766671298",
+            appId: "1:748766671298:web:bd934aa81b246b9e0ba65b",
+            measurementId: "G-LFB2EN182E"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentAuthType = 'INICIAR SESIÓN';
+
+        function showCategory(id) {
+            document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
+            if(id === 'faq') renderFaq();
+        }
+
+        function copyIP() {
+            const ipText = document.getElementById('serverIP').innerText;
+            navigator.clipboard.writeText(ipText).then(() => {
+                document.getElementById('copyTooltip').classList.add('show');
+                setTimeout(() => document.getElementById('copyTooltip').classList.remove('show'), 2000);
+            });
+        }
+
+        // --- SISTEMA DE AUTENTICACIÓN ---
+        function openAuth(type) { 
+            currentAuthType = type;
+            document.getElementById('modalTitle').innerText = type; 
+            document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
+            document.getElementById('authModal').style.display = 'flex'; 
+        }
+        function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+        async function handleAuth() {
+            const nick = document.getElementById('authUser').value;
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+            const errorDiv = document.getElementById('authError');
+
+            try {
+                if (currentAuthType === 'REGISTRARSE') {
+                    const res = await auth.createUserWithEmailAndPassword(email, pass);
+                    await db.collection('users').doc(res.user.uid).set({ nickname: nick });
+                    localStorage.setItem('u', nick);
+                } else {
+                    const res = await auth.signInWithEmailAndPassword(email, pass);
+                    const doc = await db.collection('users').doc(res.user.uid).get();
+                    localStorage.setItem('u', doc.data().nickname);
+                }
+                location.reload();
+            } catch (error) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = "ERROR: " + error.message;
+            }
+        }
+
+        function logout() { auth.signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
+
+        // --- SISTEMA DE PERFIL ---
+        function openEditProfile() {
+            const currentNick = localStorage.getItem('u');
+            document.getElementById('editNickInput').value = currentNick;
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+        function closeEditProfile() { document.getElementById('editProfileModal').style.display = 'none'; }
+
+        async function updateProfile() {
+            const newNick = document.getElementById('editNickInput').value;
+            const user = auth.currentUser;
+            if(!newNick.trim() || !user) return;
+
+            try {
+                await db.collection('users').doc(user.uid).update({ nickname: newNick });
+                localStorage.setItem('u', newNick);
+                alert("¡Perfil actualizado con éxito!");
+                location.reload();
+            } catch (error) {
+                alert("Error al actualizar: " + error.message);
+            }
+        }
+
+        // --- SISTEMA DE FAQ (FIRESTORE) ---
+        async function postFaq() {
+            const user = localStorage.getItem('u');
+            const txt = document.getElementById('faqTxt').value;
+            if(!user || !txt.trim()) return;
+            await db.collection('faq').add({ author: user, content: txt, date: Date.now() });
+            document.getElementById('faqTxt').value = '';
+        }
+
+        function renderFaq() {
+            const list = document.getElementById('faqList');
+            db.collection('faq').orderBy('date', 'desc').onSnapshot(snap => {
+                list.innerHTML = '';
+                snap.forEach(doc => {
+                    const p = doc.data();
+                    list.innerHTML += `
+                        <div class="faq-card">
+                            <span class="faq-author">${p.author}</span>
+                            <div class="faq-text">${p.content}</div>
+                        </div>`;
+                });
+            });
+        }
+
+        // --- ESTADO INICIAL ---
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                const u = localStorage.getItem('u');
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userLogged').style.display = 'flex';
+                document.getElementById('btnEditProfile').style.display = 'flex';
+                document.getElementById('userTag').innerText = u;
+                document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
+                document.getElementById('faqInputArea').style.display = 'block';
+            }
+        });
+
+        async function updateStatus() {
+            try {
+                const res = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
+                const data = await res.json();
+                if(data.online) {
+                    document.getElementById('statusIcon').className = 'status-dot online-dot';
+                    document.getElementById('statusText').innerText = 'ONLINE';
+                    document.getElementById('statusText').style.color = '#2ecc71';
+                }
+            } catch (e) {}
+        }
+        updateStatus();
+    </script>
+</body>
+</html>        .ip-copy-box { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
