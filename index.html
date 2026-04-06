@@ -55,12 +55,10 @@
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; }
         
-        /* PASS WRAPPER */
         .pass-wrapper { position: relative; width: 100%; }
         .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
         .toggle-pass:hover { color: var(--accent); }
 
-        /* ALERT CUSTOM */
         .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; box-shadow: 0 0 10px var(--error-glow); animation: shake 0.4s; }
 
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
@@ -75,7 +73,6 @@
         .btn-mini:hover { color: var(--accent); }
         .btn-delete:hover { color: #ff4757; }
 
-        /* --- UI ELEMENTS --- */
         .theme-switch { position: relative; width: 55px; height: 28px; cursor: pointer; }
         .theme-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
@@ -89,7 +86,25 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
-        .news-cell { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); }
+        
+        .news-cell { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            border-left: 4px solid var(--accent); 
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .version-tag {
+            background: rgba(0, 229, 229, 0.1);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            border: 1px solid var(--accent);
+        }
 
         .category-section { display: none; }
         .category-section.active { display: block; animation: fadeIn 0.5s; }
@@ -111,12 +126,11 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE AUTENTICACIÓN ACTUALIZADO -->
+    <!-- MODAL DE AUTENTICACIÓN -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
             
-            <!-- ALERTA PERSONALIZADA -->
             <div id="authError" class="auth-error-msg">CORREO O CONTRASEÑA INCORRECTOS</div>
 
             <div id="authInputs">
@@ -164,7 +178,6 @@
             <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
         </div>
 
-        <!-- SECCIÓN DE ESTADO DEL SERVIDOR -->
         <div class="server-status-card">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
             <p style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
@@ -195,8 +208,11 @@
         <div id="inicio" class="category-section active">
             <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
             <div class="news-cell">
-                <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
-                <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
+                <div>
+                    <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
+                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
+                </div>
+                <span class="version-tag">V1.0</span>
             </div>
         </div>
 
@@ -249,7 +265,6 @@
             </div>
         </div>
 
-        <!-- FAQ -->
         <div id="faq" class="category-section">
             <h1>PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
             <div style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
@@ -287,12 +302,9 @@
             try {
                 const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
                 const data = await response.json();
-                
                 const icon = document.getElementById('statusIcon');
                 const text = document.getElementById('statusText');
                 const players = document.getElementById('playerCount');
-
-                // Si no hay datos de jugadores (servidor apagado), ponemos un valor por defecto o mantenemos el ultimo maximo
                 const maxPlayers = data.players ? data.players.max : "100";
 
                 if(data.online === true) {
@@ -313,7 +325,6 @@
             }
         }
 
-        /* --- LÓGICA DE VISIBILIDAD DE CONTRASEÑA --- */
         function togglePassView() {
             const passInput = document.getElementById('authPass');
             const icon = document.querySelector('.toggle-pass');
@@ -326,20 +337,24 @@
             }
         }
 
-        // LÓGICA DE AUTENTICACIÓN ACTUALIZADA
+        // --- FUNCIÓN DE AUTENTICACIÓN CORREGIDA ---
         function openAuth(type) { 
             currentAuthType = type;
-            document.getElementById('modalTitle').innerText = type; 
-            document.getElementById('authError').style.display = 'none'; // Reset error
-            
+            const modalTitle = document.getElementById('modalTitle');
             const userInp = document.getElementById('authUser');
             const emailInp = document.getElementById('authEmail');
             const passInp = document.getElementById('authPass');
-            passInp.type = "password"; // Reset type
-            document.querySelector('.toggle-pass').classList.replace('fa-eye-slash', 'fa-eye');
+            const errorBox = document.getElementById('authError');
+            const toggleIcon = document.querySelector('.toggle-pass');
 
+            // Reset
+            modalTitle.innerText = type; 
+            errorBox.style.display = 'none';
+            passInp.type = "password"; 
+            toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
             userInp.value = ""; emailInp.value = ""; passInp.value = "";
 
+            // Mostrar/Ocultar usuario según el tipo
             if(type === 'REGISTRARSE') {
                 userInp.style.display = 'block';
             } else {
@@ -357,7 +372,7 @@
             const pass = document.getElementById('authPass').value;
             const errorBox = document.getElementById('authError');
 
-            errorBox.style.display = 'none'; // Reset error visual
+            errorBox.style.display = 'none';
 
             if (currentAuthType === 'REGISTRARSE') {
                 if(user && email && pass) {
@@ -371,7 +386,6 @@
                     errorBox.style.display = 'block';
                 }
             } else {
-                // LOGIN
                 const savedEmail = localStorage.getItem('regEmail');
                 const savedPass = localStorage.getItem('regPass');
                 const savedUser = localStorage.getItem('regUser');
@@ -446,7 +460,6 @@
 
         window.onload = () => {
             updateServerStatus();
-            // Actualizar cada 30 segundos
             setInterval(updateServerStatus, 30000);
 
             const container = document.getElementById('llavesContainer');
@@ -457,17 +470,11 @@
             }
 
             const u = localStorage.getItem('u');
-            const hasAccount = localStorage.getItem('regEmail');
-
             if(u) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userLogged').style.display = 'flex';
                 document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
-            } else {
-                if(hasAccount) {
-                    document.getElementById('btnRegister').onclick = () => openAuth('INICIAR SESIÓN');
-                }
             }
             renderFaq();
         };
