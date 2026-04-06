@@ -25,7 +25,7 @@
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
         /* --- SIDEBAR --- */
-        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px; position: fixed; height: 100vh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; }
+        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px; position: fixed; height: 100vh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; overflow-y: auto; }
         
         .logo-box { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .logo-box img { width: 45px; height: auto; filter: drop-shadow(0 0 5px var(--accent-glow)); }
@@ -34,6 +34,13 @@
         .nav-item:hover { background: rgba(0, 225, 225, 0.1); color: var(--accent); transform: translateX(8px); }
         .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
+
+        /* --- SERVER STATUS BOX --- */
+        .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+        .online-dot { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+        .offline-dot { background: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
 
         /* --- MAIN CONTENT --- */
         .main-content { margin-left: 320px; padding: 60px; width: calc(100% - 320px); transition: 0.4s; }
@@ -134,6 +141,19 @@
             <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
             <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
             <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
+        </div>
+
+        <!-- SECCIÓN DE ESTADO DEL SERVIDOR -->
+        <div class="server-status-card">
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
+            <p style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
+            <div style="margin-top: 10px; font-size: 0.75rem; font-weight: 900;">
+                <span id="statusIcon" class="status-dot offline-dot"></span>
+                <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
+            </div>
+            <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
+                JUGADORES: <span id="playerCount">0</span>
+            </div>
         </div>
     </div>
 
@@ -241,6 +261,30 @@
             if(id === 'faq') renderFaq();
         }
 
+        async function updateServerStatus() {
+            try {
+                const response = await fetch('https://mcapi.us/server/status?ip=aterniamc.aternos.me');
+                const data = await response.json();
+                const icon = document.getElementById('statusIcon');
+                const text = document.getElementById('statusText');
+                const players = document.getElementById('playerCount');
+
+                if(data.online) {
+                    icon.className = 'status-dot online-dot';
+                    text.innerText = 'ONLINE';
+                    text.style.color = '#2ecc71';
+                    players.innerText = data.players.now + ' / ' + data.players.max;
+                } else {
+                    icon.className = 'status-dot offline-dot';
+                    text.innerText = 'OFFLINE';
+                    text.style.color = '#e74c3c';
+                    players.innerText = '0';
+                }
+            } catch (e) {
+                console.error("Error al obtener estado del servidor");
+            }
+        }
+
         function openAuth(type) { document.getElementById('modalTitle').innerText = type; document.getElementById('authModal').style.display = 'flex'; }
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
         function handleAuth() { const user = document.getElementById('authVoxel').value; if(user) { localStorage.setItem('u', user); location.reload(); } }
@@ -303,6 +347,9 @@
         }
 
         window.onload = () => {
+            updateServerStatus();
+            setInterval(updateServerStatus, 30000); // Actualiza cada 30 segundos
+
             const container = document.getElementById('llavesContainer');
             if(container) {
                 RAREZAS.forEach(r => {
