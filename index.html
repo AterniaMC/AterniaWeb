@@ -100,12 +100,16 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE AUTENTICACIÓN -->
+    <!-- MODAL DE AUTENTICACIÓN ACTUALIZADO -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
-            <input type="text" id="authVoxel" placeholder="USUARIO DE MINECRAFT">
-            <input type="password" id="authPass" placeholder="CONTRASEÑA">
+            <!-- Los inputs se manejan dinámicamente -->
+            <div id="authInputs">
+                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT">
+                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
+                <input type="password" id="authPass" placeholder="CONTRASEÑA">
+            </div>
             <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
             <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
         </div>
@@ -165,8 +169,8 @@
                 <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
             </div>
             <div id="authButtons" style="display: flex; gap: 10px;">
-                <button class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
-                <button class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
+                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
+                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
@@ -249,6 +253,7 @@
 
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
         let editingId = null;
+        let currentAuthType = 'INICIAR SESIÓN';
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -285,9 +290,61 @@
             }
         }
 
-        function openAuth(type) { document.getElementById('modalTitle').innerText = type; document.getElementById('authModal').style.display = 'flex'; }
+        // LÓGICA DE AUTENTICACIÓN ACTUALIZADA
+        function openAuth(type) { 
+            currentAuthType = type;
+            document.getElementById('modalTitle').innerText = type; 
+            
+            const userInp = document.getElementById('authUser');
+            const emailInp = document.getElementById('authEmail');
+            const passInp = document.getElementById('authPass');
+
+            // Limpiar valores
+            userInp.value = ""; emailInp.value = ""; passInp.value = "";
+
+            if(type === 'REGISTRARSE') {
+                userInp.style.display = 'block';
+            } else {
+                userInp.style.display = 'none';
+            }
+            
+            document.getElementById('authModal').style.display = 'flex'; 
+        }
+
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
-        function handleAuth() { const user = document.getElementById('authVoxel').value; if(user) { localStorage.setItem('u', user); location.reload(); } }
+
+        function handleAuth() { 
+            const user = document.getElementById('authUser').value; 
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+
+            if (currentAuthType === 'REGISTRARSE') {
+                if(user && email && pass) {
+                    // Guardamos los datos de registro
+                    localStorage.setItem('regUser', user);
+                    localStorage.setItem('regEmail', email);
+                    localStorage.setItem('regPass', pass);
+                    // Sesión activa
+                    localStorage.setItem('u', user);
+                    location.reload();
+                } else {
+                    alert("RELLENA TODOS LOS CAMPOS");
+                }
+            } else {
+                // LOGIN
+                const savedEmail = localStorage.getItem('regEmail');
+                const savedPass = localStorage.getItem('regPass');
+                const savedUser = localStorage.getItem('regUser');
+
+                if(email === savedEmail && pass === savedPass) {
+                    localStorage.setItem('u', savedUser);
+                    location.reload();
+                } else {
+                    alert("CORREO O CONTRASEÑA INCORRECTOS");
+                }
+            }
+        }
+
         function logout() { localStorage.removeItem('u'); location.reload(); }
 
         function postFaq() {
@@ -348,7 +405,7 @@
 
         window.onload = () => {
             updateServerStatus();
-            setInterval(updateServerStatus, 30000); // Actualiza cada 30 segundos
+            setInterval(updateServerStatus, 30000);
 
             const container = document.getElementById('llavesContainer');
             if(container) {
@@ -358,11 +415,19 @@
             }
 
             const u = localStorage.getItem('u');
+            const hasAccount = localStorage.getItem('regEmail');
+
+            // Lógica de botones de Auth
             if(u) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userLogged').style.display = 'flex';
                 document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
+            } else {
+                // Si ya está registrado pero no logueado, el botón de registrarse abre login
+                if(hasAccount) {
+                    document.getElementById('btnRegister').onclick = () => openAuth('INICIAR SESIÓN');
+                }
             }
             renderFaq();
         };
