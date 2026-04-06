@@ -32,7 +32,21 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
-        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px; position: fixed; height: 100vh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; overflow-y: auto; }
+        /* AJUSTE SIDEBAR: Se añade dvh para móviles y padding inferior de seguridad */
+        .sidebar { 
+            width: 280px; 
+            background-color: var(--sidebar-bg); 
+            padding: 40px 20px 80px 20px; /* 80px abajo para que no choque con el limite */
+            position: fixed; 
+            height: 100dvh; 
+            border-right: 1px solid rgba(255,255,255,0.05); 
+            z-index: 100; 
+            transition: 0.4s; 
+            overflow-y: auto; 
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
         
         .logo-box { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .logo-box img { width: 45px; height: auto; filter: drop-shadow(0 0 5px var(--accent-glow)); }
@@ -58,7 +72,6 @@
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         
-        /* AQUÍ ESTÁ LA CORRECCIÓN SOLICITADA */
         .modal-content input, .modal-content textarea { 
             width: 100%; 
             max-width: 100%; 
@@ -352,7 +365,10 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) toggleSidebar();
+            if(window.innerWidth <= 992) {
+                 // No cerramos inmediatamente si queremos que el usuario vea el cambio, pero aquí se cierra al elegir
+                 document.getElementById('sidebar').classList.remove('open');
+            }
             if(id === 'faq') renderFaq();
         }
 
