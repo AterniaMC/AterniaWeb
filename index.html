@@ -18,6 +18,7 @@
             --lore-color: #ff7f27;
             --comun: #95a5a6; --raro: #00d2d3; --epico: #8e44ad; 
             --legendario: #f1c40f; --mitico: #c0392b; --exotico: #ad244f;
+            --error: #ff4757; --error-glow: rgba(255, 71, 87, 0.4);
         }
 
         [data-theme="light"] { --bg: #f4f4f4; --card-bg: #ffffff; --sidebar-bg: #e0e0e0; --text: #333; }
@@ -48,12 +49,22 @@
 
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--sidebar-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--accent); }
 
-        /* --- MODALES (LOGIN Y EDITOR) --- */
+        /* --- MODALES --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 350px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; }
+        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 350px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; }
+        
+        /* PASS WRAPPER */
+        .pass-wrapper { position: relative; width: 100%; }
+        .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
+        .toggle-pass:hover { color: var(--accent); }
+
+        /* ALERT CUSTOM */
+        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; box-shadow: 0 0 10px var(--error-glow); animation: shake 0.4s; }
+
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
         /* --- FAQ / COMENTARIOS --- */
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
@@ -104,11 +115,17 @@
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
-            <!-- Los inputs se manejan dinámicamente -->
+            
+            <!-- ALERTA PERSONALIZADA -->
+            <div id="authError" class="auth-error-msg">CORREO O CONTRASEÑA INCORRECTOS</div>
+
             <div id="authInputs">
                 <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT">
                 <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
-                <input type="password" id="authPass" placeholder="CONTRASEÑA">
+                <div class="pass-wrapper">
+                    <input type="password" id="authPass" placeholder="CONTRASEÑA">
+                    <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
+                </div>
             </div>
             <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
             <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
@@ -290,16 +307,31 @@
             }
         }
 
+        /* --- LÓGICA DE VISIBILIDAD DE CONTRASEÑA --- */
+        function togglePassView() {
+            const passInput = document.getElementById('authPass');
+            const icon = document.querySelector('.toggle-pass');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passInput.type = "password";
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
         // LÓGICA DE AUTENTICACIÓN ACTUALIZADA
         function openAuth(type) { 
             currentAuthType = type;
             document.getElementById('modalTitle').innerText = type; 
+            document.getElementById('authError').style.display = 'none'; // Reset error
             
             const userInp = document.getElementById('authUser');
             const emailInp = document.getElementById('authEmail');
             const passInp = document.getElementById('authPass');
+            passInp.type = "password"; // Reset type
+            document.querySelector('.toggle-pass').classList.replace('fa-eye-slash', 'fa-eye');
 
-            // Limpiar valores
             userInp.value = ""; emailInp.value = ""; passInp.value = "";
 
             if(type === 'REGISTRARSE') {
@@ -317,18 +349,20 @@
             const user = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPass').value;
+            const errorBox = document.getElementById('authError');
+
+            errorBox.style.display = 'none'; // Reset error visual
 
             if (currentAuthType === 'REGISTRARSE') {
                 if(user && email && pass) {
-                    // Guardamos los datos de registro
                     localStorage.setItem('regUser', user);
                     localStorage.setItem('regEmail', email);
                     localStorage.setItem('regPass', pass);
-                    // Sesión activa
                     localStorage.setItem('u', user);
                     location.reload();
                 } else {
-                    alert("RELLENA TODOS LOS CAMPOS");
+                    errorBox.innerText = "RELLENA TODOS LOS CAMPOS";
+                    errorBox.style.display = 'block';
                 }
             } else {
                 // LOGIN
@@ -340,7 +374,8 @@
                     localStorage.setItem('u', savedUser);
                     location.reload();
                 } else {
-                    alert("CORREO O CONTRASEÑA INCORRECTOS");
+                    errorBox.innerText = "CORREO O CONTRASEÑA INCORRECTOS";
+                    errorBox.style.display = 'block';
                 }
             }
         }
@@ -417,14 +452,12 @@
             const u = localStorage.getItem('u');
             const hasAccount = localStorage.getItem('regEmail');
 
-            // Lógica de botones de Auth
             if(u) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userLogged').style.display = 'flex';
                 document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
             } else {
-                // Si ya está registrado pero no logueado, el botón de registrarse abre login
                 if(hasAccount) {
                     document.getElementById('btnRegister').onclick = () => openAuth('INICIAR SESIÓN');
                 }
