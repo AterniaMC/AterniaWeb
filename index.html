@@ -173,7 +173,7 @@
                 <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
             </div>
             <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
-                JUGADORES: <span id="playerCount">0</span>
+                JUGADORES: <span id="playerCount">0 / --</span>
             </div>
         </div>
     </div>
@@ -285,7 +285,6 @@
 
         async function updateServerStatus() {
             try {
-                // Nueva API mcsrvstat.us mucho más precisa para Aternos
                 const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
                 const data = await response.json();
                 
@@ -293,22 +292,24 @@
                 const text = document.getElementById('statusText');
                 const players = document.getElementById('playerCount');
 
+                // Si no hay datos de jugadores (servidor apagado), ponemos un valor por defecto o mantenemos el ultimo maximo
+                const maxPlayers = data.players ? data.players.max : "100";
+
                 if(data.online === true) {
                     icon.className = 'status-dot online-dot';
                     text.innerText = 'ONLINE';
                     text.style.color = '#2ecc71';
-                    players.innerText = data.players.online + ' / ' + data.players.max;
+                    players.innerText = `${data.players.online} / ${data.players.max}`;
                 } else {
                     icon.className = 'status-dot offline-dot';
                     text.innerText = 'OFFLINE';
                     text.style.color = '#e74c3c';
-                    players.innerText = '0';
+                    players.innerText = `0 / ${maxPlayers}`;
                 }
             } catch (e) {
-                console.error("Error al obtener estado del servidor");
-                // Fallback a offline en caso de error de red
                 document.getElementById('statusText').innerText = 'OFFLINE';
                 document.getElementById('statusIcon').className = 'status-dot offline-dot';
+                document.getElementById('playerCount').innerText = "0 / --";
             }
         }
 
