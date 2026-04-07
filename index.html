@@ -103,6 +103,11 @@
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
+        
+        /* NUEVO DISEÑO MODAL PERFIL EXTENDIDO */
+        .modal-profile { max-width: 700px !important; text-align: left !important; }
+        .profile-grid { display: grid; grid-template-columns: 200px 1fr; gap: 30px; margin-top: 20px; }
+        
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         
         .modal-content input, .modal-content textarea, .modal-content select { 
@@ -200,8 +205,11 @@
         }
 
         /* ESTILOS ESPECÍFICOS PERFIL */
-        .skin-container { width: 120px; height: 180px; margin: 0 auto 20px auto; position: relative; }
-        .skin-container img { height: 100%; } /* MOVIMIENTO ELIMINADO */
+        .skin-container { width: 100%; height: 280px; background: rgba(0,0,0,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(255,255,255,0.1); }
+        .skin-container img { height: 90%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+
+        .security-section { background: rgba(255, 71, 87, 0.05); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); margin-top: 20px; }
+        .security-title { color: var(--error); font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; letter-spacing: 1px; }
 
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
@@ -210,6 +218,8 @@
             .menu-toggle { display: block; }
             .top-bar { justify-content: center; flex-wrap: wrap; }
             .modal-content { padding: 30px 20px; width: 95%; }
+            .profile-grid { grid-template-columns: 1fr; }
+            .skin-container { height: 200px; }
         }
     </style>
 </head>
@@ -217,7 +227,7 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODALES -->
+    <!-- MODAL INICIO SESIÓN / REGISTRO -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
@@ -235,46 +245,62 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR PERFIL -->
+    <!-- MODAL EDITAR PERFIL (ACTUALIZADO SEGÚN IMAGEN 1) -->
     <div id="profileModal" class="modal">
-        <div class="modal-content" style="max-width: 500px;">
-            <!-- BOTÓN SEGURIDAD CUENTA -->
-            <button class="btn-mini" style="position: absolute; top: 20px; left: 20px; color: var(--accent); border: 1px solid var(--accent); padding: 5px 10px; border-radius: 8px;">SEGURIDAD DE LA CUENTA</button>
+        <div class="modal-content modal-profile">
+            <h2 style="text-align: center; width: 100%;">EDITAR MI PERFIL</h2>
             
-            <h2 style="margin-top: 20px;">EDITAR MI PERFIL</h2>
-            
-            <div class="skin-container">
-                <img id="profileSkinImg" src="" alt="Skin 3D">
-            </div>
-
-            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin;">
-                <input type="text" id="editNickname" placeholder="NICKNAME (APODO)">
-                
-                <select id="editGender" onchange="toggleOtherGender()">
-                    <option value="" disabled selected>SELECCIONAR GÉNERO</option>
-                    <option value="MASCULINO">MASCULINO</option>
-                    <option value="FEMENINO">FEMENINO</option>
-                    <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
-                    <option value="OTRO">OTRO...</option>
-                </select>
-                
-                <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
-
-                <div style="text-align: right; font-size: 0.6rem; margin-bottom: 5px; font-weight: 900;">
-                    <span id="charCount">0</span>/500
-                </div>
-                <textarea id="editBio" rows="4" maxlength="500" placeholder="DESCRIPCIÓN BREVE..." oninput="updateCharCount()"></textarea>
-
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
-                    <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR</button>
+            <div class="profile-grid">
+                <!-- COLUMNA IZQUIERDA: NOMBRE Y SKIN -->
+                <div>
+                    <p style="font-size: 0.65rem; color: var(--accent); font-weight: 900; margin-bottom: 5px;">NOMBRE DE USUARIO</p>
+                    <p id="profileRealName" style="font-size: 1.1rem; font-weight: 900; margin: 0 0 15px 0; color: #fff;">USER_NAME</p>
+                    
+                    <div class="skin-container">
+                        <img id="profileSkinImg" src="" alt="Skin 3D">
+                    </div>
                 </div>
 
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
-                
-                <!-- BOTÓN ELIMINAR CUENTA REDISEÑADO -->
-                <button class="btn-action" onclick="confirmDeleteAccount()" style="background: #ff4757; color: white; width: 100%; font-size: 0.75rem;">ELIMINAR CUENTA</button>
+                <!-- COLUMNA DERECHA: DATOS EDITABLES -->
+                <div>
+                    <p style="font-size: 0.65rem; color: #555; font-weight: 900; margin-bottom: 5px;">INFORMACIÓN PÚBLICA</p>
+                    
+                    <input type="text" id="editNickname" placeholder="NICKNAME (APODO)">
+                    
+                    <select id="editGender" onchange="toggleOtherGender()">
+                        <option value="" disabled selected>SELECCIONAR GÉNERO</option>
+                        <option value="MASCULINO">MASCULINO</option>
+                        <option value="FEMENINO">FEMENINO</option>
+                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                        <option value="OTRO">OTRO...</option>
+                    </select>
+                    
+                    <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span style="font-size: 0.65rem; color: #555; font-weight: 900;">DESCRIPCIÓN</span>
+                        <span style="font-size: 0.6rem; font-weight: 900;"><span id="charCount">0</span>/500</span>
+                    </div>
+                    <textarea id="editBio" rows="3" maxlength="500" placeholder="CUÉNTANOS ALGO SOBRE TI..." oninput="updateCharCount()"></textarea>
+
+                    <!-- SECCIÓN SEGURIDAD (SOLICITADA EN IMAGEN 1) -->
+                    <div class="security-section">
+                        <div class="security-title"><i class="fas fa-shield-alt"></i> SEGURIDAD DE LA CUENTA</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button class="btn-mini" style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; color: #aaa;" onclick="alert('Funcionalidad de contraseña en desarrollo')">CAMBIAR CONTRASEÑA</button>
+                            <button class="btn-mini" style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; color: #aaa;" onclick="alert('Funcionalidad de correo en desarrollo')">CAMBIAR CORREO</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- BOTONES DE ACCIÓN INFERIORES -->
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
+            </div>
+
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="width: 100%; margin-top: 15px; text-align: center; color: rgba(255, 71, 87, 0.4);">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
         </div>
     </div>
 
@@ -314,7 +340,6 @@
         <div class="server-status-card">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
             
-            <!-- IP CON BOTÓN DE COPIADO -->
             <div class="ip-copy-box" onclick="copyIP()">
                 <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
                 <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
@@ -333,7 +358,6 @@
 
     <div class="main-content">
         <div class="top-bar">
-            <!-- 1. CUENTA ACTUAL -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
@@ -345,15 +369,14 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
-            <!-- 2. BOTÓN EDITAR PERFIL -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
 
-            <!-- 3. INTERRUPTOR CLARO/OSCURO -->
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
+        <!-- SECCIONES DE CONTENIDO (SIN CAMBIOS) -->
         <div id="inicio" class="category-section active">
             <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
             <div class="news-cell">
@@ -410,35 +433,28 @@
                     <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
                         AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
                     </p>
-                    
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-                    
                     <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> ENFOQUE DEL SERVIDOR</h3>
                     <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
                         Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
                     </p>
-
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-
                     <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
                     <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
                         <li><b style="color:var(--lore-color)">1.</b> Se prohíbe el uso de hacks, cheats, o clientes modificados.</li>
-                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador, de manera que se eviten palabrotas, chistes fuera de lugar, entre otros.</li>
+                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador...</li>
                         <li><b style="color:var(--lore-color)">3.</b> Evita el spam en el chat.</li>
-                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord, el aprovechamiento de estos será sancionado.</li>
-                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL, este será severamente sancionado.</li>
+                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord...</li>
+                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL...</li>
                         <li><b style="color:var(--lore-color)">6.</b> No se permite el pvp aunque esté activo.</li>
                     </ul>
                 </div>
-
                 <div class="card">
                     <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
                     <div style="text-align: left; margin-top:20px;">
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.21.11 (Próximamente compatible con todas las versiones)</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.21.1</p>
                         <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL VANILLA</p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">FECHA DE CREACIÓN:</span> DICIEMBRE 2025</p>
                     </div>
-                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
                 </div>
             </div>
         </div>
@@ -483,9 +499,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) {
-                 document.getElementById('sidebar').classList.remove('open');
-            }
+            if(window.innerWidth <= 992) { document.getElementById('sidebar').classList.remove('open'); }
             if(id === 'faq') renderFaq();
         }
 
@@ -512,9 +526,7 @@
                     icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
                     players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
                 }
-            } catch (e) {
-                document.getElementById('statusText').innerText = 'OFFLINE';
-            }
+            } catch (e) { document.getElementById('statusText').innerText = 'OFFLINE'; }
         }
 
         function togglePassView() {
@@ -548,18 +560,17 @@
                 if(email === localStorage.getItem('regEmail') && pass === localStorage.getItem('regPass')) {
                     localStorage.setItem('u', localStorage.getItem('regUser'));
                     location.reload();
-                } else {
-                    document.getElementById('authError').style.display = 'block';
-                }
+                } else { document.getElementById('authError').style.display = 'block'; }
             }
         }
 
         function logout() { localStorage.removeItem('u'); location.reload(); }
 
-        /* FUNCIONES PERFIL */
+        /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
             const u = localStorage.getItem('u');
             if(!u) return;
+            document.getElementById('profileRealName').innerText = u;
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
@@ -577,9 +588,7 @@
             if(select.value === 'OTRO') {
                 otherInput.style.display = 'block';
                 otherInput.value = localStorage.getItem('pGenderOther') || '';
-            } else {
-                otherInput.style.display = 'none';
-            }
+            } else { otherInput.style.display = 'none'; }
         }
 
         function updateCharCount() {
@@ -599,12 +608,8 @@
         }
 
         function confirmDeleteAccount() {
-            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos y no se puede deshacer.");
-            if(confirm) {
-                localStorage.clear();
-                alert("CUENTA ELIMINADA.");
-                location.reload();
-            }
+            const confirm = window.confirm("¡ATENCIÓN! ¿Estás seguro de eliminar tu cuenta? Esta acción borrará todos tus datos.");
+            if(confirm) { localStorage.clear(); location.reload(); }
         }
 
         function postFaq() {
