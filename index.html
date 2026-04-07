@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATERNIA MC | OFICIAL</title>
     
-    <!-- CONFIGURACIÓN DEL FAVICON -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/EpxuqFO.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- LIBRERIA PARA SKIN 3D -->
     <script src="https://bsat999.github.io/skinview3d/bundle.js"></script>
 
     <style>
@@ -16,8 +14,6 @@
             --bg: #0f0f0f; --card-bg: #1a1a1a; --sidebar-bg: #121212; --text: #ffffff;
             --accent: #00e5e5; --accent-dark: #008b8b; --accent-glow: rgba(0, 229, 229, 0.4);
             --lore-color: #ff7f27; 
-            --comun: #95a5a6; --raro: #00d2d3; --epico: #8e44ad; 
-            --legendary: #f1c40f; --mitico: #c0392b; --exotico: #ad244f;
             --error: #ff4757; --error-glow: rgba(255, 71, 87, 0.4);
         }
 
@@ -25,7 +21,7 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
-        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px 80px 20px; position: fixed; height: 100dvh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; overflow-y: auto; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+        .sidebar { width: 280px; background-color: var(--sidebar-bg); padding: 40px 20px 80px 20px; position: fixed; height: 100dvh; border-right: 1px solid rgba(255,255,255,0.05); z-index: 100; transition: 0.4s; overflow-y: auto; box-sizing: border-box; }
         .logo-box { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .logo-box img { width: 45px; height: auto; filter: drop-shadow(0 0 5px var(--accent-glow)); }
         
@@ -52,31 +48,14 @@
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 95%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; overflow: hidden; }
         
-        /* ESTILO GRANDE PARA EL PERFIL */
         .profile-large { max-width: 850px; display: flex; flex-direction: row; gap: 30px; text-align: left; align-items: stretch; }
-        .profile-skin-side { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; box-sizing: border-box; max-height: 100%; }
+        .profile-skin-side { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; box-sizing: border-box; }
         .profile-info-side { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; }
         #skin-container { width: 100%; height: 350px; cursor: grab; max-width: 250px; }
-
-        .modal-content h2 { margin-bottom: 20px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
-        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.08); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; display: block; }
-        
-        .modal-content select option { background: #1a1a1a; color: white; }
-        .modal-content input::placeholder, .modal-content textarea::placeholder { color: #666; }
-
-        .pass-wrapper { position: relative; width: 100%; }
-        .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
-        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; animation: shake 0.4s; }
-
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
         .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
         .faq-text { text-transform: none; color: var(--lore-color); line-height: 1.5; font-size: 0.9rem; font-weight: 600; }
-        .faq-actions { margin-top: 12px; display: flex; gap: 15px; }
-        .btn-mini { background: none; border: none; color: #555; font-size: 0.65rem; font-weight: 900; cursor: pointer; transition: 0.3s; padding: 0; letter-spacing: 1px; }
-        .btn-mini:hover { color: var(--accent); }
 
         .theme-switch { position: relative; width: 55px; height: 28px; cursor: pointer; }
         .theme-switch input { opacity: 0; width: 0; height: 0; }
@@ -89,31 +68,19 @@
         .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
         .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
         .btn-danger { background: rgba(255, 71, 87, 0.1); color: var(--error); border: 1px solid var(--error); }
-        .btn-danger:hover { background: var(--error); color: #000; box-shadow: 0 0 15px var(--error-glow); }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
         
-        .news-cell { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; }
-        .version-tag { background: rgba(0, 229, 229, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; border: 1px solid var(--accent); }
-
         .category-section { display: none; }
         .category-section.active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .social-link { display: flex; align-items: center; gap: 12px; padding: 10px; color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
-        .social-link:hover { color: var(--accent); transform: translateX(5px); }
-
-        .btn-topbar-edit { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent); color: var(--text); padding: 8px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 900; cursor: pointer; transition: 0.3s; display: none; align-items: center; gap: 8px; }
-        .btn-topbar-edit:hover { background: var(--accent); color: #000; }
 
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
             .sidebar.open { left: 0; }
             .main-content { margin-left: 0; width: 100%; padding: 80px 20px 40px 20px; box-sizing: border-box; }
             .menu-toggle { display: block; }
-            .profile-large { flex-direction: column; align-items: center; width: 90%; height: auto; padding: 20px; }
-            .profile-skin-side { width: 100%; max-height: 400px; }
         }
     </style>
 </head>
@@ -125,66 +92,16 @@
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
-            <div id="authError" class="auth-error-msg">DATOS INCORRECTOS</div>
-            <div id="authInputs">
-                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT (REAL)">
-                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
-                <div class="pass-wrapper">
-                    <input type="password" id="authPass" placeholder="CONTRASEÑA">
-                    <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
-                </div>
-            </div>
+            <div id="authError" class="auth-error-msg" style="display:none; color:var(--error); font-size:0.8rem; margin-bottom:10px;">DATOS INCORRECTOS</div>
+            <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white;">
+            <input type="email" id="authEmail" placeholder="CORREO" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white;">
+            <input type="password" id="authPass" placeholder="CONTRASEÑA" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white;">
             <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
             <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
         </div>
     </div>
 
-    <!-- MODAL PERFIL GRANDE 3D -->
-    <div id="editProfileModal" class="modal">
-        <div class="modal-content profile-large">
-            <div class="profile-skin-side">
-                <div id="skin-container"></div>
-                <p id="mcNameDisplay" style="font-size:0.8rem; color:var(--accent); font-weight:900; margin-top:15px;">CARGANDO...</p>
-                <button class="btn-action btn-danger" style="font-size: 0.6rem; width: 100%; margin-top: 10px;" onclick="deleteAccount()">BORRAR CUENTA</button>
-            </div>
-            <div class="profile-info-side">
-                <h2>MI PERFIL</h2>
-                <label style="font-size:0.6rem; color:#555;">NICKNAME</label>
-                <input type="text" id="editNickInput" placeholder="TU APODO ESTÉTICO">
-                
-                <label style="font-size:0.6rem; color:#555;">GÉNERO</label>
-                <select id="editGender" onchange="toggleCustomGender()">
-                    <option value="No definido">NO DEFINIDO</option>
-                    <option value="Hombre">HOMBRE</option>
-                    <option value="Mujer">MUJER</option>
-                    <option value="Prefiero no decirlo">PREFIERO NO DECIRLO</option>
-                    <option value="Otro">OTRO (ESCRIBIR)</option>
-                </select>
-                <input type="text" id="customGenderInput" placeholder="ESCRIBE TU GÉNERO..." style="display:none;">
-
-                <label style="font-size:0.6rem; color:#555;">BIOGRAFÍA</label>
-                <textarea id="editBio" rows="3" placeholder="CUÉNTANOS SOBRE TI..."></textarea>
-
-                <div style="display: flex; gap: 10px; margin-top:auto;">
-                    <button class="btn-action btn-outline" style="flex:1" onclick="closeEditProfile()">CERRAR</button>
-                    <button class="btn-action" style="flex:1" onclick="updateProfile()">GUARDAR</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- EL RESTO DEL HTML SE MANTIENE IGUAL -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h2>EDITAR PREGUNTA</h2>
-            <textarea id="editFaqTxt" rows="5" placeholder="EDITA TU MENSAJE..."></textarea>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeEdit()">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveEdit()">GUARDAR</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="logo-box" onclick="showCategory('inicio')">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
@@ -200,12 +117,6 @@
         <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
         <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> PREGUNTAS / FAQ</div>
         
-        <div style="margin-top: 30px;">
-            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;">REDES SOCIALES</p>
-            <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
-            <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
-        </div>
-
         <div class="server-status-card">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
             <div class="ip-copy-box" onclick="copyIP()">
@@ -217,40 +128,24 @@
                 <span id="statusIcon" class="status-dot offline-dot"></span>
                 <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
             </div>
-            <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
-                JUGADORES: <span id="playerCount">0 / --</span>
-            </div>
         </div>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="top-bar">
-            <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
-                <img id="headImg" src="" style="width:25px; border-radius:3px;">
-                <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
-                <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
-            </div>
-
             <div id="authButtons" style="display: flex; gap: 10px;">
-                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
-                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
+                <button class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
+                <button class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
-
-            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openEditProfile()">
-                <i class="fas fa-user-edit"></i> PERFIL
-            </button>
-
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
         <div id="inicio" class="category-section active">
             <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
-            <div class="news-cell">
-                <div>
-                    <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
-                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
-                </div>
-                <span class="version-tag">V1.0</span>
+            <div class="card" style="text-align: left;">
+                <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
+                <p style="color:#777; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
             </div>
         </div>
 
@@ -273,19 +168,21 @@
         <div id="donaciones" class="category-section">
             <h1><span style="color:var(--accent)">DONACIONES</span></h1>
             <div class="grid">
-                <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card">
+                    <h3>DONACIÓN LIBRE</h3>
+                    <p style="text-transform: none; color:#777;">Apoya el crecimiento del servidor.</p>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action">APOYAR</a>
+                </div>
             </div>
         </div>
 
         <div id="sobre" class="category-section">
             <h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
-            <div class="grid">
-                <div class="card" style="text-align: left; grid-column: span 2;">
-                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
-                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
-                        AterniaMC se originó con el objetivo del aprendizaje y diversión del creador.
-                    </p>
-                </div>
+            <div class="card" style="text-align: left;">
+                <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
+                <p style="text-transform: none; color:#aaa; line-height: 1.6;">
+                    AterniaMC se originó con el objetivo del aprendizaje y diversión del creador. Buscamos crear una experiencia única para los jugadores.
+                </p>
             </div>
         </div>
 
@@ -302,20 +199,21 @@
 
         <div id="faq" class="category-section">
             <h1>PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
-            <div id="faqForm" style="display:none; background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
-                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..."></textarea>
-                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()">PUBLICAR</button>
+            <div id="faqList">
+                <div class="faq-card">
+                    <span class="faq-author">SISTEMA</span>
+                    <div class="faq-text">¿Cómo puedo comprar? Visita nuestra tienda en Tebex.</div>
+                </div>
             </div>
-            <div id="faqList"></div>
         </div>
     </div>
 
-    <!-- FIREBASE SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
+        // Configuración Firebase (la que ya tenías)
         const firebaseConfig = {
             apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
             authDomain: "aterniamc-web.firebaseapp.com",
@@ -324,12 +222,7 @@
             messagingSenderId: "748766671298",
             appId: "1:748766671298:web:bd934aa81b246b9e0ba65b"
         };
-
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        let skinViewer = null;
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -338,231 +231,38 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(id === 'faq') renderFaq();
         }
 
         function copyIP() {
             const ipText = document.getElementById('serverIP').innerText;
-            const tooltip = document.getElementById('copyTooltip');
             navigator.clipboard.writeText(ipText).then(() => {
+                const tooltip = document.getElementById('copyTooltip');
                 tooltip.classList.add('show');
                 setTimeout(() => tooltip.classList.remove('show'), 2000);
             });
         }
 
-        async function updateServerStatus() {
-            try {
-                const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
-                const data = await response.json();
-                const icon = document.getElementById('statusIcon');
-                const players = document.getElementById('playerCount');
-                if(data.online) {
-                    icon.className = 'status-dot online-dot';
-                    players.innerText = `${data.players.online} / ${data.players.max}`;
-                    document.getElementById('statusText').innerText = 'ONLINE';
-                    document.getElementById('statusText').style.color = '#2ecc71';
-                }
-            } catch (e) {}
-        }
-
-        function togglePassView() {
-            const passInput = document.getElementById('authPass');
-            passInput.type = passInput.type === "password" ? "text" : "password";
-        }
-
         function openAuth(type) { 
-            currentAuthType = type;
             document.getElementById('modalTitle').innerText = type; 
             document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
             document.getElementById('authModal').style.display = 'flex'; 
         }
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
-        async function handleAuth() {
-            const mcUser = document.getElementById('authUser').value.trim(); 
-            const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPass').value;
-            const errorBox = document.getElementById('authError');
-
-            try {
-                if (currentAuthType === 'REGISTRARSE') {
-                    if(!mcUser) throw new Error("DEBES INGRESAR TU USUARIO DE MINECRAFT");
-                    const res = await auth.createUserWithEmailAndPassword(email, pass);
-                    await db.collection('users').doc(res.user.uid).set({ 
-                        mc_user: mcUser, 
-                        nickname: mcUser,
-                        bio: "",
-                        gender: "No definido"
-                    });
-                } else {
-                    await auth.signInWithEmailAndPassword(email, pass);
-                }
-                location.reload();
-            } catch (e) {
-                errorBox.innerText = e.message;
-                errorBox.style.display = 'block';
-            }
-        }
-
-        function logout() { auth.signOut().then(() => location.reload()); }
-
-        function toggleCustomGender() {
-            const select = document.getElementById('editGender');
-            const customInput = document.getElementById('customGenderInput');
-            customInput.style.display = select.value === 'Otro' ? 'block' : 'none';
-        }
-
-        async function openEditProfile() {
-            const user = auth.currentUser;
-            if(!user) return;
-
-            const doc = await db.collection('users').doc(user.uid).get();
-            const data = doc.data();
-
-            if(!data) return;
-
-            const mcUsername = data.mc_user || data.nickname || "Steve";
-            document.getElementById('editNickInput').value = data.nickname || mcUsername;
-            document.getElementById('editBio').value = data.bio || "";
-            document.getElementById('mcNameDisplay').innerText = `CUENTA: ${mcUsername.toUpperCase()}`;
-            
-            const genderOptions = ["No definido", "Hombre", "Mujer", "Prefiero no decirlo"];
-            if(genderOptions.includes(data.gender)) {
-                document.getElementById('editGender').value = data.gender;
-                document.getElementById('customGenderInput').style.display = 'none';
-            } else if (data.gender) {
-                document.getElementById('editGender').value = "Otro";
-                document.getElementById('customGenderInput').value = data.gender;
-                document.getElementById('customGenderInput').style.display = 'block';
-            }
-
-            document.getElementById('editProfileModal').style.display = 'flex';
-
-            if(!skinViewer) {
-                skinViewer = new skinview3d.SkinViewer({
-                    canvas: document.createElement("canvas"),
-                    width: 250,
-                    height: 350
-                });
-                document.getElementById('skin-container').innerHTML = "";
-                document.getElementById('skin-container').appendChild(skinViewer.canvas);
-                skinViewer.autoRotate = true;
-            }
-            skinViewer.loadSkin(`https://mc-heads.net/skin/${mcUsername}`);
-        }
-
-        function closeEditProfile() { document.getElementById('editProfileModal').style.display = 'none'; }
-        
-        async function updateProfile() {
-            const newNick = document.getElementById('editNickInput').value;
-            const newBio = document.getElementById('editBio').value;
-            const genderSelect = document.getElementById('editGender').value;
-            let finalGender = genderSelect === 'Otro' ? document.getElementById('customGenderInput').value : genderSelect;
-
-            if(!newNick.trim()) return;
-            const user = auth.currentUser;
-            await db.collection('users').doc(user.uid).update({ 
-                nickname: newNick,
-                bio: newBio,
-                gender: finalGender || "Otro"
-            });
-            location.reload();
-        }
-
-        async function deleteAccount() {
-            if(!confirm("¿ESTÁS COMPLETAMENTE SEGURO? ESTA ACCIÓN ELIMINARÁ TU PERFIL, PREGUNTAS Y ACCESO DE FORMA PERMANENTE.")) return;
-            
-            const user = auth.currentUser;
-            const uid = user.uid;
-
-            try {
-                // 1. Borrar datos de Firestore
-                await db.collection('users').doc(uid).delete();
-                
-                // 2. Borrar preguntas del FAQ del usuario
-                const faqSnap = await db.collection('faq').where('uid', '==', uid).get();
-                const batch = db.batch();
-                faqSnap.forEach(doc => batch.delete(doc.ref));
-                await batch.commit();
-
-                // 3. Borrar de Firebase Auth
-                await user.delete();
-                
-                alert("CUENTA ELIMINADA CORRECTAMENTE.");
-                location.reload();
-            } catch (e) {
-                alert("PARA BORRAR TU CUENTA DEBES HABER INICIADO SESIÓN RECIENTEMENTE. POR SEGURIDAD, CIERRA SESIÓN E INICIA SESIÓN DE NUEVO ANTES DE INTENTARLO.");
-            }
-        }
-
-        async function postFaq() {
-            const txt = document.getElementById('faqTxt').value;
-            if(!txt.trim()) return;
-            const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-            const nick = userDoc.data().nickname;
-            await db.collection('faq').add({ author: nick, content: txt, timestamp: Date.now(), uid: auth.currentUser.uid });
-            document.getElementById('faqTxt').value = '';
-        }
-
-        function renderFaq() {
-            const list = document.getElementById('faqList');
-            db.collection('faq').orderBy('timestamp', 'desc').onSnapshot(snap => {
-                list.innerHTML = '';
-                snap.forEach(doc => {
-                    const p = doc.data();
-                    const isOwner = auth.currentUser && auth.currentUser.uid === p.uid;
-                    list.innerHTML += `
-                        <div class="faq-card">
-                            <span class="faq-author">${p.author}</span>
-                            <div class="faq-text">${p.content}</div>
-                            ${isOwner ? `<div class="faq-actions">
-                                <button class="btn-mini" onclick="openEdit('${doc.id}', '${p.content}')">EDITAR</button>
-                                <button class="btn-mini" style="color:#ff4757" onclick="deletePost('${doc.id}')">ELIMINAR</button>
-                            </div>` : ''}
-                        </div>`;
-                });
-            });
-        }
-
-        function openEdit(id, content) {
-            editingId = id;
-            document.getElementById('editFaqTxt').value = content;
-            document.getElementById('editModal').style.display = 'flex';
-        }
-        function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
-        async function saveEdit() {
-            await db.collection('faq').doc(editingId).update({ content: document.getElementById('editFaqTxt').value });
-            closeEdit();
-        }
-        async function deletePost(id) { if(confirm("¿Borrar?")) await db.collection('faq').doc(id).delete(); }
-
+        // Inicializar llaves
         window.onload = () => {
-            updateServerStatus(); setInterval(updateServerStatus, 30000);
             const container = document.getElementById('llavesContainer');
             const RAREZAS = [{n:'COMÚN', c:'#95a5a6', p:1}, {n:'RARO', c:'#00d2d3', p:2.5}];
             RAREZAS.forEach(r => {
-                container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; width:90%;">COMPRAR</a></div>`;
+                container.innerHTML += `
+                    <div class="card" style="border-top: 4px solid ${r.c}">
+                        <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
+                        <h2 style="color:${r.c}">${r.n} x5</h2>
+                        <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
+                        <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; width:90%;">COMPRAR</a>
+                    </div>`;
             });
         };
-
-        auth.onAuthStateChanged(async user => {
-            if(user) {
-                const doc = await db.collection('users').doc(user.uid).get();
-                const data = doc.data();
-                if(data) {
-                    document.getElementById('authButtons').style.display = 'none';
-                    document.getElementById('userLogged').style.display = 'flex';
-                    document.getElementById('btnEditProfile').style.display = 'flex';
-                    document.getElementById('userTag').innerText = data.nickname;
-                    const mcHead = data.mc_user || data.nickname || "Steve";
-                    document.getElementById('headImg').src = `https://mc-heads.net/avatar/${mcHead}`;
-                    document.getElementById('faqForm').style.display = 'block';
-                }
-            }
-            renderFaq();
-        });
-
-        document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
     </script>
 </body>
 </html>
