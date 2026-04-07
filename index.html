@@ -105,7 +105,7 @@
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         
-        .modal-content input, .modal-content textarea { 
+        .modal-content input, .modal-content textarea, .modal-content select { 
             width: 100%; 
             max-width: 100%; 
             padding: 12px; 
@@ -119,6 +119,8 @@
             font-family: inherit; 
             resize: vertical;
         }
+
+        .modal-content select option { background: var(--card-bg); color: white; }
         
         .pass-wrapper { position: relative; width: 100%; }
         .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
@@ -197,6 +199,11 @@
             color: #000;
         }
 
+        /* ESTILOS ESPECÍFICOS PERFIL */
+        .skin-container { width: 120px; height: 180px; margin: 0 auto 20px auto; position: relative; }
+        .skin-container img { height: 100%; transition: transform 0.5s ease-in-out; }
+        .skin-container:hover img { transform: rotateY(360deg); }
+
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
             .sidebar.open { left: 0; }
@@ -226,6 +233,45 @@
             </div>
             <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
             <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR PERFIL (ACTUALIZADO) -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>EDITAR MI PERFIL</h2>
+            
+            <div class="skin-container">
+                <img id="profileSkinImg" src="" alt="Skin 3D">
+            </div>
+
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin;">
+                <input type="text" id="editNickname" placeholder="NICKNAME (APODO)">
+                
+                <select id="editGender" onchange="toggleOtherGender()">
+                    <option value="" disabled selected>SELECCIONA GÉNERO</option>
+                    <option value="MASCULINO">MASCULINO</option>
+                    <option value="FEMENINO">FEMENINO</option>
+                    <option value="OTRO">OTRO...</option>
+                    <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                </select>
+                
+                <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
+
+                <div style="text-align: right; font-size: 0.6rem; margin-bottom: 5px; font-weight: 900;">
+                    <span id="charCount">0</span>/500
+                </div>
+                <textarea id="editBio" rows="4" maxlength="500" placeholder="DESCRIPCIÓN BREVE..." oninput="updateCharCount()"></textarea>
+
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
+                    <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR</button>
+                </div>
+
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+                
+                <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="font-size: 0.7rem;">ELIMINAR MI CUENTA DEFINITIVAMENTE</button>
+            </div>
         </div>
     </div>
 
@@ -296,8 +342,8 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
-            <!-- 2. BOTÓN EDITAR PERFIL (NUEVO) -->
-            <button id="btnEditProfile" class="btn-topbar-edit" onclick="alert('Funcionalidad de editar perfil próximamente')">
+            <!-- 2. BOTÓN EDITAR PERFIL (YA FUNCIONAL) -->
+            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
 
@@ -440,11 +486,9 @@
             if(id === 'faq') renderFaq();
         }
 
-        // FUNCIÓN PARA COPIAR IP
         function copyIP() {
             const ipText = document.getElementById('serverIP').innerText;
             const tooltip = document.getElementById('copyTooltip');
-            
             navigator.clipboard.writeText(ipText).then(() => {
                 tooltip.classList.add('show');
                 setTimeout(() => tooltip.classList.remove('show'), 2000);
@@ -509,6 +553,57 @@
 
         function logout() { localStorage.removeItem('u'); location.reload(); }
 
+        /* FUNCIONES PERFIL */
+        function openProfile() {
+            const u = localStorage.getItem('u');
+            if(!u) return;
+            document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
+            document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
+            document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
+            document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
+            updateCharCount();
+            toggleOtherGender();
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
+
+        function toggleOtherGender() {
+            const select = document.getElementById('editGender');
+            const otherInput = document.getElementById('editGenderOther');
+            if(select.value === 'OTRO') {
+                otherInput.style.display = 'block';
+                otherInput.value = localStorage.getItem('pGenderOther') || '';
+            } else {
+                otherInput.style.display = 'none';
+            }
+        }
+
+        function updateCharCount() {
+            const bio = document.getElementById('editBio');
+            document.getElementById('charCount').innerText = bio.value.length;
+        }
+
+        function saveProfile() {
+            localStorage.setItem('pNickname', document.getElementById('editNickname').value);
+            localStorage.setItem('pBio', document.getElementById('editBio').value);
+            localStorage.setItem('pGender', document.getElementById('editGender').value);
+            if(document.getElementById('editGender').value === 'OTRO') {
+                localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+            }
+            alert('PERFIL ACTUALIZADO CON ÉXITO');
+            closeProfile();
+        }
+
+        function confirmDeleteAccount() {
+            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos y no se puede deshacer.");
+            if(confirm) {
+                localStorage.clear();
+                alert("CUENTA ELIMINADA.");
+                location.reload();
+            }
+        }
+
         function postFaq() {
             const user = localStorage.getItem('u');
             const txt = document.getElementById('faqTxt').value;
@@ -560,7 +655,7 @@
             if(u) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userLogged').style.display = 'flex';
-                document.getElementById('btnEditProfile').style.display = 'flex'; // Mostrar botón editar
+                document.getElementById('btnEditProfile').style.display = 'flex';
                 document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
             }
