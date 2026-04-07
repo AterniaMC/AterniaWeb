@@ -30,6 +30,7 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
+        /* AJUSTE SIDEBAR */
         .sidebar { 
             width: 280px; 
             background-color: var(--sidebar-bg); 
@@ -53,6 +54,7 @@
         .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
 
+        /* SERVER STATUS CARD & COPY IP */
         .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
         
@@ -72,6 +74,7 @@
         .ip-copy-box i { color: #555; font-size: 0.8rem; transition: 0.3s; }
         .ip-copy-box:hover i { color: var(--accent); }
         
+        /* Tooltip de Copiado */
         .copy-tooltip {
             position: absolute;
             top: -30px;
@@ -97,11 +100,12 @@
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--sidebar-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--accent); }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 550px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
+        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         
         .modal-content input, .modal-content textarea, .modal-content select { 
             width: 100%; 
+            max-width: 100%; 
             padding: 12px; 
             margin-bottom: 15px; 
             background: rgba(255,255,255,0.05); 
@@ -111,11 +115,11 @@
             outline: none; 
             box-sizing: border-box; 
             font-family: inherit; 
-            font-size: 0.8rem;
+            resize: vertical;
         }
 
-        .modal-content label { display: block; text-align: left; font-size: 0.65rem; color: var(--accent); font-weight: 900; margin-bottom: 5px; }
-
+        .modal-content select option { background: var(--card-bg); color: white; }
+        
         .pass-wrapper { position: relative; width: 100%; }
         .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
         .toggle-pass:hover { color: var(--accent); }
@@ -123,12 +127,16 @@
         .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; box-shadow: 0 0 10px var(--error-glow); animation: shake 0.4s; }
 
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
-        .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 4px; display: block; }
-        .faq-nick-display { color: #888; font-size: 0.75rem; font-weight: 900; margin-bottom: 8px; display: block; }
+        .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
         .faq-text { text-transform: none; color: var(--lore-color); line-height: 1.5; font-size: 0.9rem; font-weight: 600; }
-        
+        .faq-actions { margin-top: 12px; display: flex; gap: 15px; }
+        .btn-mini { background: none; border: none; color: #555; font-size: 0.65rem; font-weight: 900; cursor: pointer; transition: 0.3s; padding: 0; letter-spacing: 1px; }
+        .btn-mini:hover { color: var(--accent); }
+        .btn-delete:hover { color: #ff4757; }
+
         .theme-switch { position: relative; width: 55px; height: 28px; cursor: pointer; }
         .theme-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
@@ -143,31 +151,71 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
         
-        .news-cell { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; }
-        .version-tag { background: rgba(0, 229, 229, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; border: 1px solid var(--accent); }
+        .news-cell { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            border-left: 4px solid var(--accent); 
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .version-tag {
+            background: rgba(0, 229, 229, 0.1);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            border: 1px solid var(--accent);
+        }
 
         .category-section { display: none; }
         .category-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-topbar-edit { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent); color: var(--text); padding: 8px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 900; cursor: pointer; transition: 0.3s; display: none; align-items: center; gap: 8px; }
-        .btn-topbar-edit:hover { background: var(--accent); color: #000; }
+        .social-link { display: flex; align-items: center; gap: 12px; padding: 10px; color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
+        .social-link:hover { color: var(--accent); transform: translateX(5px); }
 
-        /* PERFIL LAYOUT COPIADO DE LA IMAGEN */
-        .profile-grid { display: flex; gap: 30px; align-items: flex-start; text-align: left; }
-        .profile-skin-side { width: 150px; text-align: center; flex-shrink: 0; }
-        .profile-skin-side img { width: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); margin-bottom: 10px; }
-        .profile-skin-side span { font-weight: 900; font-size: 0.9rem; color: white; display: block; }
-        .profile-form-side { flex-grow: 1; }
+        /* ESTILO BOTÓN EDITAR PERFIL EN TOPBAR */
+        .btn-topbar-edit {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            display: none; /* Se muestra solo si hay login */
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-topbar-edit:hover {
+            background: var(--accent);
+            color: #000;
+        }
 
-        .security-section { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
-        .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
+        .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
+        .profile-left { width: 150px; text-align: center; }
+        .profile-right { flex: 1; }
+        .skin-container { width: 120px; height: 180px; margin: 0 auto 10px auto; position: relative; background: rgba(255,255,255,0.03); border-radius: 10px; }
+        .skin-container img { height: 100%; } /* Animación eliminada */
+        
+        .profile-label { font-size: 0.7rem; font-weight: 900; margin-bottom: 5px; display: block; color: var(--accent); }
+        .security-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
+        .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
 
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
             .sidebar.open { left: 0; }
             .main-content { margin-left: 0; width: 100%; padding: 80px 20px 40px 20px; box-sizing: border-box; }
             .menu-toggle { display: block; }
-            .profile-grid { flex-direction: column; align-items: center; }
+            .top-bar { justify-content: center; flex-wrap: wrap; }
+            .modal-content { padding: 30px 20px; width: 95%; }
+            .profile-container { flex-direction: column; align-items: center; }
             .security-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -185,7 +233,7 @@
                 <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
                 <div class="pass-wrapper">
                     <input type="password" id="authPass" placeholder="CONTRASEÑA">
-                    <i class="fas fa-eye toggle-pass" onclick="togglePassView('authPass', this)"></i>
+                    <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
                 </div>
             </div>
             <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
@@ -193,57 +241,55 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR PERFIL VERSION 1.003 -->
     <div id="profileModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 650px;">
             <h2>EDITAR PERFIL</h2>
             
-            <div class="profile-grid">
-                <div class="profile-skin-side">
-                    <img id="profileSkinImg" src="" alt="Skin">
-                    <span id="profileOriginalName">@NOMBRE</span>
+            <div class="profile-container">
+                <div class="profile-left">
+                    <div class="skin-container">
+                        <img id="profileSkinImg" src="" alt="Skin">
+                    </div>
+                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem;">NOMBRE</span>
                 </div>
-                
-                <div class="profile-form-side">
-                    <label>APODO</label>
+
+                <div class="profile-right">
+                    <label class="profile-label">APODO</label>
                     <input type="text" id="editNickname" placeholder="TU APODO">
-                    
-                    <label>GENERO</label>
+
+                    <label class="profile-label">GENERO</label>
                     <select id="editGender" onchange="toggleOtherGender()">
                         <option value="" disabled selected>SELECCIONA GÉNERO</option>
                         <option value="MASCULINO">MASCULINO</option>
                         <option value="FEMENINO">FEMENINO</option>
-                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
                         <option value="OTRO">OTRO...</option>
+                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
                     </select>
-                    <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
+                    <input type="text" id="editGenderOther" placeholder="ESPECIFICA" style="display:none;">
 
-                    <label>DESCRIPCION BREVE</label>
+                    <label class="profile-label">DESCRIPCION BREVE</label>
                     <textarea id="editBio" rows="3" maxlength="500" placeholder="SOBRE TI..." oninput="updateCharCount()"></textarea>
-                    <div style="text-align: right; font-size: 0.5rem; margin-top: -10px; color:#555;"><span id="charCount">0</span>/500</div>
+                    <div style="text-align: right; font-size: 0.5rem; margin-top: -10px;"><span id="charCount">0</span>/500</div>
                 </div>
             </div>
 
             <div class="security-section">
-                <h3 style="font-size: 0.8rem; color:white;">SEGURIDAD DE LA CUENTA</h3>
+                <h3 style="font-size: 0.8rem; letter-spacing: 1px;">SEGURIDAD DE LA CUENTA</h3>
                 <div class="security-grid">
                     <div>
-                        <label>CONTRASEÑA</label>
-                        <input type="password" value="********" readonly style="opacity: 0.5; cursor: not-allowed;">
+                        <label class="profile-label">CONTRASEÑA</label>
+                        <input type="password" value="00000000" disabled style="opacity: 0.5;">
                     </div>
                     <div>
-                        <label>CAMBIAR CONTRASEÑA</label>
-                        <div class="pass-wrapper">
-                            <input type="password" id="newPass" placeholder="NUEVA CLAVE">
-                            <i class="fas fa-eye toggle-pass" onclick="togglePassView('newPass', this)"></i>
-                        </div>
+                        <label class="profile-label">CAMBIAR CONTRASEÑA</label>
+                        <input type="password" id="newPass" placeholder="NUEVA CLAVE">
                     </div>
                     <div>
-                        <label>CORREO</label>
-                        <input type="text" id="currentEmailDisplay" readonly style="opacity: 0.5;">
+                        <label class="profile-label">CORREO</label>
+                        <input type="email" id="displayEmail" disabled style="opacity: 0.5;">
                     </div>
                     <div>
-                        <label>CAMBIAR CORREO</label>
+                        <label class="profile-label">CAMBIAR CORREO</label>
                         <input type="email" id="newEmail" placeholder="NUEVO CORREO">
                     </div>
                 </div>
@@ -253,8 +299,8 @@
                 <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
                 <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
             </div>
-            
-            <button class="btn-action" style="background:#ff4757; width:100%; margin-top:10px; font-size:0.7rem;" onclick="confirmDeleteAccount()">ELIMINAR CUENTA</button>
+
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 20px; width: 100%; background: #ff4757; color: white; padding: 8px; border-radius: 5px;">ELIMINAR CUENTA</button>
         </div>
     </div>
 
@@ -288,15 +334,18 @@
             <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;">REDES SOCIALES</p>
             <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
             <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+            <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
         </div>
 
         <div class="server-status-card">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
+            
             <div class="ip-copy-box" onclick="copyIP()">
                 <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
                 <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
                 <i class="fas fa-copy"></i>
             </div>
+
             <div style="margin-top: 10px; font-size: 0.75rem; font-weight: 900;">
                 <span id="statusIcon" class="status-dot offline-dot"></span>
                 <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
@@ -311,10 +360,7 @@
         <div class="top-bar">
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
-                <div style="display: flex; flex-direction: column; line-height: 1;">
-                    <span id="userTag" style="font-weight:900; font-size:0.75rem; color:var(--accent);"></span>
-                    <span id="userNickHeader" style="font-size: 0.6rem; color:#fff; font-weight:900;"></span>
-                </div>
+                <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
                 <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
             </div>
 
@@ -337,22 +383,97 @@
                     <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
                     <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
                 </div>
-                <span class="version-tag">V1.003</span>
+                <span class="version-tag">V1.0</span>
             </div>
         </div>
 
-        <!-- Secciones de Rangos, Llaves, etc. se mantienen igual -->
         <div id="rangos" class="category-section">
             <h1>RANGOS <span style="color:var(--accent)">EXCLUSIVOS</span></h1>
             <div class="grid">
-                <div class="card"><h2>VIP</h2><div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ADQUIRIR</a></div>
-                <div class="card" style="border-color:gold;"><h2 style="color:gold;">VIP+</h2><div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%">ADQUIRIR</a></div>
+                <div class="card">
+                    <h2>VIP</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ADQUIRIR</a>
+                </div>
+                <div class="card" style="border-color:gold;">
+                    <h2 style="color:gold;">VIP+</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%">ADQUIRIR</a>
+                </div>
             </div>
         </div>
 
         <div id="llaves" class="category-section">
             <h1>LLAVES DE <span style="color:var(--accent)">CRATES</span></h1>
             <div class="grid" id="llavesContainer"></div>
+        </div>
+
+        <div id="donaciones" class="category-section">
+            <h1><span style="color:var(--accent)">DONACIONES</span></h1>
+            <div class="grid">
+                <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3>MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3>GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card" style="border: 2px solid var(--accent);">
+                    <h3>DONACIÓN LIBRE</h3>
+                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;">MONTO ABIERTO</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ELEGIR MONTO</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="sobre" class="category-section">
+            <h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
+            <div class="grid">
+                <div class="card" style="text-align: left; grid-column: span 2;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                        AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
+                    </p>
+                    
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+                    
+                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> ENFOQUE DEL SERVIDOR</h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                        Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
+                    </p>
+
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+
+                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
+                    <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
+                        <li><b style="color:var(--lore-color)">1.</b> Se prohíbe el uso de hacks, cheats, o clientes modificados.</li>
+                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador, de manera que se eviten palabrotas, chistes fuera de lugar, entre otros.</li>
+                        <li><b style="color:var(--lore-color)">3.</b> Evita el spam en el chat.</li>
+                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord, el aprovechamiento de estos será sancionado.</li>
+                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL, este será severamente sancionado.</li>
+                        <li><b style="color:var(--lore-color)">6.</b> No se permite el pvp aunque esté activo.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
+                    <div style="text-align: left; margin-top:20px;">
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.21.11 (Próximamente compatible con todas las versiones)</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL VANILLA</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">FECHA DE CREACIÓN:</span> DICIEMBRE 2025</p>
+                    </div>
+                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
+                </div>
+            </div>
+        </div>
+
+        <div id="staff" class="category-section">
+            <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
+            <div class="grid">
+                <div class="card" style="border-color: gold;">
+                    <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
+                    <h3 style="color:gold;">PERROLOLXD</h3>
+                    <p style="font-size: 0.7rem; letter-spacing: 2px;">OWNER & DEVELOPER</p>
+                </div>
+            </div>
         </div>
 
         <div id="faq" class="category-section">
@@ -363,22 +484,19 @@
             </div>
             <div id="faqList"></div>
         </div>
-
-        <!-- El resto de secciones (Donaciones, Sobre, Staff) permanecen igual -->
-        <div id="donaciones" class="category-section"><h1><span style="color:var(--accent)">DONACIONES</span></h1><div class="grid"><div class="card"><h3>LIBRE</h3><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div></div></div>
-        <div id="sobre" class="category-section"><h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1><div class="card"><p style="text-transform:none;">Survival Vanilla enfocado en la comunidad.</p></div></div>
-        <div id="staff" class="category-section"><h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1><div class="grid"><div class="card"><h3 style="color:gold;">PERROLOLXD</h3><p>OWNER</p></div></div></div>
     </div>
 
     <script>
         const RAREZAS = [
             {n:'COMÚN', c:'var(--comun)', p:1.00}, {n:'RARO', c:'var(--raro)', p:2.50},
-            {n:'ÉPICO', c:'var(--epico)', p:5.00}, {n:'LEGENDARIO', c:'var(--legendary)', p:10.00}, 
-            {n:'MÍTICO', c:'var(--mitico)', p:20.00}, {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
+            {n:'ÉPICO', c:'var(--epico)', p:5.00}, 
+            {n:'LEGENDARIO', c:'var(--legendary)', p:10.00}, {n:'MÍTICO', c:'var(--mitico)', p:20.00}, 
+            {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
         ];
 
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
         let editingId = null;
+        let currentAuthType = 'INICIAR SESIÓN';
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -387,6 +505,9 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
+            if(window.innerWidth <= 992) {
+                 document.getElementById('sidebar').classList.remove('open');
+            }
             if(id === 'faq') renderFaq();
         }
 
@@ -406,19 +527,22 @@
                 const icon = document.getElementById('statusIcon');
                 const text = document.getElementById('statusText');
                 const players = document.getElementById('playerCount');
-                if(data.online) {
+                if(data.online === true) {
                     icon.className = 'status-dot online-dot'; text.innerText = 'ONLINE'; text.style.color = '#2ecc71';
                     players.innerText = `${data.players.online} / ${data.players.max}`;
                 } else {
                     icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
-                    players.innerText = `0 / --`;
+                    players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
                 }
-            } catch (e) { console.log(e); }
+            } catch (e) {
+                document.getElementById('statusText').innerText = 'OFFLINE';
+            }
         }
 
-        function togglePassView(inputId, icon) {
-            const input = document.getElementById(inputId);
-            input.type = input.type === "password" ? "text" : "password";
+        function togglePassView() {
+            const passInput = document.getElementById('authPass');
+            const icon = document.querySelector('.toggle-pass');
+            passInput.type = passInput.type === "password" ? "text" : "password";
             icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
         }
 
@@ -454,15 +578,16 @@
 
         function logout() { localStorage.removeItem('u'); location.reload(); }
 
+        /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
             const u = localStorage.getItem('u');
             if(!u) return;
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
-            document.getElementById('profileOriginalName').innerText = `@${u}`;
+            document.getElementById('profileNameLabel').innerText = u;
+            document.getElementById('displayEmail').value = localStorage.getItem('regEmail') || '';
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
             document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
-            document.getElementById('currentEmailDisplay').value = localStorage.getItem('regEmail') || '';
             updateCharCount();
             toggleOtherGender();
             document.getElementById('profileModal').style.display = 'flex';
@@ -473,38 +598,51 @@
         function toggleOtherGender() {
             const select = document.getElementById('editGender');
             const otherInput = document.getElementById('editGenderOther');
-            otherInput.style.display = select.value === 'OTRO' ? 'block' : 'none';
+            if(select.value === 'OTRO') {
+                otherInput.style.display = 'block';
+                otherInput.value = localStorage.getItem('pGenderOther') || '';
+            } else {
+                otherInput.style.display = 'none';
+            }
         }
 
         function updateCharCount() {
-            document.getElementById('charCount').innerText = document.getElementById('editBio').value.length;
+            const bio = document.getElementById('editBio');
+            document.getElementById('charCount').innerText = bio.value.length;
         }
 
         function saveProfile() {
-            const nick = document.getElementById('editNickname').value;
-            const nPass = document.getElementById('newPass').value;
-            const nEmail = document.getElementById('newEmail').value;
-
-            localStorage.setItem('pNickname', nick);
+            localStorage.setItem('pNickname', document.getElementById('editNickname').value);
             localStorage.setItem('pBio', document.getElementById('editBio').value);
             localStorage.setItem('pGender', document.getElementById('editGender').value);
-            if(nPass) localStorage.setItem('regPass', nPass);
-            if(nEmail) localStorage.setItem('regEmail', nEmail);
             
-            alert('PERFIL ACTUALIZADO');
+            if(document.getElementById('editGender').value === 'OTRO') {
+                localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+            }
+
+            const newP = document.getElementById('newPass').value;
+            const newE = document.getElementById('newEmail').value;
+            if(newP) localStorage.setItem('regPass', newP);
+            if(newE) localStorage.setItem('regEmail', newE);
+
+            alert('CAMBIOS GUARDADOS CON ÉXITO');
             location.reload();
         }
 
         function confirmDeleteAccount() {
-            if(confirm("¿Eliminar cuenta definitivamente?")) { localStorage.clear(); location.reload(); }
+            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos y no se puede deshacer.");
+            if(confirm) {
+                localStorage.clear();
+                alert("CUENTA ELIMINADA.");
+                location.reload();
+            }
         }
 
         function postFaq() {
             const user = localStorage.getItem('u');
-            const nick = localStorage.getItem('pNickname') || '';
             const txt = document.getElementById('faqTxt').value;
             if(!user || !txt.trim()) return;
-            posts.unshift({ id: Date.now(), author: user, nickname: nick, content: txt });
+            posts.unshift({ id: Date.now(), author: user, content: txt });
             localStorage.setItem('faqPosts', JSON.stringify(posts));
             document.getElementById('faqTxt').value = '';
             renderFaq();
@@ -517,14 +655,24 @@
             posts.forEach(p => {
                 list.innerHTML += `
                     <div class="faq-card">
-                        <span class="faq-author">@${p.author} (NOMBRE ORIGINAL)</span>
-                        ${p.nickname ? `<span class="faq-nick-display">${p.nickname} (NICK)</span>` : ''}
+                        <span class="faq-author">${p.author}</span>
                         <div class="faq-text">${p.content}</div>
-                        ${currentUser === p.author ? `<div style="margin-top:10px;"><button class="btn-action btn-outline" style="padding:4px 10px; font-size:0.6rem;" onclick="deletePost(${p.id})">BORRAR</button></div>` : ''}
+                        ${currentUser === p.author ? `<div class="faq-actions"><button class="btn-mini" onclick="openEdit(${p.id})">EDITAR</button><button class="btn-mini btn-delete" onclick="deletePost(${p.id})">ELIMINAR</button></div>` : ''}
                     </div>`;
             });
         }
 
+        function openEdit(id) {
+            editingId = id;
+            document.getElementById('editFaqTxt').value = posts.find(p => p.id === id).content;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
+        function saveEdit() {
+            posts.find(p => p.id === editingId).content = document.getElementById('editFaqTxt').value;
+            localStorage.setItem('faqPosts', JSON.stringify(posts));
+            closeEdit(); renderFaq();
+        }
         function deletePost(id) {
             posts = posts.filter(p => p.id !== id);
             localStorage.setItem('faqPosts', JSON.stringify(posts));
@@ -532,27 +680,23 @@
         }
 
         window.onload = () => {
-            updateServerStatus();
+            updateServerStatus(); setInterval(updateServerStatus, 30000);
             const container = document.getElementById('llavesContainer');
             RAREZAS.forEach(r => {
                 container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
             });
             const u = localStorage.getItem('u');
-            const nick = localStorage.getItem('pNickname');
             if(u) {
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('userLogged').style.display = 'flex';
                 document.getElementById('btnEditProfile').style.display = 'flex';
-                document.getElementById('userTag').innerText = `@${u}`;
-                document.getElementById('userNickHeader').innerText = nick ? nick : '';
+                document.getElementById('userTag').innerText = u;
                 document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
             }
             renderFaq();
         };
 
-        document.getElementById('theme-toggle').onclick = () => { 
-            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); 
-        };
+        document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
     </script>
 </body>
 </html>
