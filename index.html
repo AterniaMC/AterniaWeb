@@ -66,7 +66,7 @@
 
         .pass-wrapper { position: relative; width: 100%; }
         .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
-        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; animation: shake 0.4s; text-align: center; }
+        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; animation: shake 0.4s; }
 
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
@@ -149,7 +149,6 @@
             </div>
             <div class="profile-info-side">
                 <h2>MI PERFIL</h2>
-                <div id="profileError" class="auth-error-msg"></div>
                 <label style="font-size:0.6rem; color:#555;">NICKNAME</label>
                 <input type="text" id="editNickInput" placeholder="TU APODO ESTÉTICO">
                 
@@ -377,10 +376,7 @@
             document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
             document.getElementById('authModal').style.display = 'flex'; 
         }
-        function closeAuth() { 
-            document.getElementById('authModal').style.display = 'none'; 
-            document.getElementById('authError').style.display = 'none';
-        }
+        function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
         async function handleAuth() {
             const mcUser = document.getElementById('authUser').value.trim(); 
@@ -403,7 +399,7 @@
                 }
                 location.reload();
             } catch (e) {
-                errorBox.innerText = e.message.toUpperCase();
+                errorBox.innerText = e.message;
                 errorBox.style.display = 'block';
             }
         }
@@ -452,14 +448,10 @@
                 document.getElementById('skin-container').appendChild(skinViewer.canvas);
                 skinViewer.autoRotate = true;
             }
-            // Asegurar que use mc_user para la skin
             skinViewer.loadSkin(`https://mc-heads.net/skin/${mcUsername}`);
         }
 
-        function closeEditProfile() { 
-            document.getElementById('editProfileModal').style.display = 'none'; 
-            document.getElementById('profileError').style.display = 'none';
-        }
+        function closeEditProfile() { document.getElementById('editProfileModal').style.display = 'none'; }
         
         async function updateProfile() {
             const newNick = document.getElementById('editNickInput').value;
@@ -478,9 +470,6 @@
         }
 
         async function deleteAccount() {
-            const errorBox = document.getElementById('profileError');
-            errorBox.style.display = 'none';
-
             if(!confirm("¿ESTÁS COMPLETAMENTE SEGURO? ESTA ACCIÓN ELIMINARÁ TU PERFIL, PREGUNTAS Y ACCESO DE FORMA PERMANENTE.")) return;
             
             const user = auth.currentUser;
@@ -499,10 +488,10 @@
                 // 3. Borrar de Firebase Auth
                 await user.delete();
                 
+                alert("CUENTA ELIMINADA CORRECTAMENTE.");
                 location.reload();
             } catch (e) {
-                errorBox.innerText = "POR SEGURIDAD, DEBES INICIAR SESIÓN DE NUEVO PARA ELIMINAR TU CUENTA.";
-                errorBox.style.display = 'block';
+                alert("PARA BORRAR TU CUENTA DEBES HABER INICIADO SESIÓN RECIENTEMENTE. POR SEGURIDAD, CIERRA SESIÓN E INICIA SESIÓN DE NUEVO ANTES DE INTENTARLO.");
             }
         }
 
