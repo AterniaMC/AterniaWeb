@@ -201,8 +201,7 @@
 
         /* ESTILOS ESPECÍFICOS PERFIL */
         .skin-container { width: 120px; height: 180px; margin: 0 auto 20px auto; position: relative; }
-        .skin-container img { height: 100%; transition: transform 0.5s ease-in-out; }
-        .skin-container:hover img { transform: rotateY(360deg); }
+        .skin-container img { height: 100%; } /* MOVIMIENTO ELIMINADO */
 
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
@@ -236,10 +235,13 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR PERFIL (ACTUALIZADO) -->
+    <!-- MODAL EDITAR PERFIL -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 500px;">
-            <h2>EDITAR MI PERFIL</h2>
+            <!-- BOTÓN SEGURIDAD CUENTA -->
+            <button class="btn-mini" style="position: absolute; top: 20px; left: 20px; color: var(--accent); border: 1px solid var(--accent); padding: 5px 10px; border-radius: 8px;">SEGURIDAD DE LA CUENTA</button>
+            
+            <h2 style="margin-top: 20px;">EDITAR MI PERFIL</h2>
             
             <div class="skin-container">
                 <img id="profileSkinImg" src="" alt="Skin 3D">
@@ -249,11 +251,11 @@
                 <input type="text" id="editNickname" placeholder="NICKNAME (APODO)">
                 
                 <select id="editGender" onchange="toggleOtherGender()">
-                    <option value="" disabled selected>SELECCIONA GÉNERO</option>
+                    <option value="" disabled selected>SELECCIONAR GÉNERO</option>
                     <option value="MASCULINO">MASCULINO</option>
                     <option value="FEMENINO">FEMENINO</option>
-                    <option value="OTRO">OTRO...</option>
                     <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                    <option value="OTRO">OTRO...</option>
                 </select>
                 
                 <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
@@ -270,7 +272,8 @@
 
                 <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
                 
-                <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="font-size: 0.7rem;">ELIMINAR MI CUENTA DEFINITIVAMENTE</button>
+                <!-- BOTÓN ELIMINAR CUENTA REDISEÑADO -->
+                <button class="btn-action" onclick="confirmDeleteAccount()" style="background: #ff4757; color: white; width: 100%; font-size: 0.75rem;">ELIMINAR CUENTA</button>
             </div>
         </div>
     </div>
@@ -342,7 +345,7 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
-            <!-- 2. BOTÓN EDITAR PERFIL (YA FUNCIONAL) -->
+            <!-- 2. BOTÓN EDITAR PERFIL -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
