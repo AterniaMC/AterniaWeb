@@ -50,21 +50,17 @@
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--sidebar-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--accent); }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 95%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; overflow: hidden; }
+        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         
         /* ESTILO GRANDE PARA EL PERFIL */
-        .profile-large { max-width: 850px; display: flex; flex-direction: row; gap: 30px; text-align: left; }
-        .profile-skin-side { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; }
-        .profile-info-side { flex-grow: 1; min-width: 0; }
+        .profile-large { max-width: 800px; display: flex; flex-direction: row; gap: 30px; text-align: left; }
+        .profile-skin-side { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; }
+        .profile-info-side { flex: 1.5; }
         #skin-container { width: 250px; height: 350px; cursor: grab; }
 
         .modal-content h2 { margin-bottom: 20px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
-        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.08); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; display: block; }
+        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; }
         
-        /* Fix de visibilidad para los inputs y select */
-        .modal-content select option { background: #1a1a1a; color: white; }
-        .modal-content input::placeholder, .modal-content textarea::placeholder { color: #666; }
-
         .pass-wrapper { position: relative; width: 100%; }
         .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
         .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; animation: shake 0.4s; }
@@ -111,8 +107,7 @@
             .sidebar.open { left: 0; }
             .main-content { margin-left: 0; width: 100%; padding: 80px 20px 40px 20px; box-sizing: border-box; }
             .menu-toggle { display: block; }
-            .profile-large { flex-direction: column; align-items: center; width: 90%; }
-            .profile-skin-side { width: 100%; }
+            .profile-large { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -143,7 +138,7 @@
         <div class="modal-content profile-large">
             <div class="profile-skin-side">
                 <div id="skin-container"></div>
-                <p id="mcNameDisplay" style="font-size:0.8rem; color:var(--accent); font-weight:900; margin-top:15px;">CARGANDO...</p>
+                <p id="mcNameDisplay" style="font-size:0.8rem; color:var(--accent); font-weight:900; margin-top:15px;"></p>
             </div>
             <div class="profile-info-side">
                 <h2>MI PERFIL</h2>
@@ -151,14 +146,12 @@
                 <input type="text" id="editNickInput" placeholder="TU APODO">
                 
                 <label style="font-size:0.6rem; color:#555;">GÉNERO</label>
-                <select id="editGender" onchange="toggleCustomGender()">
-                    <option value="No definido">NO DEFINIDO</option>
+                <select id="editGender">
+                    <option value="No especificado">PREFIERO NO DECIRLO</option>
                     <option value="Hombre">HOMBRE</option>
                     <option value="Mujer">MUJER</option>
-                    <option value="Prefiero no decirlo">PREFIERO NO DECIRLO</option>
-                    <option value="Otro">OTRO (ESCRIBIR)</option>
+                    <option value="Otro">OTRO</option>
                 </select>
-                <input type="text" id="customGenderInput" placeholder="ESCRIBE TU GÉNERO..." style="display:none;">
 
                 <label style="font-size:0.6rem; color:#555;">BIOGRAFÍA</label>
                 <textarea id="editBio" rows="3" placeholder="CUÉNTANOS SOBRE TI..."></textarea>
@@ -357,8 +350,6 @@
                 if(data.online) {
                     icon.className = 'status-dot online-dot';
                     players.innerText = `${data.players.online} / ${data.players.max}`;
-                    document.getElementById('statusText').innerText = 'ONLINE';
-                    document.getElementById('statusText').style.color = '#2ecc71';
                 }
             } catch (e) {}
         }
@@ -389,7 +380,7 @@
                         mc_user: mcUser, 
                         nickname: mcUser,
                         bio: "",
-                        gender: "No definido"
+                        gender: "No especificado"
                     });
                 } else {
                     await auth.signInWithEmailAndPassword(email, pass);
@@ -403,43 +394,17 @@
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // FUNCION PARA MOSTRAR/OCULTAR CASILLA DE OTRO GENERO
-        function toggleCustomGender() {
-            const select = document.getElementById('editGender');
-            const customInput = document.getElementById('customGenderInput');
-            if(select.value === 'Otro') {
-                customInput.style.display = 'block';
-            } else {
-                customInput.style.display = 'none';
-            }
-        }
-
         // PERFIL LOGIC CON SKIN 3D
         async function openEditProfile() {
             const user = auth.currentUser;
-            if(!user) return;
-
             const doc = await db.collection('users').doc(user.uid).get();
             const data = doc.data();
 
-            // Sincronización de UI
-            document.getElementById('editNickInput').value = data.nickname || "";
+            document.getElementById('editNickInput').value = data.nickname;
             document.getElementById('editBio').value = data.bio || "";
-            document.getElementById('mcNameDisplay').innerText = `CUENTA: ${data.mc_user || 'UNDEFINED'}`;
+            document.getElementById('editGender').value = data.gender || "No especificado";
+            document.getElementById('mcNameDisplay').innerText = `CUENTA: ${data.mc_user}`;
             
-            // Lógica de Género
-            const genderOptions = ["No definido", "Hombre", "Mujer", "Prefiero no decirlo"];
-            if(genderOptions.includes(data.gender)) {
-                document.getElementById('editGender').value = data.gender;
-                document.getElementById('customGenderInput').style.display = 'none';
-            } else if (data.gender) {
-                document.getElementById('editGender').value = "Otro";
-                document.getElementById('customGenderInput').value = data.gender;
-                document.getElementById('customGenderInput').style.display = 'block';
-            } else {
-                document.getElementById('editGender').value = "No definido";
-            }
-
             document.getElementById('editProfileModal').style.display = 'flex';
 
             // Cargar Skin 3D
@@ -452,9 +417,7 @@
                 document.getElementById('skin-container').appendChild(skinViewer.canvas);
                 skinViewer.autoRotate = true;
             }
-            if(data.mc_user) {
-                skinViewer.loadSkin(`https://mc-heads.net/skin/${data.mc_user}`);
-            }
+            skinViewer.loadSkin(`https://mc-heads.net/skin/${data.mc_user}`);
         }
 
         function closeEditProfile() { document.getElementById('editProfileModal').style.display = 'none'; }
@@ -462,20 +425,14 @@
         async function updateProfile() {
             const newNick = document.getElementById('editNickInput').value;
             const newBio = document.getElementById('editBio').value;
-            const genderSelect = document.getElementById('editGender').value;
-            let finalGender = genderSelect;
-
-            if(genderSelect === 'Otro') {
-                finalGender = document.getElementById('customGenderInput').value;
-                if(!finalGender.trim()) finalGender = "Otro";
-            }
+            const newGender = document.getElementById('editGender').value;
             
             if(!newNick.trim()) return;
             const user = auth.currentUser;
             await db.collection('users').doc(user.uid).update({ 
                 nickname: newNick,
                 bio: newBio,
-                gender: finalGender
+                gender: newGender
             });
             location.reload();
         }
@@ -535,14 +492,12 @@
             if(user) {
                 const doc = await db.collection('users').doc(user.uid).get();
                 const data = doc.data();
-                if(data) {
-                    document.getElementById('authButtons').style.display = 'none';
-                    document.getElementById('userLogged').style.display = 'flex';
-                    document.getElementById('btnEditProfile').style.display = 'flex';
-                    document.getElementById('userTag').innerText = data.nickname;
-                    document.getElementById('headImg').src = `https://mc-heads.net/avatar/${data.mc_user}`;
-                    document.getElementById('faqForm').style.display = 'block';
-                }
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userLogged').style.display = 'flex';
+                document.getElementById('btnEditProfile').style.display = 'flex';
+                document.getElementById('userTag').innerText = data.nickname;
+                document.getElementById('headImg').src = `https://mc-heads.net/avatar/${data.mc_user}`;
+                document.getElementById('faqForm').style.display = 'block';
             }
             renderFaq();
         });
