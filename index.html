@@ -201,8 +201,8 @@
         .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
         .profile-left { width: 150px; text-align: center; }
         .profile-right { flex: 1; }
-        .skin-container { width: 120px; height: 180px; margin: 0 auto 10px auto; position: relative; background: rgba(255,255,255,0.03); border-radius: 10px; }
-        .skin-container img { height: 100%; } /* Animación eliminada */
+        .skin-container { width: 120px; height: 180px; margin: 0 auto 10px auto; position: relative; background: rgba(255,255,255,0.03); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .skin-container img { height: 90%; width: auto; object-fit: contain; }
         
         .profile-label { font-size: 0.7rem; font-weight: 900; margin-bottom: 5px; display: block; color: var(--accent); }
         .security-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
@@ -241,6 +241,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE PERFIL CORREGIDO -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <h2>EDITAR PERFIL</h2>
@@ -250,57 +251,61 @@
                     <div class="skin-container">
                         <img id="profileSkinImg" src="" alt="Skin">
                     </div>
-                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem;">NOMBRE</span>
+                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem; color: var(--accent); display: block;">NOMBRE</span>
+                    <span id="profileTagLabel" style="font-size: 0.65rem; color: #555; font-weight: 900;">@ORIGINAL</span>
                 </div>
 
                 <div class="profile-right">
-                    <label class="profile-label">APODO</label>
-                    <input type="text" id="editNickname" placeholder="TU APODO">
+                    <label class="profile-label">APODO EN FORO</label>
+                    <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO">
 
-                    <label class="profile-label">GENERO</label>
+                    <label class="profile-label">GÉNERO</label>
                     <select id="editGender" onchange="toggleOtherGender()">
                         <option value="" disabled selected>SELECCIONA GÉNERO</option>
                         <option value="MASCULINO">MASCULINO</option>
                         <option value="FEMENINO">FEMENINO</option>
-                        <option value="OTRO">OTRO...</option>
                         <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                        <option value="OTRO">OTRO...</option>
                     </select>
-                    <input type="text" id="editGenderOther" placeholder="ESPECIFICA" style="display:none;">
+                    <input type="text" id="editGenderOther" placeholder="¿CUÁL?" style="display:none;">
 
-                    <label class="profile-label">DESCRIPCION BREVE</label>
-                    <textarea id="editBio" rows="3" maxlength="500" placeholder="SOBRE TI..." oninput="updateCharCount()"></textarea>
-                    <div style="text-align: right; font-size: 0.5rem; margin-top: -10px;"><span id="charCount">0</span>/500</div>
+                    <label class="profile-label">DESCRIPCIÓN BREVE</label>
+                    <textarea id="editBio" rows="4" maxlength="500" placeholder="CUÉNTANOS SOBRE TI..." oninput="updateCharCount()" style="font-size: 0.8rem; text-transform: none;"></textarea>
+                    <div style="text-align: right; font-size: 0.55rem; margin-top: -10px; font-weight: 900; color: #444;"><span id="charCount" style="color:var(--accent)">0</span> / 500</div>
                 </div>
             </div>
 
             <div class="security-section">
-                <h3 style="font-size: 0.8rem; letter-spacing: 1px;">SEGURIDAD DE LA CUENTA</h3>
+                <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;">SEGURIDAD Y CUENTA</h3>
                 <div class="security-grid">
                     <div>
-                        <label class="profile-label">CONTRASEÑA</label>
-                        <input type="password" value="00000000" disabled style="opacity: 0.5;">
+                        <label class="profile-label">CONTRASEÑA ACTUAL</label>
+                        <input type="password" value="********" disabled style="opacity: 0.3; cursor: not-allowed;">
                     </div>
                     <div>
                         <label class="profile-label">CAMBIAR CONTRASEÑA</label>
-                        <input type="password" id="newPass" placeholder="NUEVA CLAVE">
+                        <div class="pass-wrapper">
+                            <input type="password" id="newPass" placeholder="NUEVA CLAVE">
+                            <i class="fas fa-eye toggle-pass" onclick="toggleNewPassView()" style="top: 12px;"></i>
+                        </div>
                     </div>
                     <div>
-                        <label class="profile-label">CORREO</label>
-                        <input type="email" id="displayEmail" disabled style="opacity: 0.5;">
+                        <label class="profile-label">CORREO VINCULADO</label>
+                        <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed;">
                     </div>
                     <div>
-                        <label class="profile-label">CAMBIAR CORREO</label>
-                        <input type="email" id="newEmail" placeholder="NUEVO CORREO">
+                        <label class="profile-label">NUEVO CORREO</label>
+                        <input type="email" id="newEmail" placeholder="EJEMPLO@MAIL.COM">
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
+            <div style="display: flex; gap: 12px; margin-top: 30px;">
                 <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
                 <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
             </div>
 
-            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 20px; width: 100%; background: #ff4757; color: white; padding: 8px; border-radius: 5px;">ELIMINAR CUENTA</button>
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
         </div>
     </div>
 
@@ -546,6 +551,15 @@
             icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
         }
 
+        // NUEVA FUNCIÓN PARA EL OJO DE LA CONTRASEÑA NUEVA EN PERFIL
+        function toggleNewPassView() {
+            const passInput = document.getElementById('newPass');
+            const icon = document.querySelector('.security-grid .toggle-pass');
+            passInput.type = passInput.type === "password" ? "text" : "password";
+            icon.classList.toggle('fa-eye'); 
+            icon.classList.toggle('fa-eye-slash');
+        }
+
         function openAuth(type) { 
             currentAuthType = type;
             document.getElementById('modalTitle').innerText = type; 
@@ -584,6 +598,7 @@
             if(!u) return;
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
             document.getElementById('profileNameLabel').innerText = u;
+            document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
             document.getElementById('displayEmail').value = localStorage.getItem('regEmail') || '';
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
