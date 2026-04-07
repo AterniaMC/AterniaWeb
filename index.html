@@ -53,14 +53,15 @@
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 95%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; overflow: hidden; }
         
         /* ESTILO GRANDE PARA EL PERFIL */
-        .profile-large { max-width: 850px; display: flex; flex-direction: row; gap: 30px; text-align: left; align-items: stretch; }
-        .profile-skin-side { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; box-sizing: border-box; max-height: 100%; }
-        .profile-info-side { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; }
-        #skin-container { width: 100%; height: 350px; cursor: grab; max-width: 250px; }
+        .profile-large { max-width: 850px; display: flex; flex-direction: row; gap: 30px; text-align: left; }
+        .profile-skin-side { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px; }
+        .profile-info-side { flex-grow: 1; min-width: 0; }
+        #skin-container { width: 250px; height: 350px; cursor: grab; }
 
         .modal-content h2 { margin-bottom: 20px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.08); border: 1px solid #333; border-radius: 10px; color: white; outline: none; box-sizing: border-box; font-family: inherit; display: block; }
         
+        /* Fix de visibilidad para los inputs y select */
         .modal-content select option { background: #1a1a1a; color: white; }
         .modal-content input::placeholder, .modal-content textarea::placeholder { color: #666; }
 
@@ -110,8 +111,8 @@
             .sidebar.open { left: 0; }
             .main-content { margin-left: 0; width: 100%; padding: 80px 20px 40px 20px; box-sizing: border-box; }
             .menu-toggle { display: block; }
-            .profile-large { flex-direction: column; align-items: center; width: 90%; height: auto; padding: 20px; }
-            .profile-skin-side { width: 100%; max-height: 400px; }
+            .profile-large { flex-direction: column; align-items: center; width: 90%; }
+            .profile-skin-side { width: 100%; }
         }
     </style>
 </head>
@@ -125,7 +126,7 @@
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
             <div id="authError" class="auth-error-msg">DATOS INCORRECTOS</div>
             <div id="authInputs">
-                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT (REAL)">
+                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT (PARA TU SKIN)">
                 <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
                 <div class="pass-wrapper">
                     <input type="password" id="authPass" placeholder="CONTRASEÑA">
@@ -146,8 +147,8 @@
             </div>
             <div class="profile-info-side">
                 <h2>MI PERFIL</h2>
-                <label style="font-size:0.6rem; color:#555;">NICKNAME</label>
-                <input type="text" id="editNickInput" placeholder="TU APODO ESTÉTICO">
+                <label style="font-size:0.6rem; color:#555;">NICKNAME ESTÉTICO</label>
+                <input type="text" id="editNickInput" placeholder="TU APODO">
                 
                 <label style="font-size:0.6rem; color:#555;">GÉNERO</label>
                 <select id="editGender" onchange="toggleCustomGender()">
@@ -162,7 +163,7 @@
                 <label style="font-size:0.6rem; color:#555;">BIOGRAFÍA</label>
                 <textarea id="editBio" rows="3" placeholder="CUÉNTANOS SOBRE TI..."></textarea>
 
-                <div style="display: flex; gap: 10px; margin-top:auto;">
+                <div style="display: flex; gap: 10px; margin-top:10px;">
                     <button class="btn-action btn-outline" style="flex:1" onclick="closeEditProfile()">CERRAR</button>
                     <button class="btn-action" style="flex:1" onclick="updateProfile()">GUARDAR</button>
                 </div>
@@ -170,7 +171,7 @@
         </div>
     </div>
 
-    <!-- EL RESTO DEL HTML SE MANTIENE IGUAL -->
+    <!-- MODAL EDITAR FAQ -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>EDITAR PREGUNTA</h2>
@@ -376,16 +377,14 @@
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
         async function handleAuth() {
-            const mcUser = document.getElementById('authUser').value.trim(); 
+            const mcUser = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPass').value;
             const errorBox = document.getElementById('authError');
 
             try {
                 if (currentAuthType === 'REGISTRARSE') {
-                    if(!mcUser) throw new Error("DEBES INGRESAR TU USUARIO DE MINECRAFT");
                     const res = await auth.createUserWithEmailAndPassword(email, pass);
-                    // Guardamos el usuario de MC como base del perfil
                     await db.collection('users').doc(res.user.uid).set({ 
                         mc_user: mcUser, 
                         nickname: mcUser,
@@ -404,12 +403,18 @@
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
+        // FUNCION PARA MOSTRAR/OCULTAR CASILLA DE OTRO GENERO
         function toggleCustomGender() {
             const select = document.getElementById('editGender');
             const customInput = document.getElementById('customGenderInput');
-            customInput.style.display = select.value === 'Otro' ? 'block' : 'none';
+            if(select.value === 'Otro') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
         }
 
+        // PERFIL LOGIC CON SKIN 3D
         async function openEditProfile() {
             const user = auth.currentUser;
             if(!user) return;
@@ -417,12 +422,12 @@
             const doc = await db.collection('users').doc(user.uid).get();
             const data = doc.data();
 
-            if(!data) return;
-
-            document.getElementById('editNickInput').value = data.nickname || data.mc_user;
+            // Sincronización de UI
+            document.getElementById('editNickInput').value = data.nickname || "";
             document.getElementById('editBio').value = data.bio || "";
-            document.getElementById('mcNameDisplay').innerText = `CUENTA: ${data.mc_user}`;
+            document.getElementById('mcNameDisplay').innerText = `CUENTA: ${data.mc_user || 'UNDEFINED'}`;
             
+            // Lógica de Género
             const genderOptions = ["No definido", "Hombre", "Mujer", "Prefiero no decirlo"];
             if(genderOptions.includes(data.gender)) {
                 document.getElementById('editGender').value = data.gender;
@@ -431,22 +436,25 @@
                 document.getElementById('editGender').value = "Otro";
                 document.getElementById('customGenderInput').value = data.gender;
                 document.getElementById('customGenderInput').style.display = 'block';
+            } else {
+                document.getElementById('editGender').value = "No definido";
             }
 
             document.getElementById('editProfileModal').style.display = 'flex';
 
+            // Cargar Skin 3D
             if(!skinViewer) {
                 skinViewer = new skinview3d.SkinViewer({
                     canvas: document.createElement("canvas"),
                     width: 250,
                     height: 350
                 });
-                document.getElementById('skin-container').innerHTML = "";
                 document.getElementById('skin-container').appendChild(skinViewer.canvas);
                 skinViewer.autoRotate = true;
             }
-            // Cargamos la skin del mc_user registrado
-            skinViewer.loadSkin(`https://mc-heads.net/skin/${data.mc_user}`);
+            if(data.mc_user) {
+                skinViewer.loadSkin(`https://mc-heads.net/skin/${data.mc_user}`);
+            }
         }
 
         function closeEditProfile() { document.getElementById('editProfileModal').style.display = 'none'; }
@@ -455,19 +463,24 @@
             const newNick = document.getElementById('editNickInput').value;
             const newBio = document.getElementById('editBio').value;
             const genderSelect = document.getElementById('editGender').value;
-            let finalGender = genderSelect === 'Otro' ? document.getElementById('customGenderInput').value : genderSelect;
+            let finalGender = genderSelect;
 
+            if(genderSelect === 'Otro') {
+                finalGender = document.getElementById('customGenderInput').value;
+                if(!finalGender.trim()) finalGender = "Otro";
+            }
+            
             if(!newNick.trim()) return;
             const user = auth.currentUser;
             await db.collection('users').doc(user.uid).update({ 
                 nickname: newNick,
                 bio: newBio,
-                gender: finalGender || "Otro"
+                gender: finalGender
             });
             location.reload();
         }
 
-        // LÓGICA DE FAQ Y ESTADOS (Mantenida intacta)
+        // FAQ LOGIC
         async function postFaq() {
             const txt = document.getElementById('faqTxt').value;
             if(!txt.trim()) return;
