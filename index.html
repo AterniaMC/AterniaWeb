@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATERNIA MC | OFICIAL</title>
     
-    <!-- CONFIGURACIÓN DEL FAVICON (ICONO DE PESTAÑA) -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/EpxuqFO.png">
     <link rel="apple-touch-icon" href="https://i.imgur.com/EpxuqFO.png">
     
-    <!-- META TAGS PARA PREVISUALIZACIÓN -->
     <meta property="og:title" content="ATERNIA MC | TIENDA OFICIAL" />
     <meta property="og:description" content="Adquiere rangos exclusivos y apoya al servidor oficial." />
     <meta property="og:image" content="https://i.imgur.com/EpxuqFO.png" />
@@ -199,10 +197,16 @@
             color: #000;
         }
 
-        /* ESTILOS ESPECÍFICOS PERFIL */
-        .skin-container { width: 120px; height: 180px; margin: 0 auto 20px auto; position: relative; }
-        .skin-container img { height: 100%; transition: transform 0.5s ease-in-out; }
-        .skin-container:hover img { transform: rotateY(360deg); }
+        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
+        .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
+        .profile-left { width: 150px; text-align: center; }
+        .profile-right { flex: 1; }
+        .skin-container { width: 120px; height: 180px; margin: 0 auto 10px auto; position: relative; background: rgba(255,255,255,0.03); border-radius: 10px; }
+        .skin-container img { height: 100%; } /* Animación eliminada */
+        
+        .profile-label { font-size: 0.7rem; font-weight: 900; margin-bottom: 5px; display: block; color: var(--accent); }
+        .security-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
+        .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
 
         @media (max-width: 992px) {
             .sidebar { left: -320px; }
@@ -211,6 +215,8 @@
             .menu-toggle { display: block; }
             .top-bar { justify-content: center; flex-wrap: wrap; }
             .modal-content { padding: 30px 20px; width: 95%; }
+            .profile-container { flex-direction: column; align-items: center; }
+            .security-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -218,7 +224,6 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODALES -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
@@ -236,42 +241,66 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR PERFIL (ACTUALIZADO) -->
     <div id="profileModal" class="modal">
-        <div class="modal-content" style="max-width: 500px;">
-            <h2>EDITAR MI PERFIL</h2>
+        <div class="modal-content" style="max-width: 650px;">
+            <h2>EDITAR PERFIL</h2>
             
-            <div class="skin-container">
-                <img id="profileSkinImg" src="" alt="Skin 3D">
-            </div>
-
-            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin;">
-                <input type="text" id="editNickname" placeholder="NICKNAME (APODO)">
-                
-                <select id="editGender" onchange="toggleOtherGender()">
-                    <option value="" disabled selected>SELECCIONA GÉNERO</option>
-                    <option value="MASCULINO">MASCULINO</option>
-                    <option value="FEMENINO">FEMENINO</option>
-                    <option value="OTRO">OTRO...</option>
-                    <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
-                </select>
-                
-                <input type="text" id="editGenderOther" placeholder="ESPECIFICA TU GÉNERO" style="display:none;">
-
-                <div style="text-align: right; font-size: 0.6rem; margin-bottom: 5px; font-weight: 900;">
-                    <span id="charCount">0</span>/500
-                </div>
-                <textarea id="editBio" rows="4" maxlength="500" placeholder="DESCRIPCIÓN BREVE..." oninput="updateCharCount()"></textarea>
-
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
-                    <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR</button>
+            <div class="profile-container">
+                <div class="profile-left">
+                    <div class="skin-container">
+                        <img id="profileSkinImg" src="" alt="Skin">
+                    </div>
+                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem;">NOMBRE</span>
                 </div>
 
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
-                
-                <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="font-size: 0.7rem;">ELIMINAR MI CUENTA DEFINITIVAMENTE</button>
+                <div class="profile-right">
+                    <label class="profile-label">APODO</label>
+                    <input type="text" id="editNickname" placeholder="TU APODO">
+
+                    <label class="profile-label">GENERO</label>
+                    <select id="editGender" onchange="toggleOtherGender()">
+                        <option value="" disabled selected>SELECCIONA GÉNERO</option>
+                        <option value="MASCULINO">MASCULINO</option>
+                        <option value="FEMENINO">FEMENINO</option>
+                        <option value="OTRO">OTRO...</option>
+                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                    </select>
+                    <input type="text" id="editGenderOther" placeholder="ESPECIFICA" style="display:none;">
+
+                    <label class="profile-label">DESCRIPCION BREVE</label>
+                    <textarea id="editBio" rows="3" maxlength="500" placeholder="SOBRE TI..." oninput="updateCharCount()"></textarea>
+                    <div style="text-align: right; font-size: 0.5rem; margin-top: -10px;"><span id="charCount">0</span>/500</div>
+                </div>
             </div>
+
+            <div class="security-section">
+                <h3 style="font-size: 0.8rem; letter-spacing: 1px;">SEGURIDAD DE LA CUENTA</h3>
+                <div class="security-grid">
+                    <div>
+                        <label class="profile-label">CONTRASEÑA</label>
+                        <input type="password" value="00000000" disabled style="opacity: 0.5;">
+                    </div>
+                    <div>
+                        <label class="profile-label">CAMBIAR CONTRASEÑA</label>
+                        <input type="password" id="newPass" placeholder="NUEVA CLAVE">
+                    </div>
+                    <div>
+                        <label class="profile-label">CORREO</label>
+                        <input type="email" id="displayEmail" disabled style="opacity: 0.5;">
+                    </div>
+                    <div>
+                        <label class="profile-label">CAMBIAR CORREO</label>
+                        <input type="email" id="newEmail" placeholder="NUEVO CORREO">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
+            </div>
+
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 20px; width: 100%; background: #ff4757; color: white; padding: 8px; border-radius: 5px;">ELIMINAR CUENTA</button>
         </div>
     </div>
 
@@ -311,7 +340,6 @@
         <div class="server-status-card">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
             
-            <!-- IP CON BOTÓN DE COPIADO -->
             <div class="ip-copy-box" onclick="copyIP()">
                 <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
                 <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
@@ -330,7 +358,6 @@
 
     <div class="main-content">
         <div class="top-bar">
-            <!-- 1. CUENTA ACTUAL -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
@@ -342,12 +369,10 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
-            <!-- 2. BOTÓN EDITAR PERFIL (YA FUNCIONAL) -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
 
-            <!-- 3. INTERRUPTOR CLARO/OSCURO -->
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
@@ -553,11 +578,13 @@
 
         function logout() { localStorage.removeItem('u'); location.reload(); }
 
-        /* FUNCIONES PERFIL */
+        /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
             const u = localStorage.getItem('u');
             if(!u) return;
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
+            document.getElementById('profileNameLabel').innerText = u;
+            document.getElementById('displayEmail').value = localStorage.getItem('regEmail') || '';
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
             document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
@@ -588,11 +615,18 @@
             localStorage.setItem('pNickname', document.getElementById('editNickname').value);
             localStorage.setItem('pBio', document.getElementById('editBio').value);
             localStorage.setItem('pGender', document.getElementById('editGender').value);
+            
             if(document.getElementById('editGender').value === 'OTRO') {
                 localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
             }
-            alert('PERFIL ACTUALIZADO CON ÉXITO');
-            closeProfile();
+
+            const newP = document.getElementById('newPass').value;
+            const newE = document.getElementById('newEmail').value;
+            if(newP) localStorage.setItem('regPass', newP);
+            if(newE) localStorage.setItem('regEmail', newE);
+
+            alert('CAMBIOS GUARDADOS CON ÉXITO');
+            location.reload();
         }
 
         function confirmDeleteAccount() {
