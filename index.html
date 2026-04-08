@@ -16,6 +16,27 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- SCRIPTS DE FIREBASE (FIREWALL) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Configuración recibida de tu proyecto aterniamc-web
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
+            authDomain: "aterniamc-web.firebaseapp.com",
+            projectId: "aterniamc-web",
+            storageBucket: "aterniamc-web.firebasestorage.app",
+            messagingSenderId: "748766671298",
+            appId: "1:748766671298:web:bd934aa81b246b9e0ba65b",
+            measurementId: "G-LFB2EN182E"
+        };
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
     <style>
         :root {
             --bg: #0f0f0f; --card-bg: #1a1a1a; --sidebar-bg: #121212; --text: #ffffff;
@@ -551,7 +572,6 @@
             icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
         }
 
-        // NUEVA FUNCIÓN PARA EL OJO DE LA CONTRASEÑA NUEVA EN PERFIL
         function toggleNewPassView() {
             const passInput = document.getElementById('newPass');
             const icon = document.querySelector('.security-grid .toggle-pass');
@@ -570,27 +590,41 @@
 
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
+        // NUEVA LÓGICA CON FIREBASE (FIREWALL)
         function handleAuth() { 
             const user = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPass').value;
+
             if (currentAuthType === 'REGISTRARSE') {
-                if(user && email && pass) {
-                    localStorage.setItem('regUser', user); localStorage.setItem('regEmail', email);
-                    localStorage.setItem('regPass', pass); localStorage.setItem('u', user);
-                    location.reload();
-                }
+                firebase.auth().createUserWithEmailAndPassword(email, pass)
+                    .then((userCredential) => {
+                        // Guardar nombre de Minecraft en el perfil
+                        return userCredential.user.updateProfile({ displayName: user });
+                    })
+                    .then(() => {
+                        localStorage.setItem('u', user);
+                        location.reload();
+                    })
+                    .catch((error) => { alert("ERROR AL REGISTRAR: " + error.message); });
             } else {
-                if(email === localStorage.getItem('regEmail') && pass === localStorage.getItem('regPass')) {
-                    localStorage.setItem('u', localStorage.getItem('regUser'));
-                    location.reload();
-                } else {
-                    document.getElementById('authError').style.display = 'block';
-                }
+                firebase.auth().signInWithEmailAndPassword(email, pass)
+                    .then((userCredential) => {
+                        localStorage.setItem('u', userCredential.user.displayName);
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        document.getElementById('authError').style.display = 'block';
+                    });
             }
         }
 
-        function logout() { localStorage.removeItem('u'); location.reload(); }
+        function logout() { 
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('u'); 
+                location.reload(); 
+            });
+        }
 
         /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
@@ -599,7 +633,13 @@
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
             document.getElementById('profileNameLabel').innerText = u;
             document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
-            document.getElementById('displayEmail').value = localStorage.getItem('regEmail') || '';
+            
+            // Cargar datos actuales del usuario logueado en Firebase
+            const user = firebase.auth().currentUser;
+            if(user) {
+                document.getElementById('displayEmail').value = user.email;
+            }
+
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
             document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
@@ -637,19 +677,28 @@
 
             const newP = document.getElementById('newPass').value;
             const newE = document.getElementById('newEmail').value;
-            if(newP) localStorage.setItem('regPass', newP);
-            if(newE) localStorage.setItem('regEmail', newE);
+            const user = firebase.auth().currentUser;
+
+            if(user) {
+                if(newP) user.updatePassword(newP);
+                if(newE) user.updateEmail(newE);
+            }
 
             alert('CAMBIOS GUARDADOS CON ÉXITO');
             location.reload();
         }
 
         function confirmDeleteAccount() {
-            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos y no se puede deshacer.");
+            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.");
             if(confirm) {
-                localStorage.clear();
-                alert("CUENTA ELIMINADA.");
-                location.reload();
+                const user = firebase.auth().currentUser;
+                if(user) {
+                    user.delete().then(() => {
+                        localStorage.clear();
+                        alert("CUENTA ELIMINADA.");
+                        location.reload();
+                    }).catch(err => alert("Re-autenticación necesaria para eliminar cuenta."));
+                }
             }
         }
 
@@ -700,14 +749,24 @@
             RAREZAS.forEach(r => {
                 container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
             });
-            const u = localStorage.getItem('u');
-            if(u) {
-                document.getElementById('authButtons').style.display = 'none';
-                document.getElementById('userLogged').style.display = 'flex';
-                document.getElementById('btnEditProfile').style.display = 'flex';
-                document.getElementById('userTag').innerText = u;
-                document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
-            }
+
+            // Persistencia de sesión con Firebase
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    const u = user.displayName;
+                    localStorage.setItem('u', u);
+                    document.getElementById('authButtons').style.display = 'none';
+                    document.getElementById('userLogged').style.display = 'flex';
+                    document.getElementById('btnEditProfile').style.display = 'flex';
+                    document.getElementById('userTag').innerText = u;
+                    document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
+                } else {
+                    localStorage.removeItem('u');
+                    document.getElementById('authButtons').style.display = 'flex';
+                    document.getElementById('userLogged').style.display = 'none';
+                    document.getElementById('btnEditProfile').style.display = 'none';
+                }
+            });
             renderFaq();
         };
 
