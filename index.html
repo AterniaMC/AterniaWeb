@@ -23,7 +23,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
-        // Configuración recibida de tu proyecto aterniamc-web
         const firebaseConfig = {
             apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
             authDomain: "aterniamc-web.firebaseapp.com",
@@ -33,7 +32,6 @@
             appId: "1:748766671298:web:bd934aa81b246b9e0ba65b",
             measurementId: "G-LFB2EN182E"
         };
-        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
     </script>
 
@@ -50,6 +48,12 @@
         [data-theme="light"] { --bg: #f4f4f4; --card-bg: #ffffff; --sidebar-bg: #e0e0e0; --text: #333; }
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
+
+        /* NOTIFICACIONES TOAST */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 3000; }
+        .toast { background: var(--card-bg); border-left: 4px solid var(--accent); color: var(--text); padding: 15px 25px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-top: 10px; font-weight: 900; font-size: 0.75rem; animation: slideIn 0.3s forwards; display: flex; align-items: center; gap: 10px; }
+        .toast.error { border-left-color: var(--error); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* AJUSTE SIDEBAR */
         .sidebar { 
@@ -75,7 +79,6 @@
         .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
 
-        /* SERVER STATUS CARD & COPY IP */
         .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
         
@@ -95,7 +98,6 @@
         .ip-copy-box i { color: #555; font-size: 0.8rem; transition: 0.3s; }
         .ip-copy-box:hover i { color: var(--accent); }
         
-        /* Tooltip de Copiado */
         .copy-tooltip {
             position: absolute;
             top: -30px;
@@ -168,6 +170,7 @@
         .btn-action { background: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
         .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+        .btn-action:disabled { background: #333; color: #555; cursor: not-allowed; transform: none; filter: none; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
@@ -198,7 +201,6 @@
         .social-link { display: flex; align-items: center; gap: 12px; padding: 10px; color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
         .social-link:hover { color: var(--accent); transform: translateX(5px); }
 
-        /* ESTILO BOTÓN EDITAR PERFIL EN TOPBAR */
         .btn-topbar-edit {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--accent);
@@ -209,16 +211,12 @@
             font-weight: 900;
             cursor: pointer;
             transition: 0.3s;
-            display: none; /* Se muestra solo si hay login */
+            display: none;
             align-items: center;
             gap: 8px;
         }
-        .btn-topbar-edit:hover {
-            background: var(--accent);
-            color: #000;
-        }
+        .btn-topbar-edit:hover { background: var(--accent); color: #000; }
 
-        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
         .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
         .profile-left { width: 150px; text-align: center; }
         .profile-right { flex: 1; }
@@ -243,6 +241,7 @@
 </head>
 <body>
 
+    <div id="toast-container"></div>
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
     <div id="authModal" class="modal">
@@ -262,7 +261,18 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL CORREGIDO -->
+    <!-- NUEVO MODAL DE VERIFICACIÓN / RE-AUTENTICACIÓN -->
+    <div id="verifyModal" class="modal">
+        <div class="modal-content">
+            <h2>VERIFICAR IDENTIDAD</h2>
+            <p style="font-size: 0.7rem; color: #777; margin-bottom: 20px; text-transform: none;">Para aplicar cambios de seguridad, ingresa tu contraseña actual o el código enviado a tu correo.</p>
+            <input type="password" id="verifyInput" placeholder="CONTRASEÑA ACTUAL / CÓDIGO">
+            <button class="btn-action" style="width: 100%;" onclick="processSecureChanges()">CONFIRMAR CAMBIOS</button>
+            <button id="resendBtn" class="btn-mini" onclick="resendVerification()" style="margin-top: 15px; display: block; width: 100%;">REENVIAR CÓDIGO (30S)</button>
+            <p onclick="closeVerify()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">VOLVER</p>
+        </div>
+    </div>
+
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <h2>EDITAR PERFIL</h2>
@@ -323,7 +333,7 @@
 
             <div style="display: flex; gap: 12px; margin-top: 30px;">
                 <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
+                <button class="btn-action" style="flex:1" onclick="checkSecurityChanges()">GUARDAR CAMBIOS</button>
             </div>
 
             <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
@@ -458,31 +468,26 @@
                     <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
                         AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
                     </p>
-                    
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-                    
                     <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> ENFOQUE DEL SERVIDOR</h3>
                     <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
                         Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
                     </p>
-
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-
                     <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
                     <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
                         <li><b style="color:var(--lore-color)">1.</b> Se prohíbe el uso de hacks, cheats, o clientes modificados.</li>
-                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador, de manera que se eviten palabrotas, chistes fuera de lugar, entre otros.</li>
+                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador...</li>
                         <li><b style="color:var(--lore-color)">3.</b> Evita el spam en el chat.</li>
-                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord, el aprovechamiento de estos será sancionado.</li>
-                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL, este será severamente sancionado.</li>
+                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord...</li>
+                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL...</li>
                         <li><b style="color:var(--lore-color)">6.</b> No se permite el pvp aunque esté activo.</li>
                     </ul>
                 </div>
-
                 <div class="card">
                     <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
                     <div style="text-align: left; margin-top:20px;">
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.21.11 (Próximamente compatible con todas las versiones)</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> 1.21.11</p>
                         <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL VANILLA</p>
                         <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">FECHA DE CREACIÓN:</span> DICIEMBRE 2025</p>
                     </div>
@@ -523,6 +528,16 @@
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
         let editingId = null;
         let currentAuthType = 'INICIAR SESIÓN';
+        let resendTimer = 0;
+
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+            toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -531,9 +546,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) {
-                 document.getElementById('sidebar').classList.remove('open');
-            }
+            if(window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
             if(id === 'faq') renderFaq();
         }
 
@@ -558,11 +571,9 @@
                     players.innerText = `${data.players.online} / ${data.players.max}`;
                 } else {
                     icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
-                    players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
+                    players.innerText = `0 / --`;
                 }
-            } catch (e) {
-                document.getElementById('statusText').innerText = 'OFFLINE';
-            }
+            } catch (e) { document.getElementById('statusText').innerText = 'OFFLINE'; }
         }
 
         function togglePassView() {
@@ -576,8 +587,7 @@
             const passInput = document.getElementById('newPass');
             const icon = document.querySelector('.security-grid .toggle-pass');
             passInput.type = passInput.type === "password" ? "text" : "password";
-            icon.classList.toggle('fa-eye'); 
-            icon.classList.toggle('fa-eye-slash');
+            icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
         }
 
         function openAuth(type) { 
@@ -590,7 +600,6 @@
 
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
-        // NUEVA LÓGICA CON FIREBASE (FIREWALL)
         function handleAuth() { 
             const user = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
@@ -598,53 +607,30 @@
 
             if (currentAuthType === 'REGISTRARSE') {
                 firebase.auth().createUserWithEmailAndPassword(email, pass)
-                    .then((userCredential) => {
-                        // Guardar nombre de Minecraft en el perfil
-                        return userCredential.user.updateProfile({ displayName: user });
-                    })
-                    .then(() => {
-                        localStorage.setItem('u', user);
-                        location.reload();
-                    })
-                    .catch((error) => { alert("ERROR AL REGISTRAR: " + error.message); });
+                    .then((userCredential) => userCredential.user.updateProfile({ displayName: user }))
+                    .then(() => { localStorage.setItem('u', user); location.reload(); })
+                    .catch((error) => showToast(error.message, 'error'));
             } else {
                 firebase.auth().signInWithEmailAndPassword(email, pass)
-                    .then((userCredential) => {
-                        localStorage.setItem('u', userCredential.user.displayName);
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        document.getElementById('authError').style.display = 'block';
-                    });
+                    .then((userCredential) => { localStorage.setItem('u', userCredential.user.displayName); location.reload(); })
+                    .catch(() => document.getElementById('authError').style.display = 'block');
             }
         }
 
-        function logout() { 
-            firebase.auth().signOut().then(() => {
-                localStorage.removeItem('u'); 
-                location.reload(); 
-            });
-        }
+        function logout() { firebase.auth().signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
 
-        /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
             const u = localStorage.getItem('u');
             if(!u) return;
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
             document.getElementById('profileNameLabel').innerText = u;
             document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
-            
-            // Cargar datos actuales del usuario logueado en Firebase
             const user = firebase.auth().currentUser;
-            if(user) {
-                document.getElementById('displayEmail').value = user.email;
-            }
-
+            if(user) document.getElementById('displayEmail').value = user.email;
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
             document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
-            updateCharCount();
-            toggleOtherGender();
+            updateCharCount(); toggleOtherGender();
             document.getElementById('profileModal').style.display = 'flex';
         }
 
@@ -656,9 +642,7 @@
             if(select.value === 'OTRO') {
                 otherInput.style.display = 'block';
                 otherInput.value = localStorage.getItem('pGenderOther') || '';
-            } else {
-                otherInput.style.display = 'none';
-            }
+            } else otherInput.style.display = 'none';
         }
 
         function updateCharCount() {
@@ -666,39 +650,78 @@
             document.getElementById('charCount').innerText = bio.value.length;
         }
 
-        function saveProfile() {
+        // LÓGICA DE SEGURIDAD CORREGIDA
+        function checkSecurityChanges() {
+            const newP = document.getElementById('newPass').value;
+            const newE = document.getElementById('newEmail').value;
+            if(newP || newE) {
+                document.getElementById('verifyModal').style.display = 'flex';
+            } else {
+                saveBasicProfile();
+            }
+        }
+
+        function closeVerify() { document.getElementById('verifyModal').style.display = 'none'; }
+
+        function processSecureChanges() {
+            const verifyVal = document.getElementById('verifyInput').value;
+            const user = firebase.auth().currentUser;
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, verifyVal);
+
+            user.reauthenticateWithCredential(credential).then(() => {
+                const newP = document.getElementById('newPass').value;
+                const newE = document.getElementById('newEmail').value;
+                
+                let promises = [];
+                if(newP) promises.push(user.updatePassword(newP));
+                if(newE) promises.push(user.updateEmail(newE));
+
+                Promise.all(promises).then(() => {
+                    saveBasicProfile();
+                    closeVerify();
+                }).catch(err => showToast("ERROR: " + err.message, 'error'));
+            }).catch(() => showToast("CONTRASEÑA O CÓDIGO INCORRECTO", 'error'));
+        }
+
+        function resendVerification() {
+            if(resendTimer > 0) return;
+            const user = firebase.auth().currentUser;
+            firebase.auth().sendPasswordResetEmail(user.email).then(() => {
+                showToast("CÓDIGO ENVIADO AL CORREO");
+                startResendTimer();
+            });
+        }
+
+        function startResendTimer() {
+            resendTimer = 30;
+            const btn = document.getElementById('resendBtn');
+            btn.disabled = true;
+            const interval = setInterval(() => {
+                resendTimer--;
+                btn.innerText = `REENVIAR CÓDIGO (${resendTimer}S)`;
+                if(resendTimer <= 0) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    btn.innerText = "REENVIAR CÓDIGO";
+                }
+            }, 1000);
+        }
+
+        function saveBasicProfile() {
             localStorage.setItem('pNickname', document.getElementById('editNickname').value);
             localStorage.setItem('pBio', document.getElementById('editBio').value);
             localStorage.setItem('pGender', document.getElementById('editGender').value);
-            
             if(document.getElementById('editGender').value === 'OTRO') {
                 localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
             }
-
-            const newP = document.getElementById('newPass').value;
-            const newE = document.getElementById('newEmail').value;
-            const user = firebase.auth().currentUser;
-
-            if(user) {
-                if(newP) user.updatePassword(newP);
-                if(newE) user.updateEmail(newE);
-            }
-
-            alert('CAMBIOS GUARDADOS CON ÉXITO');
-            location.reload();
+            showToast('CAMBIOS GUARDADOS CON ÉXITO');
+            setTimeout(() => location.reload(), 1500);
         }
 
         function confirmDeleteAccount() {
-            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.");
-            if(confirm) {
+            if(window.confirm("¡ATENCIÓN! ¿Eliminar cuenta permanentemente?")) {
                 const user = firebase.auth().currentUser;
-                if(user) {
-                    user.delete().then(() => {
-                        localStorage.clear();
-                        alert("CUENTA ELIMINADA.");
-                        location.reload();
-                    }).catch(err => alert("Re-autenticación necesaria para eliminar cuenta."));
-                }
+                if(user) user.delete().then(() => { localStorage.clear(); location.reload(); }).catch(() => showToast("RE-AUTENTICACIÓN NECESARIA", 'error'));
             }
         }
 
@@ -749,8 +772,6 @@
             RAREZAS.forEach(r => {
                 container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
             });
-
-            // Persistencia de sesión con Firebase
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     const u = user.displayName;
