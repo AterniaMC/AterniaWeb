@@ -122,6 +122,10 @@
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--sidebar-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--accent); }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        
+        /* MODAL DE ALERTAS ESPECÍFICO (MAYOR Z-INDEX) */
+        #customAlert { z-index: 3000; }
+
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
         
@@ -255,7 +259,7 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE ALERTAS PERSONALIZADAS -->
+    <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 3000) -->
     <div id="customAlert" class="modal">
         <div id="alertBox" class="modal-content custom-alert-content">
             <h2 id="alertTitle">AVISO</h2>
@@ -284,7 +288,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL -->
+    <!-- MODAL DE PERFIL (Z-INDEX 2000) -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <h2>EDITAR PERFIL</h2>
