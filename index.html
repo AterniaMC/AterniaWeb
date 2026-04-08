@@ -45,6 +45,7 @@
             --comun: #95a5a6; --raro: #00d2d3; --epico: #8e44ad; 
             --legendary: #f1c40f; --mitico: #c0392b; --exotico: #ad244f;
             --error: #ff4757; --error-glow: rgba(255, 71, 87, 0.4);
+            --warning: #f1c40f; --warning-glow: rgba(241, 196, 15, 0.4);
         }
 
         [data-theme="light"] { --bg: #f4f4f4; --card-bg: #ffffff; --sidebar-bg: #e0e0e0; --text: #333; }
@@ -150,6 +151,15 @@
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
+        /* ESTILOS ALERTAS PERSONALIZADAS */
+        .custom-alert-content { border-width: 2px; border-style: solid; }
+        .alert-error { border-color: var(--error); box-shadow: 0 0 20px var(--error-glow); }
+        .alert-error h2 { color: var(--error); }
+        .alert-warning { border-color: var(--warning); box-shadow: 0 0 20px var(--warning-glow); }
+        .alert-warning h2 { color: var(--warning); }
+        .alert-success { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+        .alert-success h2 { color: var(--accent); }
+
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
         .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
         .faq-text { text-transform: none; color: var(--lore-color); line-height: 1.5; font-size: 0.9rem; font-weight: 600; }
@@ -245,6 +255,18 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
+    <!-- MODAL DE ALERTAS PERSONALIZADAS -->
+    <div id="customAlert" class="modal">
+        <div id="alertBox" class="modal-content custom-alert-content">
+            <h2 id="alertTitle">AVISO</h2>
+            <p id="alertMsg" style="text-transform: none; font-size: 0.9rem; margin-bottom: 25px; color: #bbb;"></p>
+            <div id="alertActions" style="display: flex; gap: 10px; justify-content: center;">
+                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;">ACEPTAR</button>
+                <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
@@ -262,7 +284,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL CORREGIDO -->
+    <!-- MODAL DE PERFIL -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <h2>EDITAR PERFIL</h2>
@@ -524,6 +546,34 @@
         let editingId = null;
         let currentAuthType = 'INICIAR SESIÓN';
 
+        // LÓGICA DE ALERTA PERSONALIZADA
+        function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
+            const modal = document.getElementById('customAlert');
+            const box = document.getElementById('alertBox');
+            const titleEl = document.getElementById('alertTitle');
+            const msgEl = document.getElementById('alertMsg');
+            const confirmBtn = document.getElementById('alertConfirmBtn');
+            const cancelBtn = document.getElementById('alertCancelBtn');
+
+            titleEl.innerText = title;
+            msgEl.innerText = msg;
+            box.className = 'modal-content custom-alert-content alert-' + type;
+
+            cancelBtn.style.display = onCancel ? 'block' : 'none';
+            
+            confirmBtn.onclick = () => {
+                modal.style.display = 'none';
+                if(onConfirm) onConfirm();
+            };
+
+            cancelBtn.onclick = () => {
+                modal.style.display = 'none';
+                if(onCancel) onCancel();
+            };
+
+            modal.style.display = 'flex';
+        }
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function showCategory(id) {
@@ -590,7 +640,6 @@
 
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
-        // NUEVA LÓGICA CON FIREBASE (FIREWALL)
         function handleAuth() { 
             const user = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
@@ -599,14 +648,15 @@
             if (currentAuthType === 'REGISTRARSE') {
                 firebase.auth().createUserWithEmailAndPassword(email, pass)
                     .then((userCredential) => {
-                        // Guardar nombre de Minecraft en el perfil
                         return userCredential.user.updateProfile({ displayName: user });
                     })
                     .then(() => {
                         localStorage.setItem('u', user);
                         location.reload();
                     })
-                    .catch((error) => { alert("ERROR AL REGISTRAR: " + error.message); });
+                    .catch((error) => { 
+                        showCustomAlert("ERROR", error.message, "error");
+                    });
             } else {
                 firebase.auth().signInWithEmailAndPassword(email, pass)
                     .then((userCredential) => {
@@ -626,7 +676,6 @@
             });
         }
 
-        /* FUNCIONES PERFIL ACTUALIZADAS */
         function openProfile() {
             const u = localStorage.getItem('u');
             if(!u) return;
@@ -634,7 +683,6 @@
             document.getElementById('profileNameLabel').innerText = u;
             document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
             
-            // Cargar datos actuales del usuario logueado en Firebase
             const user = firebase.auth().currentUser;
             if(user) {
                 document.getElementById('displayEmail').value = user.email;
@@ -667,39 +715,53 @@
         }
 
         function saveProfile() {
-            localStorage.setItem('pNickname', document.getElementById('editNickname').value);
-            localStorage.setItem('pBio', document.getElementById('editBio').value);
-            localStorage.setItem('pGender', document.getElementById('editGender').value);
-            
-            if(document.getElementById('editGender').value === 'OTRO') {
-                localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
-            }
+            showCustomAlert(
+                "ADVERTENCIA", 
+                "¿Estás seguro de que quieres guardar estos cambios en tu perfil?", 
+                "warning", 
+                () => {
+                    // Ejecución real del guardado
+                    localStorage.setItem('pNickname', document.getElementById('editNickname').value);
+                    localStorage.setItem('pBio', document.getElementById('editBio').value);
+                    localStorage.setItem('pGender', document.getElementById('editGender').value);
+                    
+                    if(document.getElementById('editGender').value === 'OTRO') {
+                        localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+                    }
 
-            const newP = document.getElementById('newPass').value;
-            const newE = document.getElementById('newEmail').value;
-            const user = firebase.auth().currentUser;
+                    const newP = document.getElementById('newPass').value;
+                    const newE = document.getElementById('newEmail').value;
+                    const user = firebase.auth().currentUser;
 
-            if(user) {
-                if(newP) user.updatePassword(newP);
-                if(newE) user.updateEmail(newE);
-            }
+                    if(user) {
+                        if(newP) user.updatePassword(newP).catch(e => showCustomAlert("ERROR", "No se pudo cambiar la contraseña", "error"));
+                        if(newE) user.updateEmail(newE).catch(e => showCustomAlert("ERROR", "No se pudo cambiar el correo", "error"));
+                    }
 
-            alert('CAMBIOS GUARDADOS CON ÉXITO');
-            location.reload();
+                    showCustomAlert("ÉXITO", "Cambios guardados correctamente", "success", () => {
+                        location.reload();
+                    });
+                },
+                () => { /* No hacer nada si cancela */ }
+            );
         }
 
         function confirmDeleteAccount() {
-            const confirm = window.confirm("¡ATENCIÓN! ¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.");
-            if(confirm) {
-                const user = firebase.auth().currentUser;
-                if(user) {
-                    user.delete().then(() => {
-                        localStorage.clear();
-                        alert("CUENTA ELIMINADA.");
-                        location.reload();
-                    }).catch(err => alert("Re-autenticación necesaria para eliminar cuenta."));
-                }
-            }
+            showCustomAlert(
+                "ATENCIÓN", 
+                "¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.", 
+                "error", 
+                () => {
+                    const user = firebase.auth().currentUser;
+                    if(user) {
+                        user.delete().then(() => {
+                            localStorage.clear();
+                            showCustomAlert("CUENTA ELIMINADA", "Tu cuenta ha sido borrada.", "success", () => location.reload());
+                        }).catch(err => showCustomAlert("ERROR", "Re-autenticación necesaria para eliminar cuenta.", "error"));
+                    }
+                },
+                () => { /* No hacer nada si cancela */ }
+            );
         }
 
         function postFaq() {
@@ -715,6 +777,7 @@
         function renderFaq() {
             const list = document.getElementById('faqList');
             const currentUser = localStorage.getItem('u');
+            if(!list) return;
             list.innerHTML = '';
             posts.forEach(p => {
                 list.innerHTML += `
@@ -738,9 +801,11 @@
             closeEdit(); renderFaq();
         }
         function deletePost(id) {
-            posts = posts.filter(p => p.id !== id);
-            localStorage.setItem('faqPosts', JSON.stringify(posts));
-            renderFaq();
+            showCustomAlert("ELIMINAR", "¿Quieres borrar esta publicación?", "warning", () => {
+                posts = posts.filter(p => p.id !== id);
+                localStorage.setItem('faqPosts', JSON.stringify(posts));
+                renderFaq();
+            }, () => {});
         }
 
         window.onload = () => {
@@ -750,7 +815,6 @@
                 container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
             });
 
-            // Persistencia de sesión con Firebase
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     const u = user.displayName;
