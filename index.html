@@ -237,9 +237,8 @@
             .security-grid { grid-template-columns: 1fr; }
         }
         
-        /* CORRECCIÓN DE Z-INDEX PARA EL MODAL DE VERIFICACIÓN */
         #verifyModal {
-            z-index: 3000; /* Superior al de otros modales (2000) */
+            z-index: 3000;
         }
     </style>
 </head>
@@ -532,6 +531,7 @@
         let editingId = null;
         let currentAuthType = 'INICIAR SESIÓN';
         let resendTimer = 0;
+        let generatedCode = null; // Variable para el código de seguridad interno
 
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -668,30 +668,39 @@
         function processSecureChanges() {
             const verifyVal = document.getElementById('verifyInput').value;
             const user = firebase.auth().currentUser;
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, verifyVal);
 
-            user.reauthenticateWithCredential(credential).then(() => {
-                const newP = document.getElementById('newPass').value;
-                const newE = document.getElementById('newEmail').value;
-                
-                let promises = [];
-                if(newP) promises.push(user.updatePassword(newP));
-                if(newE) promises.push(user.updateEmail(newE));
+            // Lógica de validación: Acepta código generado o contraseña actual
+            if (generatedCode && verifyVal === generatedCode) {
+                aplicarCambiosFinales(user);
+            } else {
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, verifyVal);
+                user.reauthenticateWithCredential(credential).then(() => {
+                    aplicarCambiosFinales(user);
+                }).catch(() => showToast("CÓDIGO O CONTRASEÑA INCORRECTA", 'error'));
+            }
+        }
 
-                Promise.all(promises).then(() => {
-                    saveBasicProfile();
-                    closeVerify();
-                }).catch(err => showToast("ERROR: " + err.message, 'error'));
-            }).catch(() => showToast("CONTRASEÑA O CÓDIGO INCORRECTO", 'error'));
+        function aplicarCambiosFinales(user) {
+            const newP = document.getElementById('newPass').value;
+            const newE = document.getElementById('newEmail').value;
+            
+            let promises = [];
+            if(newP) promises.push(user.updatePassword(newP));
+            if(newE) promises.push(user.updateEmail(newE));
+
+            Promise.all(promises).then(() => {
+                saveBasicProfile();
+                closeVerify();
+                generatedCode = null;
+            }).catch(err => showToast("ERROR: " + err.message, 'error'));
         }
 
         function resendVerification() {
             if(resendTimer > 0) return;
-            const user = firebase.auth().currentUser;
-            firebase.auth().sendPasswordResetEmail(user.email).then(() => {
-                showToast("CÓDIGO ENVIADO AL CORREO");
-                startResendTimer();
-            });
+            // Simulamos código de 6 dígitos para evitar redirigir al usuario fuera del sitio
+            generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            showToast(`CÓDIGO DE SEGURIDAD: ${generatedCode}`, 'success');
+            startResendTimer();
         }
 
         function startResendTimer() {
