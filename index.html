@@ -124,7 +124,8 @@
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         
         /* MODAL DE ALERTAS ESPECÍFICO (MAYOR Z-INDEX) */
-        #customAlert { z-index: 3000; }
+        #customAlert { z-index: 4000; }
+        #passChangeModal, #cooldownModal { z-index: 3500; }
 
         .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
         .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
@@ -163,6 +164,20 @@
         .alert-warning h2 { color: var(--warning); }
         .alert-success { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
         .alert-success h2 { color: var(--accent); }
+
+        /* BANNER ROJO ADVERTENCIA */
+        .danger-banner {
+            background: rgba(255, 71, 87, 0.15);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            margin-top: 15px;
+            text-transform: none;
+            line-height: 1.4;
+        }
 
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
         .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
@@ -259,7 +274,7 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 3000) -->
+    <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 4000) -->
     <div id="customAlert" class="modal">
         <div id="alertBox" class="modal-content custom-alert-content">
             <h2 id="alertTitle">AVISO</h2>
@@ -267,6 +282,42 @@
             <div id="alertActions" style="display: flex; gap: 10px; justify-content: center;">
                 <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;">ACEPTAR</button>
                 <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE COOLDOWN (BLOQUEO) -->
+    <div id="cooldownModal" class="modal">
+        <div class="modal-content alert-error">
+            <h2>ACCESO DENEGADO</h2>
+            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;">No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:</p>
+            <div id="timerDisplay" style="font-size: 1.2rem; font-weight: 900; color: var(--error); margin-bottom: 30px; letter-spacing: 2px;">00d 00h 00m 00s</div>
+            <button class="btn-action" style="width: 100%;" onclick="closeCooldown()">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CAMBIO DE CONTRASEÑA (FORMULARIO) -->
+    <div id="passChangeModal" class="modal">
+        <div class="modal-content alert-success" style="border-color: var(--accent);">
+            <h2>CAMBIAR CONTRASEÑA</h2>
+            
+            <label class="profile-label" style="text-align: left;">CONTRASEÑA ANTERIOR</label>
+            <div class="pass-wrapper">
+                <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL">
+            </div>
+
+            <label class="profile-label" style="text-align: left;">NUEVA CONTRASEÑA</label>
+            <div class="pass-wrapper">
+                <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE">
+            </div>
+
+            <div class="danger-banner">
+                <i class="fas fa-exclamation-triangle"></i> SI PIERDES TU CONTRASEÑA, NO EXISTE SISTEMA DE RECUPERACIÓN. EL STAFF NO TIENE ACCESO A TU CUENTA. ANÓTALA BIEN.
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 25px;">
+                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="executePassUpdate()">CONFIRMAR</button>
             </div>
         </div>
     </div>
@@ -327,22 +378,14 @@
                 <div class="security-grid">
                     <div>
                         <label class="profile-label">CONTRASEÑA ACTUAL</label>
-                        <input type="password" value="********" disabled style="opacity: 0.3; cursor: not-allowed;">
-                    </div>
-                    <div>
-                        <label class="profile-label">CAMBIAR CONTRASEÑA</label>
-                        <div class="pass-wrapper">
-                            <input type="password" id="newPass" placeholder="NUEVA CLAVE">
-                            <i class="fas fa-eye toggle-pass" onclick="toggleNewPassView()" style="top: 12px;"></i>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="password" value="********" disabled style="opacity: 0.3; cursor: not-allowed; flex: 1;">
+                            <button class="btn-action" style="padding: 0 15px; background: #f1c40f;" onclick="startPassChangeFlow()">CAMBIAR</button>
                         </div>
                     </div>
                     <div>
                         <label class="profile-label">CORREO VINCULADO</label>
                         <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed;">
-                    </div>
-                    <div>
-                        <label class="profile-label">NUEVO CORREO</label>
-                        <input type="email" id="newEmail" placeholder="EJEMPLO@MAIL.COM">
                     </div>
                 </div>
             </div>
@@ -549,6 +592,7 @@
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
         let editingId = null;
         let currentAuthType = 'INICIAR SESIÓN';
+        let cooldownInterval = null;
 
         // LÓGICA DE ALERTA PERSONALIZADA
         function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
@@ -577,6 +621,88 @@
 
             modal.style.display = 'flex';
         }
+
+        // --- SISTEMA DE CAMBIO DE CONTRASEÑA ---
+
+        function startPassChangeFlow() {
+            const lastChange = localStorage.getItem('lastPassChange');
+            const now = Date.now();
+            const weekInMs = 7 * 24 * 60 * 60 * 1000;
+
+            if(lastChange && (now - lastChange < weekInMs)) {
+                openCooldown(weekInMs - (now - lastChange));
+            } else {
+                showCustomAlert(
+                    "ADVERTENCIA", 
+                    "¿Estás seguro de que quieres cambiar tu contraseña? Solo podrás volver a cambiarla después de 7 días.", 
+                    "warning", 
+                    () => openPassChangeModal()
+                );
+            }
+        }
+
+        function openCooldown(timeLeft) {
+            const modal = document.getElementById('cooldownModal');
+            const display = document.getElementById('timerDisplay');
+            
+            if(cooldownInterval) clearInterval(cooldownInterval);
+
+            const updateTimer = () => {
+                if(timeLeft <= 0) {
+                    clearInterval(cooldownInterval);
+                    modal.style.display = 'none';
+                    return;
+                }
+                const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                display.innerText = `${d}d ${h}h ${m}m ${s}s`;
+                timeLeft -= 1000;
+            };
+
+            updateTimer();
+            cooldownInterval = setInterval(updateTimer, 1000);
+            modal.style.display = 'flex';
+        }
+
+        function closeCooldown() {
+            clearInterval(cooldownInterval);
+            document.getElementById('cooldownModal').style.display = 'none';
+        }
+
+        function openPassChangeModal() {
+            document.getElementById('passChangeModal').style.display = 'flex';
+        }
+
+        function closePassChange() {
+            document.getElementById('passChangeModal').style.display = 'none';
+        }
+
+        function executePassUpdate() {
+            const oldPass = document.getElementById('oldPassInput').value;
+            const newPass = document.getElementById('newPassInput').value;
+            const user = firebase.auth().currentUser;
+
+            if(!oldPass || !newPass) {
+                showCustomAlert("ERROR", "Debes completar ambos campos", "error");
+                return;
+            }
+
+            // Re-autenticar al usuario antes de cambiar clave
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+
+            user.reauthenticateWithCredential(credential).then(() => {
+                user.updatePassword(newPass).then(() => {
+                    localStorage.setItem('lastPassChange', Date.now());
+                    closePassChange();
+                    // Ejecuta el guardado general del perfil como acordamos
+                    saveProfile(true); 
+                }).catch(e => showCustomAlert("ERROR", "La nueva contraseña no es válida.", "error"));
+            }).catch(e => showCustomAlert("ERROR", "Contraseña anterior incorrecta.", "error"));
+        }
+
+        // --- FIN SISTEMA CONTRASEÑA ---
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -624,14 +750,6 @@
             const icon = document.querySelector('.toggle-pass');
             passInput.type = passInput.type === "password" ? "text" : "password";
             icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
-        }
-
-        function toggleNewPassView() {
-            const passInput = document.getElementById('newPass');
-            const icon = document.querySelector('.security-grid .toggle-pass');
-            passInput.type = passInput.type === "password" ? "text" : "password";
-            icon.classList.toggle('fa-eye'); 
-            icon.classList.toggle('fa-eye-slash');
         }
 
         function openAuth(type) { 
@@ -718,36 +836,31 @@
             document.getElementById('charCount').innerText = bio.value.length;
         }
 
-        function saveProfile() {
-            showCustomAlert(
-                "ADVERTENCIA", 
-                "¿Estás seguro de que quieres guardar estos cambios en tu perfil?", 
-                "warning", 
-                () => {
-                    // Ejecución real del guardado
-                    localStorage.setItem('pNickname', document.getElementById('editNickname').value);
-                    localStorage.setItem('pBio', document.getElementById('editBio').value);
-                    localStorage.setItem('pGender', document.getElementById('editGender').value);
-                    
-                    if(document.getElementById('editGender').value === 'OTRO') {
-                        localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
-                    }
+        function saveProfile(skipConfirm = false) {
+            const performSave = () => {
+                localStorage.setItem('pNickname', document.getElementById('editNickname').value);
+                localStorage.setItem('pBio', document.getElementById('editBio').value);
+                localStorage.setItem('pGender', document.getElementById('editGender').value);
+                
+                if(document.getElementById('editGender').value === 'OTRO') {
+                    localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+                }
 
-                    const newP = document.getElementById('newPass').value;
-                    const newE = document.getElementById('newEmail').value;
-                    const user = firebase.auth().currentUser;
+                showCustomAlert("ÉXITO", "Cambios guardados correctamente", "success", () => {
+                    location.reload();
+                });
+            };
 
-                    if(user) {
-                        if(newP) user.updatePassword(newP).catch(e => showCustomAlert("ERROR", "No se pudo cambiar la contraseña", "error"));
-                        if(newE) user.updateEmail(newE).catch(e => showCustomAlert("ERROR", "No se pudo cambiar el correo", "error"));
-                    }
-
-                    showCustomAlert("ÉXITO", "Cambios guardados correctamente", "success", () => {
-                        location.reload();
-                    });
-                },
-                () => { /* No hacer nada si cancela */ }
-            );
+            if(skipConfirm) {
+                performSave();
+            } else {
+                showCustomAlert(
+                    "ADVERTENCIA", 
+                    "¿Estás seguro de que quieres guardar estos cambios en tu perfil?", 
+                    "warning", 
+                    performSave
+                );
+            }
         }
 
         function confirmDeleteAccount() {
