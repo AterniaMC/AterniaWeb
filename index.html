@@ -631,7 +631,17 @@
             if(lastChange && (now - lastChange < weekInMs)) {
                 openCooldown(weekInMs - (now - lastChange));
             } else {
-                openPassChangeModal();
+                // PASO 1: ADVERTENCIA PREVIA (BORDE AMARILLO)[cite: 1]
+                showCustomAlert(
+                    "¿Estás seguro de realizar este cambio?", 
+                    "Solo puedes cambiar tu contraseña una vez cada 7 días. Si estás seguro de tu acción presiona CONFIRMAR para proceder.", 
+                    "warning", 
+                    () => {
+                        // PASO 2: SOLO SI CONFIRMA, SE ABRE EL FORMULARIO[cite: 1]
+                        openPassChangeModal();
+                    },
+                    () => { /* Opción de cancelar */ }
+                );
             }
         }
 
@@ -651,7 +661,7 @@
                 const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                display.innerText = `${d}d ${h}h ${m}m ${s}s`;
+                display.innerText = `${d}d ${h}h ${m}s ${s}s`;
                 timeLeft -= 1000;
             };
 
