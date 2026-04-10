@@ -17,7 +17,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- SCRIPTS DE FIREBASE (FIREWALL) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -285,7 +284,6 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 4000) -->
     <div id="customAlert" class="modal">
         <div id="alertBox" class="modal-content custom-alert-content">
             <h2 id="alertTitle" data-tr="alert_notice">AVISO</h2>
@@ -297,7 +295,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE COOLDOWN (BLOQUEO) -->
     <div id="cooldownModal" class="modal">
         <div class="modal-content alert-error">
             <h2 data-tr="denied_access">ACCESO DENEGADO</h2>
@@ -307,7 +304,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CAMBIO DE CONTRASEÑA (FORMULARIO) -->
     <div id="passChangeModal" class="modal">
         <div class="modal-content alert-success" style="border-color: var(--accent);">
             <h2 data-tr="change_pass_title">CAMBIAR CONTRASEÑA</h2>
@@ -350,7 +346,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL (Z-INDEX 2000) -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <h2 data-tr="edit_profile_title">EDITAR PERFIL</h2>
@@ -466,7 +461,6 @@
 
     <div class="main-content">
         <div class="top-bar">
-            <!-- 1. CUENTA -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
@@ -478,18 +472,15 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')" data-tr="btn_login">INICIAR SESIÓN</button>
             </div>
 
-            <!-- 2. EDITAR PERFIL -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> <span data-tr="btn_edit_profile">EDITAR PERFIL</span>
             </button>
 
-            <!-- 3. IDIOMAS -->
             <select id="langSelect" class="lang-select-topbar" onchange="changeLanguage()">
                 <option value="es">🇪🇸 ES</option>
                 <option value="en">🇺🇸 EN</option>
             </select>
 
-            <!-- 4. TEMA -->
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
@@ -586,8 +577,7 @@
         <div id="otros" class="category-section">
             <h1><span style="color:var(--accent)" data-tr="nav_others">OTROS</span></h1>
             <div id="otrosContent">
-                <!-- Espacio reservado para registro de versiones -->
-            </div>
+                </div>
         </div>
 
         <div id="staff" class="category-section">
