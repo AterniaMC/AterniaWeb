@@ -420,6 +420,8 @@
         <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> DONACIONES</div>
         <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> SOBRE EL SERVIDOR</div>
         
+        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> OTROS</div>
+
         <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;">COMUNIDAD</p>
         <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
         <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> FORO</div>
@@ -560,6 +562,13 @@
             </div>
         </div>
 
+        <div id="otros" class="category-section">
+            <h1><span style="color:var(--accent)">OTROS</span></h1>
+            <div id="otrosContent">
+                <!-- Espacio reservado para registro de versiones -->
+            </div>
+        </div>
+
         <div id="staff" class="category-section">
             <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
             <div class="grid">
@@ -632,13 +641,13 @@
             if(lastChange && (now - lastChange < weekInMs)) {
                 openCooldown(weekInMs - (now - lastChange));
             } else {
-                // PASO 1: ADVERTENCIA PREVIA (BORDE AMARILLO)[cite: 1]
+                // PASO 1: ADVERTENCIA PREVIA (BORDE AMARILLO)
                 showCustomAlert(
                     "¿Estás seguro de realizar este cambio?", 
                     "Solo puedes cambiar tu contraseña una vez cada 7 días. Si estás seguro de tu acción presiona CONFIRMAR para proceder.", 
                     "warning", 
                     () => {
-                        // PASO 2: SOLO SI CONFIRMA, SE ABRE EL FORMULARIO[cite: 1]
+                        // PASO 2: SOLO SI CONFIRMA, SE ABRE EL FORMULARIO
                         openPassChangeModal();
                     },
                     () => { /* Opción de cancelar */ }
