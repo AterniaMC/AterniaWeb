@@ -654,21 +654,19 @@
             const lang = document.getElementById('langSelect').value;
             localStorage.setItem('prefLang', lang);
             updateUITranslations(lang);
+            renderLlaves(); // Refrescar llaves para aplicar traducción
         }
 
         function updateUITranslations(lang) {
-            // Traducir textos directos
             document.querySelectorAll('[data-tr]').forEach(el => {
                 const key = el.getAttribute('data-tr');
                 if(translations[lang][key]) el.innerText = translations[lang][key];
             });
-            // Traducir placeholders
             document.querySelectorAll('[data-tr-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-tr-placeholder');
                 if(translations[lang][key]) el.placeholder = translations[lang][key];
             });
         }
-        // --- FIN SISTEMA IDIOMAS ---
 
         const RAREZAS = [
             {n:'COMÚN', c:'var(--comun)', p:1.00}, {n:'RARO', c:'var(--raro)', p:2.50},
@@ -677,12 +675,30 @@
             {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
         ];
 
+        function renderLlaves() {
+            const container = document.getElementById('llavesContainer');
+            const lang = localStorage.getItem('prefLang') || 'es';
+            const buyText = translations[lang].btn_acquire || (lang === 'es' ? 'COMPRAR' : 'BUY');
+            
+            if(!container) return;
+            container.innerHTML = '';
+            RAREZAS.forEach(r => {
+                container.innerHTML += `
+                    <div class="card" style="border-top: 4px solid ${r.c}">
+                        <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
+                        <h2 style="color:${r.c}">${r.n} x5</h2>
+                        <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
+                        <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">${buyText}</a>
+                    </div>`;
+            });
+        }
+
+        // --- RESTO DEL CÓDIGO FUNCIONAL ---
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
         let editingId = null;
         let currentAuthType = 'INICIAR SESIÓN';
         let cooldownInterval = null;
 
-        // LÓGICA DE ALERTA PERSONALIZADA
         function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
             const modal = document.getElementById('customAlert');
             const box = document.getElementById('alertBox');
@@ -690,110 +706,62 @@
             const msgEl = document.getElementById('alertMsg');
             const confirmBtn = document.getElementById('alertConfirmBtn');
             const cancelBtn = document.getElementById('alertCancelBtn');
-
             titleEl.innerText = title;
             msgEl.innerText = msg;
             box.className = 'modal-content custom-alert-content alert-' + type;
-
             cancelBtn.style.display = onCancel ? 'block' : 'none';
-            
-            confirmBtn.onclick = () => {
-                modal.style.display = 'none';
-                if(onConfirm) onConfirm();
-            };
-
-            cancelBtn.onclick = () => {
-                modal.style.display = 'none';
-                if(onCancel) onCancel();
-            };
-
+            confirmBtn.onclick = () => { modal.style.display = 'none'; if(onConfirm) onConfirm(); };
+            cancelBtn.onclick = () => { modal.style.display = 'none'; if(onCancel) onCancel(); };
             modal.style.display = 'flex';
         }
-
-        // --- SISTEMA DE CAMBIO DE CONTRASEÑA ---
 
         function startPassChangeFlow() {
             const lastChange = localStorage.getItem('lastPassChange');
             const now = Date.now();
             const weekInMs = 7 * 24 * 60 * 60 * 1000;
-
             if(lastChange && (now - lastChange < weekInMs)) {
                 openCooldown(weekInMs - (now - lastChange));
             } else {
-                // PASO 1: ADVERTENCIA PREVIA (BORDE AMARILLO)
-                showCustomAlert(
-                    "¿Estás seguro de realizar este cambio?", 
-                    "Solo puedes cambiar tu contraseña una vez cada 7 días. Si estás seguro de tu acción presiona CONFIRMAR para proceder.", 
-                    "warning", 
-                    () => {
-                        // PASO 2: SOLO SI CONFIRMA, SE ABRE EL FORMULARIO
-                        openPassChangeModal();
-                    },
-                    () => { /* Opción de cancelar */ }
-                );
+                showCustomAlert("¿Estás seguro?", "Solo puedes cambiar tu contraseña una vez cada 7 días.", "warning", () => { openPassChangeModal(); }, () => {});
             }
         }
 
         function openCooldown(timeLeft) {
             const modal = document.getElementById('cooldownModal');
             const display = document.getElementById('timerDisplay');
-            
             if(cooldownInterval) clearInterval(cooldownInterval);
-
             const updateTimer = () => {
-                if(timeLeft <= 0) {
-                    clearInterval(cooldownInterval);
-                    modal.style.display = 'none';
-                    return;
-                }
+                if(timeLeft <= 0) { clearInterval(cooldownInterval); modal.style.display = 'none'; return; }
                 const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                display.innerText = `${d}d ${h}h ${m}s ${s}s`;
+                display.innerText = `${d}d ${h}h ${m}m ${s}s`;
                 timeLeft -= 1000;
             };
-
             updateTimer();
             cooldownInterval = setInterval(updateTimer, 1000);
             modal.style.display = 'flex';
         }
 
-        function closeCooldown() {
-            clearInterval(cooldownInterval);
-            document.getElementById('cooldownModal').style.display = 'none';
-        }
-
-        function openPassChangeModal() {
-            document.getElementById('passChangeModal').style.display = 'flex';
-        }
-
-        function closePassChange() {
-            document.getElementById('passChangeModal').style.display = 'none';
-        }
+        function closeCooldown() { clearInterval(cooldownInterval); document.getElementById('cooldownModal').style.display = 'none'; }
+        function openPassChangeModal() { document.getElementById('passChangeModal').style.display = 'flex'; }
+        function closePassChange() { document.getElementById('passChangeModal').style.display = 'none'; }
 
         function executePassUpdate() {
             const oldPass = document.getElementById('oldPassInput').value;
             const newPass = document.getElementById('newPassInput').value;
             const user = firebase.auth().currentUser;
-
-            if(!oldPass || !newPass) {
-                showCustomAlert("ERROR", "Debes completar ambos campos", "error");
-                return;
-            }
-
+            if(!oldPass || !newPass) { showCustomAlert("ERROR", "Debes completar ambos campos", "error"); return; }
             const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
-
             user.reauthenticateWithCredential(credential).then(() => {
                 user.updatePassword(newPass).then(() => {
                     localStorage.setItem('lastPassChange', Date.now());
                     closePassChange();
                     saveProfile(true); 
-                }).catch(e => showCustomAlert("ERROR", "La nueva contraseña no es válida.", "error"));
+                }).catch(e => showCustomAlert("ERROR", "Nueva contraseña no válida.", "error"));
             }).catch(e => showCustomAlert("ERROR", "Contraseña anterior incorrecta.", "error"));
         }
-
-        // --- FIN SISTEMA CONTRASEÑA ---
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
@@ -802,9 +770,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) {
-                 document.getElementById('sidebar').classList.remove('open');
-            }
+            if(window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
             if(id === 'faq') renderFaq();
         }
 
@@ -831,9 +797,7 @@
                     icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
                     players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
                 }
-            } catch (e) {
-                document.getElementById('statusText').innerText = 'OFFLINE';
-            }
+            } catch (e) { document.getElementById('statusText').innerText = 'OFFLINE'; }
         }
 
         function togglePassView() {
@@ -857,37 +821,19 @@
             const user = document.getElementById('authUser').value; 
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPass').value;
-
             if (currentAuthType === 'REGISTRARSE') {
                 firebase.auth().createUserWithEmailAndPassword(email, pass)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({ displayName: user });
-                    })
-                    .then(() => {
-                        localStorage.setItem('u', user);
-                        location.reload();
-                    })
-                    .catch((error) => { 
-                        showCustomAlert("ERROR", error.message, "error");
-                    });
+                    .then((userCredential) => { return userCredential.user.updateProfile({ displayName: user }); })
+                    .then(() => { localStorage.setItem('u', user); location.reload(); })
+                    .catch((error) => { showCustomAlert("ERROR", error.message, "error"); });
             } else {
                 firebase.auth().signInWithEmailAndPassword(email, pass)
-                    .then((userCredential) => {
-                        localStorage.setItem('u', userCredential.user.displayName);
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        document.getElementById('authError').style.display = 'block';
-                    });
+                    .then((userCredential) => { localStorage.setItem('u', userCredential.user.displayName); location.reload(); })
+                    .catch((error) => { document.getElementById('authError').style.display = 'block'; });
             }
         }
 
-        function logout() { 
-            firebase.auth().signOut().then(() => {
-                localStorage.removeItem('u'); 
-                location.reload(); 
-            });
-        }
+        function logout() { firebase.auth().signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
 
         function openProfile() {
             const u = localStorage.getItem('u');
@@ -895,17 +841,12 @@
             document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
             document.getElementById('profileNameLabel').innerText = u;
             document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
-            
             const user = firebase.auth().currentUser;
-            if(user) {
-                document.getElementById('displayEmail').value = user.email;
-            }
-
+            if(user) document.getElementById('displayEmail').value = user.email;
             document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
             document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
             document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
-            updateCharCount();
-            toggleOtherGender();
+            updateCharCount(); toggleOtherGender();
             document.getElementById('profileModal').style.display = 'flex';
         }
 
@@ -914,12 +855,8 @@
         function toggleOtherGender() {
             const select = document.getElementById('editGender');
             const otherInput = document.getElementById('editGenderOther');
-            if(select.value === 'OTRO') {
-                otherInput.style.display = 'block';
-                otherInput.value = localStorage.getItem('pGenderOther') || '';
-            } else {
-                otherInput.style.display = 'none';
-            }
+            if(select.value === 'OTRO') { otherInput.style.display = 'block'; otherInput.value = localStorage.getItem('pGenderOther') || ''; }
+            else { otherInput.style.display = 'none'; }
         }
 
         function updateCharCount() {
@@ -932,44 +869,18 @@
                 localStorage.setItem('pNickname', document.getElementById('editNickname').value);
                 localStorage.setItem('pBio', document.getElementById('editBio').value);
                 localStorage.setItem('pGender', document.getElementById('editGender').value);
-                
-                if(document.getElementById('editGender').value === 'OTRO') {
-                    localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
-                }
-
-                showCustomAlert("ÉXITO", "Cambios guardados correctamente", "success", () => {
-                    location.reload();
-                });
+                if(document.getElementById('editGender').value === 'OTRO') localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+                showCustomAlert("ÉXITO", "Cambios guardados", "success", () => { location.reload(); });
             };
-
-            if(skipConfirm) {
-                performSave();
-            } else {
-                showCustomAlert(
-                    "ADVERTENCIA", 
-                    "¿Estás seguro de que quieres guardar estos cambios en tu perfil?", 
-                    "warning", 
-                    performSave
-                );
-            }
+            if(skipConfirm) performSave();
+            else showCustomAlert("ADVERTENCIA", "¿Guardar cambios?", "warning", performSave);
         }
 
         function confirmDeleteAccount() {
-            showCustomAlert(
-                "ATENCIÓN", 
-                "¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.", 
-                "error", 
-                () => {
-                    const user = firebase.auth().currentUser;
-                    if(user) {
-                        user.delete().then(() => {
-                            localStorage.clear();
-                            showCustomAlert("CUENTA ELIMINADA", "Tu cuenta ha sido borrada.", "success", () => location.reload());
-                        }).catch(err => showCustomAlert("ERROR", "Re-autenticación necesaria para eliminar cuenta.", "error"));
-                    }
-                },
-                () => { /* No hacer nada si cancela */ }
-            );
+            showCustomAlert("ATENCIÓN", "¿Eliminar cuenta permanentemente?", "error", () => {
+                const user = firebase.auth().currentUser;
+                if(user) user.delete().then(() => { localStorage.clear(); location.reload(); });
+            }, () => {});
         }
 
         function postFaq() {
@@ -1009,7 +920,7 @@
             closeEdit(); renderFaq();
         }
         function deletePost(id) {
-            showCustomAlert("ELIMINAR", "¿Quieres borrar esta publicación?", "warning", () => {
+            showCustomAlert("ELIMINAR", "¿Borrar publicación?", "warning", () => {
                 posts = posts.filter(p => p.id !== id);
                 localStorage.setItem('faqPosts', JSON.stringify(posts));
                 renderFaq();
@@ -1017,17 +928,11 @@
         }
 
         window.onload = () => {
-            // Cargar idioma preferido
             const savedLang = localStorage.getItem('prefLang') || 'es';
             document.getElementById('langSelect').value = savedLang;
             updateUITranslations(savedLang);
-
             updateServerStatus(); setInterval(updateServerStatus, 30000);
-            const container = document.getElementById('llavesContainer');
-            RAREZAS.forEach(r => {
-                container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
-            });
-
+            renderLlaves();
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     const u = user.displayName;
