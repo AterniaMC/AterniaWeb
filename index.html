@@ -237,7 +237,7 @@
             font-weight: 900;
             cursor: pointer;
             transition: 0.3s;
-            display: none; 
+            display: none; /* Se muestra solo si hay login */
             align-items: center;
             gap: 8px;
         }
@@ -246,59 +246,35 @@
             color: #000;
         }
 
-        /* --- BLOQUE CORREGIDO: SELECTOR DE IDIOMAS --- */
-        .lang-container { position: relative; }
-        
-        .btn-lang-planet {
-            width: 45px; height: 45px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.03);
+        /* --- NUEVO ESTILO BOTÓN IDIOMAS (CAPSULA SEGUN IMAGEN) --- */
+        .lang-capsule {
+            display: flex;
+            align-items: center;
+            background: #000;
             border: 2px solid var(--accent);
+            padding: 6px 15px;
+            border-radius: 50px;
+            box-shadow: 0 0 10px var(--accent-glow);
+            gap: 10px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .lang-btn {
+            color: #555;
+            transition: 0.3s;
+            user-select: none;
+        }
+        .lang-btn.active {
             color: var(--accent);
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer; transition: 0.3s;
+            text-shadow: 0 0 5px var(--accent-glow);
         }
-        
-        .btn-lang-planet:hover, .btn-lang-planet.active {
-            background: rgba(0, 229, 229, 0.1);
-            box-shadow: 0 0 15px var(--accent-glow);
+        .lang-divider {
+            color: #333;
+            font-weight: 400;
         }
 
-        .lang-dropdown {
-            position: absolute; top: calc(100% + 12px); right: 0;
-            background: var(--card-bg);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            width: 140px;
-            opacity: 0; visibility: hidden;
-            transform: translateY(-10px);
-            transition: 0.3s; z-index: 1000;
-            overflow: hidden;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .lang-dropdown.open {
-            opacity: 1; visibility: visible;
-            transform: translateY(0);
-        }
-
-        .lang-option {
-            display: flex; align-items: center; gap: 10px;
-            padding: 12px 18px;
-            color: var(--text); font-size: 0.75rem; font-weight: 900;
-            cursor: pointer; transition: 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .lang-option:last-child { border-bottom: none; }
-
-        .lang-option:hover {
-            background: rgba(0, 229, 229, 0.1);
-            color: var(--accent);
-        }
-        /* --- FIN BLOQUE CORREGIDO --- */
-
+        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
         .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
         .profile-left { width: 150px; text-align: center; }
         .profile-right { flex: 1; }
@@ -398,10 +374,11 @@
                     <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem; color: var(--accent); display: block;">NOMBRE</span>
                     <span id="profileTagLabel" style="font-size: 0.65rem; color: #555; font-weight: 900;">@ORIGINAL</span>
                 </div>
+
                 <div class="profile-right">
                     <label class="profile-label" data-tr="label_nickname">APODO EN FORO</label>
                     <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO" data-tr-placeholder="placeholder_nickname">
-                    
+
                     <label class="profile-label" data-tr="label_gender">GÉNERO</label>
                     <select id="editGender" onchange="toggleOtherGender()">
                         <option value="" disabled selected data-tr="opt_select_gender">SELECCIONA GÉNERO</option>
@@ -420,6 +397,7 @@
 
             <div class="security-section">
                 <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;" data-tr="security_title">SEGURIDAD Y CUENTA</h3>
+                
                 <div class="security-row">
                     <label class="profile-label" data-tr="new_pass_label">CONTRASEÑA</label>
                     <div style="display: flex; gap: 8px;">
@@ -427,6 +405,7 @@
                         <button class="btn-action" style="padding: 0 15px; background: #f1c40f; white-space: nowrap;" onclick="startPassChangeFlow()" data-tr="btn_change_pass">CAMBIAR CONTRASEÑA</button>
                     </div>
                 </div>
+
                 <div class="security-row">
                     <label class="profile-label" data-tr="placeholder_email">CORREO</label>
                     <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed; width: 100%;">
@@ -453,349 +432,522 @@
         </div>
     </div>
 
-    <aside class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="logo-box" onclick="showCategory('inicio')">
-            <img src="https://i.imgur.com/EpxuqFO.png" alt="Aternia Logo">
-            <span>ATERNIA MC</span>
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
+            <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
         </div>
+        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> <span data-tr="nav_home">INICIO</span></div>
+        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS EXCLUSIVOS</span></div>
+        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES/CRATES</span></div>
+        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> <span data-tr="nav_donations">DONACIONES</span></div>
+        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> <span data-tr="nav_about">SOBRE EL SERVIDOR</span></div>
         
-        <nav>
-            <div class="nav-item active" onclick="showCategory('inicio')" id="nav-inicio">
-                <i class="fas fa-home"></i> <span data-tr="nav_home">INICIO</span>
-            </div>
-            <div class="nav-item" onclick="showCategory('llaves')" id="nav-llaves">
-                <i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES</span>
-            </div>
-            <div class="nav-item" onclick="showCategory('rangos')" id="nav-rangos">
-                <i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS</span>
-            </div>
-            <div class="nav-item" onclick="showCategory('comunidad')" id="nav-comunidad">
-                <i class="fas fa-users"></i> <span data-tr="nav_community">FORO</span>
-            </div>
-            <div class="nav-item" onclick="showCategory('unban')" id="nav-unban">
-                <i class="fas fa-hammer"></i> <span data-tr="nav_unban">DESBANEO</span>
-            </div>
-        </nav>
+        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> <span data-tr="nav_others">OTROS</span></div>
 
-        <div class="server-status-card">
-            <img src="https://i.imgur.com/EpxuqFO.png" alt="Icono">
-            <p style="font-size: 0.7rem; font-weight: 900; margin-bottom: 5px;" data-tr="server_status_label">ESTADO DEL SERVIDOR</p>
-            <div id="statusText" style="font-size: 0.65rem; color: #888; font-weight: 900; margin-bottom: 12px;">CARGANDO...</div>
-            
-            <div class="ip-copy-box" onclick="copyIP()">
-                <div class="copy-tooltip" id="copyTooltip" data-tr="ip_copied">¡COPIADO!</div>
-                <span style="font-size: 0.75rem; font-weight: 900; color: var(--accent);">PLAY.ATERNIA.CLUB</span>
-                <i class="fas fa-copy"></i>
-            </div>
-        </div>
-
+        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;" data-tr="side_community">COMUNIDAD</p>
+        <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
+        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> <span data-tr="nav_forum">FORO</span></div>
+        
         <div style="margin-top: 30px;">
-            <p style="font-size: 0.65rem; color: #444; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px;" data-tr="social_label">REDES SOCIALES</p>
-            <a href="#" class="social-link"><i class="fab fa-discord"></i> DISCORD OFICIAL</a>
-            <a href="#" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;" data-tr="side_social">REDES SOCIALES</p>
+            <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
+            <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
             <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
         </div>
-    </aside>
 
-    <main class="main-content">
-        <header class="top-bar">
-            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
-                <i class="fas fa-user-cog"></i> <span data-tr="btn_edit_profile">MI PERFIL</span>
-            </button>
-
-            <div class="lang-container">
-                <button class="btn-lang-planet" id="btnLangPlanet" onclick="toggleLangMenu(event)">
-                    <i class="fas fa-globe"></i>
-                </button>
-                <div class="lang-dropdown" id="langDropdown">
-                    <div class="lang-option" onclick="changeLang('es')">
-                        <span>🇪🇸</span> ES
-                    </div>
-                    <div class="lang-option" onclick="changeLang('en')">
-                        <span>🇺🇸</span> EN
-                    </div>
-                </div>
+        <div class="server-status-card">
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
+            
+            <div class="ip-copy-box" onclick="copyIP()">
+                <div id="copyTooltip" class="copy-tooltip" data-tr="tooltip_copied">¡COPIADO!</div>
+                <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
+                <i class="fas fa-copy"></i>
             </div>
 
-            <div class="theme-switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider">
-                    <i class="fas fa-moon" style="font-size: 0.7rem; color: #f1c40f;"></i>
-                    <i class="fas fa-sun" style="font-size: 0.7rem; color: #f1c40f;"></i>
-                </span>
+            <div style="margin-top: 10px; font-size: 0.75rem; font-weight: 900;">
+                <span id="statusIcon" class="status-dot offline-dot"></span>
+                <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
+            </div>
+            <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
+                <span data-tr="status_players">JUGADORES</span>: <span id="playerCount">0 / --</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
+                <img id="headImg" src="" style="width:25px; border-radius:3px;">
+                <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
+                <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
             </div>
 
             <div id="authButtons" style="display: flex; gap: 10px;">
-                <button class="btn-action btn-outline" onclick="openAuth('login')" data-tr="btn_login">LOG IN</button>
-                <button class="btn-action" onclick="openAuth('register')" data-tr="btn_register">SIGN UP</button>
+                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')" data-tr="btn_register">REGISTRARSE</button>
+                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')" data-tr="btn_login">INICIAR SESIÓN</button>
             </div>
 
-            <div id="userLogged" style="display: none; align-items: center; gap: 15px;">
-                <img id="headImg" src="" style="width: 35px; border-radius: 8px; border: 1px solid var(--accent);">
-                <span id="userTag" style="font-weight: 900; font-size: 0.8rem; color: var(--accent);">---</span>
-                <button class="btn-action btn-outline" style="padding: 5px 15px; font-size: 0.7rem;" onclick="logout()" data-tr="btn_logout">SALIR</button>
-            </div>
-        </header>
+            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
+                <i class="fas fa-user-edit"></i> <span data-tr="btn_edit_profile">EDITAR PERFIL</span>
+            </button>
 
-        <section id="inicio" class="category-section active">
-            <h1 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 10px;" data-tr="home_title">BIENVENIDO A <span style="color: var(--accent);">ATERNIA</span></h1>
-            <p style="color: #666; font-weight: 600; margin-bottom: 40px; text-transform: none;" data-tr="home_subtitle">La tienda oficial de la comunidad. Apoya el proyecto y obtén beneficios únicos en el juego.</p>
-            
-            <div style="background: rgba(0, 229, 229, 0.05); padding: 30px; border-radius: 20px; border: 1px dashed var(--accent); margin-bottom: 50px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 style="font-size: 0.9rem; letter-spacing: 2px;" data-tr="news_title">ÚLTIMAS NOVEDADES</h2>
-                    <span class="version-tag">VERSIÓN 1.20.X</span>
+            <div class="lang-capsule">
+                <span id="lang-es" class="lang-btn active" onclick="selectLang('es')">ES</span>
+                <span class="lang-divider">|</span>
+                <span id="lang-en" class="lang-btn" onclick="selectLang('en')">EN</span>
+            </div>
+
+            <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
+        </div>
+
+        <div id="inicio" class="category-section active">
+            <h1><span data-tr="news_title">NOTICIAS</span> <span style="color:var(--accent)" data-tr="recent_title">RECIENTES</span></h1>
+            <div class="news-cell">
+                <div>
+                    <h3 style="margin:0" data-tr="news_1_title">TIENDA OFICIAL LANZADA</h3>
+                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;" data-tr="news_1_desc">Bienvenido a la plataforma de compras de Aternia MC.</p>
                 </div>
-                <div class="news-cell">
-                    <div>
-                        <p style="font-weight: 900; font-size: 0.8rem; margin-bottom: 5px;" data-tr="news_update">NUEVA MODALIDAD: SURVIVAL TÉCNICO</p>
-                        <p style="font-size: 0.7rem; color: #555; text-transform: none;" data-tr="news_date">Publicado hace 2 días por Administración</p>
+                <span class="version-tag">V1.0</span>
+            </div>
+        </div>
+
+        <div id="rangos" class="category-section">
+            <h1><span data-tr="nav_ranks">RANGOS</span> <span style="color:var(--accent)" data-tr="exclusive_title">EXCLUSIVOS</span></h1>
+            <div class="grid">
+                <div class="card">
+                    <h2>VIP</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_acquire">ADQUIRIR</a>
+                </div>
+                <div class="card" style="border-color:gold;">
+                    <h2 style="color:gold;">VIP+</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%" data-tr="btn_acquire">ADQUIRIR</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="llaves" class="category-section">
+            <h1><span data-tr="nav_keys">LLAVES DE</span> <span style="color:var(--accent)">CRATES</span></h1>
+            <div class="grid" id="llavesContainer"></div>
+        </div>
+
+        <div id="donaciones" class="category-section">
+            <h1><span style="color:var(--accent)" data-tr="nav_donations">DONACIONES</span></h1>
+            <div class="grid">
+                <div class="card"><h3 data-tr="don_small">PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
+                <div class="card"><h3 data-tr="don_med">MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
+                <div class="card"><h3 data-tr="don_big">GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
+                <div class="card" style="border: 2px solid var(--accent);">
+                    <h3 data-tr="don_free">DONACIÓN LIBRE</h3>
+                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;" data-tr="don_open">MONTO ABIERTO</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_choose_amt">ELEGIR MONTO</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="sobre" class="category-section">
+            <h1><span data-tr="nav_about">SOBRE EL</span> <span style="color:var(--accent)" data-tr="server_title">SERVIDOR</span></h1>
+            <div class="grid">
+                <div class="card" style="text-align: left; grid-column: span 2;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> <span data-tr="about_history_title">NUESTRA HISTORIA</span></h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_history_text">
+                        AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
+                    </p>
+                    
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+                    
+                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> <span data-tr="about_focus_title">ENFOQUE DEL SERVIDOR</span></h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_focus_text">
+                        Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
+                    </p>
+
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+
+                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> <span data-tr="about_rules_title">REGLAS GENERALES</span></h3>
+                    <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
+                        <li><b style="color:var(--lore-color)">1.</b> <span data-tr="rule_1">Se prohíbe el uso de hacks, cheats, o clientes modificados.</span></li>
+                        <li><b style="color:var(--lore-color)">2.</b> <span data-tr="rule_2">Mantén en todo momento respeto con otros jugadores, staff y creador...</span></li>
+                        <li><b style="color:var(--lore-color)">3.</b> <span data-tr="rule_3">Evita el spam en el chat.</span></li>
+                        <li><b style="color:var(--lore-color)">4.</b> <span data-tr="rule_4">Todo bug se reporta en la página web o discord...</span></li>
+                        <li><b style="color:var(--lore-color)">5.</b> <span data-tr="rule_5">No se permite el TPA KILL, este será severamente sancionado.</span></li>
+                        <li><b style="color:var(--lore-color)">6.</b> <span data-tr="rule_6">No se permite el pvp aunque esté activo.</span></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 style="color:var(--accent);" data-tr="about_tech_title">INFORMACIÓN TÉCNICA</h3>
+                    <div style="text-align: left; margin-top:20px;">
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_version">VERSIÓN:</span> <span data-tr="tech_v_val">TODAS LAS VERSIONES</span></p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_mode">MODALIDAD:</span> SURVIVAL VANILLA</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_date">FECHA DE CREACIÓN:</span> <span data-tr="tech_d_val">DICIEMBRE 2025</span></p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_comp">COMPATIBILIDAD:</span> MC JAVA & BEDROCK</p>
                     </div>
-                    <button class="btn-action" style="padding: 5px 15px; font-size: 0.6rem;" data-tr="btn_read_more">LEER MÁS</button>
+                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
                 </div>
             </div>
+        </div>
 
+        <div id="otros" class="category-section">
+            <h1><span style="color:var(--accent)" data-tr="nav_others">OTROS</span></h1>
+            <div id="otrosContent">
+                </div>
+        </div>
+
+        <div id="staff" class="category-section">
+            <h1><span data-tr="staff_team">EQUIPO DE</span> <span style="color:var(--accent)">STAFF</span></h1>
             <div class="grid">
-                <div class="card">
-                    <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 20px;"></i>
-                    <h3 data-tr="card_security_title">PAGOS SEGUROS</h3>
-                    <p style="font-size: 0.75rem; color: #555; text-transform: none;" data-tr="card_security_desc">Tus transacciones están protegidas con encriptación SSL de nivel bancario.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-bolt" style="font-size: 2rem; color: var(--accent); margin-bottom: 20px;"></i>
-                    <h3 data-tr="card_speed_title">ENTREGA INSTANTÁNEA</h3>
-                    <p style="font-size: 0.75rem; color: #555; text-transform: none;" data-tr="card_speed_desc">Recibe tus productos automáticamente en el juego tras la compra.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-headset" style="font-size: 2rem; color: var(--accent); margin-bottom: 20px;"></i>
-                    <h3 data-tr="card_support_title">SOPORTE 24/7</h3>
-                    <p style="font-size: 0.75rem; color: #555; text-transform: none;" data-tr="card_support_desc">Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
+                <div class="card" style="border-color: gold;">
+                    <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
+                    <h3 style="color:gold;">PERROLOLXD</h3>
+                    <p style="font-size: 0.7rem; letter-spacing: 2px;">OWNER & DEVELOPER</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="llaves" class="category-section">
-            <h2 style="font-size: 1.5rem; margin-bottom: 30px;" data-tr="keys_title">LLAVES DE <span style="color: var(--accent);">CRATES</span></h2>
-            <div class="grid" id="llavesGrid">
-                </div>
-        </section>
-
-        <section id="rangos" class="category-section">
-            <h2 style="font-size: 1.5rem; margin-bottom: 30px;" data-tr="ranks_title">RANGOS <span style="color: var(--accent);">VIP</span></h2>
-            <div class="grid">
-                <div class="card" style="border-top: 5px solid var(--raro);">
-                    <h3 style="color: var(--raro);">WARRIOR</h3>
-                    <p style="font-size: 1.5rem; font-weight: 900; margin: 20px 0;">5.00 USD</p>
-                    <ul style="text-align: left; font-size: 0.7rem; color: #777; margin-bottom: 30px; text-transform: none;">
-                        <li>Prefijo exclusivo [WARRIOR]</li>
-                        <li>Acceso al comando /feed</li>
-                        <li>3 Hogares máximos (/sethome)</li>
-                    </ul>
-                    <button class="btn-action" style="width: 100%;" data-tr="btn_buy">COMPRAR</button>
-                </div>
-                <div class="card" style="border-top: 5px solid var(--epico);">
-                    <h3 style="color: var(--epico);">ELITE</h3>
-                    <p style="font-size: 1.5rem; font-weight: 900; margin: 20px 0;">10.00 USD</p>
-                    <ul style="text-align: left; font-size: 0.7rem; color: #777; margin-bottom: 30px; text-transform: none;">
-                        <li>Todo lo anterior +</li>
-                        <li>Acceso al comando /heal</li>
-                        <li>Vuelo en el Spawn (/fly)</li>
-                    </ul>
-                    <button class="btn-action" style="width: 100%;" data-tr="btn_buy">COMPRAR</button>
-                </div>
+        <div id="faq" class="category-section">
+            <h1><span data-tr="faq_q">PREGUNTAS</span> / <span style="color:var(--accent)">FAQ</span></h1>
+            <div style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
+                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..." data-tr-placeholder="placeholder_faq"></textarea>
+                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()" data-tr="btn_publish">PUBLICAR</button>
             </div>
-        </section>
-
-        <section id="comunidad" class="category-section">
-            <h2 style="font-size: 1.5rem; margin-bottom: 10px;" data-tr="forum_title">FORO DE LA <span style="color: var(--accent);">COMUNIDAD</span></h2>
-            <p style="font-size: 0.8rem; color: #555; margin-bottom: 40px; text-transform: none;" data-tr="forum_subtitle">¿Tienes dudas? Déjalas aquí y la comunidad o el staff te responderán.</p>
-            
-            <div style="background: var(--card-bg); padding: 30px; border-radius: 20px; margin-bottom: 40px;">
-                <textarea id="faqInput" rows="3" placeholder="ESCRIBE TU PREGUNTA O COMENTARIO..." style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid #333; border-radius: 12px; color: white; padding: 15px; outline: none; margin-bottom: 15px; font-family: inherit; font-size: 0.8rem; text-transform: none;" data-tr-placeholder="placeholder_forum"></textarea>
-                <div style="display: flex; justify-content: flex-end;">
-                    <button class="btn-action" onclick="postFaq()" data-tr="btn_send">ENVIAR COMENTARIO</button>
-                </div>
-            </div>
-
-            <div id="faqList">
-                </div>
-        </section>
-
-        <section id="unban" class="category-section">
-            <h2 style="font-size: 1.5rem; margin-bottom: 30px;" data-tr="unban_title">SOLICITUD DE <span style="color: var(--accent);">DESBANEO</span></h2>
-            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: left;">
-                <p style="font-size: 0.8rem; color: #888; margin-bottom: 30px; text-transform: none;" data-tr="unban_desc">Si has sido sancionado injustamente, puedes adquirir un desbaneo global. Recuerda que esto no te exime de cumplir las reglas en el futuro.</p>
-                <button class="btn-action" style="width: 100%;" data-tr="btn_unban_buy">ADQUIRIR UNBAN (15.00 USD)</button>
-            </div>
-        </section>
-    </main>
+            <div id="faqList"></div>
+        </div>
+    </div>
 
     <script>
+        // --- SISTEMA DE IDIOMAS ---
         const translations = {
             es: {
-                nav_home: "INICIO", nav_keys: "LLAVES", nav_ranks: "RANGOS", nav_community: "FORO", nav_unban: "DESBANEO",
-                server_status_label: "ESTADO DEL SERVIDOR", ip_copied: "¡COPIADO!",
-                btn_login: "LOG IN", btn_register: "SIGN UP", btn_logout: "SALIR",
-                home_title: "BIENVENIDO A ATERNIA", home_subtitle: "La tienda oficial de la comunidad. Apoya el proyecto y obtén beneficios únicos en el juego.",
-                news_title: "ÚLTIMAS NOVEDADES", news_update: "NUEVA MODALIDAD: SURVIVAL TÉCNICO", news_date: "Publicado hace 2 días por Administración",
-                btn_read_more: "LEER MÁS", btn_buy: "COMPRAR", btn_send: "ENVIAR COMENTARIO",
-                forum_title: "FORO DE LA COMUNIDAD", forum_subtitle: "¿Tienes dudas? Déjalas aquí y la comunidad o el staff te responderán.",
-                placeholder_forum: "ESCRIBE TU PREGUNTA O COMENTARIO...",
-                keys_title: "LLAVES DE CRATES", ranks_title: "RANGOS VIP", unban_title: "SOLICITUD DE DESBANEO",
-                unban_desc: "Si has sido sancionado injustamente, puedes adquirir un desbaneo global. Recuerda que esto no te exime de cumplir las reglas en el futuro.",
-                btn_unban_buy: "ADQUIRIR UNBAN (15.00 USD)",
-                card_security_title: "PAGOS SEGUROS", card_security_desc: "Tus transacciones están protegidas con encriptación SSL de nivel bancario.",
-                card_speed_title: "ENTREGA INSTANTÁNEA", card_speed_desc: "Recibe tus productos automáticamente en el juego tras la compra.",
-                card_support_title: "SOPORTE 24/7", card_support_desc: "Nuestro equipo está disponible para ayudarte en cualquier momento.",
-                placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA",
-                btn_continue: "CONTINUAR", btn_cancel: "CANCELAR", auth_error: "CORREO O CONTRASEÑA INCORRECTOS",
-                alert_notice: "AVISO", btn_accept: "ACEPTAR", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
-                btn_understood: "ENTENDIDO", change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR",
-                placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", new_pass_label: "NUEVA CONTRASEÑA", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE",
-                pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
-                btn_confirm: "CONFIRMAR", edit_profile_title: "EDITAR PERFIL", btn_edit_profile: "MI PERFIL",
-                label_nickname: "APODO EN FORO", placeholder_nickname: "TU NOMBRE PÚBLICO", label_gender: "GÉNERO",
-                opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...",
-                placeholder_which: "¿CUÁL?", label_bio: "DESCRIPCIÓN BREVE", placeholder_bio: "CUÉNTANOS SOBRE TI...",
-                security_title: "SEGURIDAD Y CUENTA", btn_change_pass: "CAMBIAR CONTRASEÑA", btn_save: "GUARDAR CAMBIOS",
-                btn_delete_account: "ELIMINAR MI CUENTA PERMANENTEMENTE", edit_question: "EDITAR PREGUNTA", placeholder_faq_edit: "EDITA TU MENSAJE..."
+                nav_home: "INICIO", nav_ranks: "RANGOS", nav_keys: "LLAVES DE", nav_donations: "DONACIONES", nav_about: "SOBRE EL", nav_others: "OTROS", nav_forum: "FORO",
+                side_community: "COMUNIDAD", side_social: "REDES SOCIALES", status_players: "JUGADORES", tooltip_copied: "¡COPIADO!",
+                btn_register: "REGISTRARSE", btn_login: "INICIAR SESIÓN", btn_edit_profile: "EDITAR PERFIL", btn_acquire: "ADQUIRIR", btn_donate: "DONAR", btn_choose_amt: "ELEGIR MONTO", btn_publish: "PUBLICAR", btn_cancel: "CANCELAR", btn_save: "GUARDAR CAMBIOS", btn_confirm: "CONFIRMAR", btn_accept: "ACEPTAR", btn_understood: "ENTENDIDO", btn_change_pass: "CAMBIAR CONTRASEÑA", btn_delete_account: "ELIMINAR MI CUENTA PERMANENTEMENTE",
+                news_title: "NOTICIAS", recent_title: "RECIENTES", news_1_title: "TIENDA OFICIAL LANZADA", news_1_desc: "Bienvenido a la plataforma de compras de Aternia MC.",
+                exclusive_title: "EXCLUSIVOS", ranks_no_benefits: "No existe beneficios actualmente. Proximamente...",
+                don_small: "PEQUEÑA", don_med: "MEDIANA", don_big: "GRANDE", don_free: "DONACIÓN LIBRE", don_open: "MONTO ABIERTO",
+                server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
+                staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
+                edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
+                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
+                alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
+                placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
+                auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA",
+                key_comun: "COMÚN", key_raro: "RARO", key_epico: "ÉPICO", key_legendario: "LEGENDARIO", key_mitico: "MÍTICO", key_exotico: "EXÓTICO"
             },
             en: {
-                nav_home: "HOME", nav_keys: "KEYS", nav_ranks: "RANKS", nav_community: "FORUM", nav_unban: "UNBAN",
-                server_status_label: "SERVER STATUS", ip_copied: "COPIED!",
-                btn_login: "LOG IN", btn_register: "SIGN UP", btn_logout: "LOGOUT",
-                home_title: "WELCOME TO ATERNIA", home_subtitle: "The official community store. Support the project and get unique in-game benefits.",
-                news_title: "LATEST NEWS", news_update: "NEW MODE: TECHNICAL SURVIVAL", news_date: "Posted 2 days ago by Admin",
-                btn_read_more: "READ MORE", btn_buy: "BUY NOW", btn_send: "POST COMMENT",
-                forum_title: "COMMUNITY FORUM", forum_subtitle: "Got questions? Post them here and the community or staff will answer.",
-                placeholder_forum: "WRITE YOUR QUESTION OR COMMENT...",
-                keys_title: "CRATE KEYS", ranks_title: "VIP RANKS", unban_title: "UNBAN REQUEST",
-                unban_desc: "If you have been unfairly sanctioned, you can purchase a global unban. Remember that this does not exempt you from following the rules in the future.",
-                btn_unban_buy: "PURCHASE UNBAN (15.00 USD)",
-                card_security_title: "SECURE PAYMENTS", card_security_desc: "Your transactions are protected with bank-level SSL encryption.",
-                card_speed_title: "INSTANT DELIVERY", card_speed_desc: "Receive your products automatically in-game after purchase.",
-                card_support_title: "24/7 SUPPORT", card_support_desc: "Our team is available to help you at any time.",
-                placeholder_mc_user: "MINECRAFT USERNAME", placeholder_email: "EMAIL ADDRESS", placeholder_pass: "PASSWORD",
-                btn_continue: "CONTINUE", btn_cancel: "CANCEL", auth_error: "INCORRECT EMAIL OR PASSWORD",
-                alert_notice: "NOTICE", btn_accept: "ACCEPT", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
-                btn_understood: "UNDERSTOOD", change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD",
-                placeholder_old_pass: "ENTER YOUR CURRENT PASSWORD", new_pass_label: "NEW PASSWORD", placeholder_new_pass: "ENTER YOUR NEW PASSWORD",
-                pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE THIS PASSWORD IS SET, YOU MUST WRITE IT DOWN AND/OR SAVE IT.",
-                btn_confirm: "CONFIRM", edit_profile_title: "EDIT PROFILE", btn_edit_profile: "MY PROFILE",
-                label_nickname: "FORUM NICKNAME", placeholder_nickname: "YOUR PUBLIC NAME", label_gender: "GENDER",
-                opt_select_gender: "SELECT GENDER", opt_male: "MALE", opt_female: "FEMALE", opt_nodecl: "PREFER NOT TO SAY", opt_other: "OTHER...",
-                placeholder_which: "WHICH?", label_bio: "SHORT BIO", placeholder_bio: "TELL US ABOUT YOURSELF...",
-                security_title: "SECURITY & ACCOUNT", btn_change_pass: "CHANGE PASSWORD", btn_save: "SAVE CHANGES",
-                btn_delete_account: "DELETE MY ACCOUNT PERMANENTLY", edit_question: "EDIT QUESTION", placeholder_faq_edit: "EDIT YOUR MESSAGE..."
+                nav_home: "HOME", nav_ranks: "RANKS", nav_keys: "KEYS", nav_donations: "DONATIONS", nav_about: "ABOUT", nav_others: "OTHERS", nav_forum: "FORUM",
+                side_community: "COMMUNITY", side_social: "SOCIAL MEDIA", status_players: "PLAYERS", tooltip_copied: "COPIED!",
+                btn_register: "REGISTER", btn_login: "LOGIN", btn_edit_profile: "EDIT PROFILE", btn_acquire: "ACQUIRE", btn_donate: "DONATE", btn_choose_amt: "CHOOSE AMOUNT", btn_publish: "PUBLISH", btn_cancel: "CANCEL", btn_save: "SAVE CHANGES", btn_confirm: "CONFIRM", btn_accept: "ACCEPT", btn_understood: "UNDERSTOOD", btn_change_pass: "CHANGE PASSWORD", btn_delete_account: "DELETE ACCOUNT PERMANENTLY",
+                news_title: "RECENT", recent_title: "NEWS", news_1_title: "OFFICIAL STORE LAUNCHED", news_1_desc: "Welcome to the Aternia MC shopping platform.",
+                exclusive_title: "EXCLUSIVE", ranks_no_benefits: "No benefits currently. Coming soon...",
+                don_small: "SMALL", don_med: "MEDIUM", don_big: "LARGE", don_free: "FREE DONATION", don_open: "OPEN AMOUNT",
+                server_title: "SERVER", about_history_title: "OUR HISTORY", about_history_text: "AterniaMC originated for the creator's learning and fun, but then an idea emerged to create a venture.", about_focus_title: "SERVER FOCUS", about_focus_text: "Our server focuses mainly on Survival Vanilla, where players can collect resources and progress. The focus is to maintain a healthy and competitive environment.", about_rules_title: "GENERAL RULES", about_tech_title: "TECHNICAL INFO", tech_version: "VERSION:", tech_v_val: "ALL VERSIONS", tech_mode: "MODE:", tech_date: "CREATION DATE:", tech_d_val: "DECEMBER 2025", tech_comp: "COMPATIBILITY:", rule_1: "Hacks, cheats, or modified clients are prohibited.", rule_2: "Respect players, staff and creator at all times...", rule_3: "Avoid spam in chat.", rule_4: "Report bugs on web or discord...", rule_5: "TPA KILL is strictly prohibited.", rule_6: "PVP is not allowed even if active.",
+                staff_team: "STAFF", faq_q: "QUESTIONS",
+                edit_profile_title: "EDIT PROFILE", label_nickname: "FORUM NICKNAME", label_gender: "GENDER", opt_select_gender: "SELECT GENDER", opt_male: "MALE", opt_female: "FEMALE", opt_nodecl: "PREFER NOT TO SAY", opt_other: "OTHER...", label_bio: "SHORT BIO", security_title: "SECURITY & ACCOUNT",
+                change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD", new_pass_label: "NEW PASSWORD", pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE SET, RECORD THIS PASSWORD.",
+                alert_notice: "NOTICE", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
+                placeholder_mc_user: "MINECRAFT USERNAME", placeholder_email: "EMAIL ADDRESS", placeholder_pass: "PASSWORD", placeholder_nickname: "YOUR PUBLIC NAME", placeholder_bio: "TELL US ABOUT YOURSELF...", placeholder_old_pass: "ENTER CURRENT KEY", placeholder_new_pass: "ENTER NEW KEY", placeholder_faq: "TYPE YOUR QUESTION...", placeholder_which: "WHICH ONE?", placeholder_faq_edit: "EDIT YOUR MESSAGE...",
+                auth_error: "INCORRECT EMAIL OR PASSWORD", edit_question: "EDIT QUESTION",
+                key_comun: "COMMON", key_raro: "RARE", key_epico: "EPIC", key_legendario: "LEGENDARY", key_mitico: "MYTHICAL", key_exotico: "EXOTIC"
             }
         };
 
-        const db = firebase.database();
-        let authMode = 'login';
-        let editingFaqId = null;
-
-        // --- LÓGICA DEL SELECTOR DE IDIOMAS (REHECHA) ---
-        function toggleLangMenu(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('langDropdown');
-            const btn = document.getElementById('btnLangPlanet');
-            menu.classList.toggle('open');
-            btn.classList.toggle('active');
-        }
-
-        window.onclick = function(event) {
-            const menu = document.getElementById('langDropdown');
-            const btn = document.getElementById('btnLangPlanet');
-            if (!event.target.closest('.lang-container')) {
-                menu.classList.remove('open');
-                btn.classList.remove('active');
-            }
-        };
-
-        function changeLang(lang) {
+        // --- LÓGICA DE CAMBIO DE IDIOMA ACTUALIZADA ---
+        function selectLang(lang) {
             localStorage.setItem('prefLang', lang);
             updateUITranslations(lang);
-            document.getElementById('langDropdown').classList.remove('open');
-            document.getElementById('btnLangPlanet').classList.remove('active');
+            
+            // Actualizar visual del botón
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            renderLlaves();
         }
 
         function updateUITranslations(lang) {
-            const set = translations[lang];
             document.querySelectorAll('[data-tr]').forEach(el => {
                 const key = el.getAttribute('data-tr');
-                if (set[key]) el.innerText = set[key];
+                if(translations[lang][key]) el.innerText = translations[lang][key];
             });
             document.querySelectorAll('[data-tr-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-tr-placeholder');
-                if (set[key]) el.placeholder = set[key];
+                if(translations[lang][key]) el.placeholder = translations[lang][key];
             });
-            renderFaq();
-            renderLlaves();
         }
 
-        // Sidebar y Navegación
+        const RAREZAS = [
+            {id:'key_comun', c:'var(--comun)', p:1.00}, 
+            {id:'key_raro', c:'var(--raro)', p:2.50},
+            {id:'key_epico', c:'var(--epico)', p:5.00}, 
+            {id:'key_legendario', c:'var(--legendary)', p:10.00}, 
+            {id:'key_mitico', c:'var(--mitico)', p:20.00}, 
+            {id:'key_exotico', c:'var(--exotico)', p:40.00}
+        ];
+
+        function renderLlaves() {
+            const container = document.getElementById('llavesContainer');
+            const lang = localStorage.getItem('prefLang') || 'es';
+            const buyText = translations[lang].btn_acquire;
+            
+            if(!container) return;
+            container.innerHTML = '';
+            RAREZAS.forEach(r => {
+                const nombreTraducido = translations[lang][r.id];
+                container.innerHTML += `
+                    <div class="card" style="border-top: 4px solid ${r.c}">
+                        <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
+                        <h2 style="color:${r.c}">${nombreTraducido} x5</h2>
+                        <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
+                        <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">${buyText}</a>
+                    </div>`;
+            });
+        }
+
+        let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
+        let editingId = null;
+        let currentAuthType = 'INICIAR SESIÓN';
+        let cooldownInterval = null;
+
+        function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
+            const modal = document.getElementById('customAlert');
+            const box = document.getElementById('alertBox');
+            const titleEl = document.getElementById('alertTitle');
+            const msgEl = document.getElementById('alertMsg');
+            const confirmBtn = document.getElementById('alertConfirmBtn');
+            const cancelBtn = document.getElementById('alertCancelBtn');
+            titleEl.innerText = title;
+            msgEl.innerText = msg;
+            box.className = 'modal-content custom-alert-content alert-' + type;
+            cancelBtn.style.display = onCancel ? 'block' : 'none';
+            confirmBtn.onclick = () => { modal.style.display = 'none'; if(onConfirm) onConfirm(); };
+            cancelBtn.onclick = () => { modal.style.display = 'none'; if(onCancel) onCancel(); };
+            modal.style.display = 'flex';
+        }
+
+        function startPassChangeFlow() {
+            const lastChange = localStorage.getItem('lastPassChange');
+            const now = Date.now();
+            const weekInMs = 7 * 24 * 60 * 60 * 1000;
+            if(lastChange && (now - lastChange < weekInMs)) {
+                openCooldown(weekInMs - (now - lastChange));
+            } else {
+                showCustomAlert("¿Estás seguro?", "Solo puedes cambiar tu contraseña una vez cada 7 días.", "warning", () => { openPassChangeModal(); }, () => {});
+            }
+        }
+
+        function openCooldown(timeLeft) {
+            const modal = document.getElementById('cooldownModal');
+            const display = document.getElementById('timerDisplay');
+            if(cooldownInterval) clearInterval(cooldownInterval);
+            const updateTimer = () => {
+                if(timeLeft <= 0) { clearInterval(cooldownInterval); modal.style.display = 'none'; return; }
+                const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                display.innerText = `${d}d ${h}h ${m}m ${s}s`;
+                timeLeft -= 1000;
+            };
+            updateTimer();
+            cooldownInterval = setInterval(updateTimer, 1000);
+            modal.style.display = 'flex';
+        }
+
+        function closeCooldown() { clearInterval(cooldownInterval); document.getElementById('cooldownModal').style.display = 'none'; }
+        function openPassChangeModal() { document.getElementById('passChangeModal').style.display = 'flex'; }
+        function closePassChange() { document.getElementById('passChangeModal').style.display = 'none'; }
+
+        function executePassUpdate() {
+            const oldPass = document.getElementById('oldPassInput').value;
+            const newPass = document.getElementById('newPassInput').value;
+            const user = firebase.auth().currentUser;
+            if(!oldPass || !newPass) { showCustomAlert("ERROR", "Debes completar ambos campos", "error"); return; }
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+            user.reauthenticateWithCredential(credential).then(() => {
+                user.updatePassword(newPass).then(() => {
+                    localStorage.setItem('lastPassChange', Date.now());
+                    closePassChange();
+                    saveProfile(true); 
+                }).catch(e => showCustomAlert("ERROR", "Nueva contraseña no válida.", "error"));
+            }).catch(e => showCustomAlert("ERROR", "Contraseña anterior incorrecta.", "error"));
+        }
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-        function showCategory(cat) {
+
+        function showCategory(id) {
             document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(cat).classList.add('active');
-            document.getElementById('nav-' + cat).classList.add('active');
-            if (window.innerWidth <= 992) toggleSidebar();
+            document.getElementById(id).classList.add('active');
+            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
+            if(window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
+            if(id === 'faq') renderFaq();
         }
 
         function copyIP() {
-            navigator.clipboard.writeText("PLAY.ATERNIA.CLUB");
-            const tip = document.getElementById('copyTooltip');
-            tip.classList.add('show');
-            setTimeout(() => tip.classList.remove('show'), 2000);
+            const ipText = document.getElementById('serverIP').innerText;
+            const tooltip = document.getElementById('copyTooltip');
+            navigator.clipboard.writeText(ipText).then(() => {
+                tooltip.classList.add('show');
+                setTimeout(() => tooltip.classList.remove('show'), 2000);
+            });
         }
 
-        function updateServerStatus() {
-            fetch('https://api.mcstatus.io/v2/status/java/play.aternia.club')
-                .then(r => r.json())
-                .then(data => {
-                    const dot = data.online ? '<span class="status-dot online-dot"></span>' : '<span class="status-dot offline-dot"></span>';
-                    const label = data.online ? `${data.players.online} JUGADORES` : 'DESCONECTADO';
-                    document.getElementById('statusText').innerHTML = `${dot} ${label}`;
-                }).catch(() => { document.getElementById('statusText').innerHTML = 'ERROR AL CARGAR'; });
+        async function updateServerStatus() {
+            try {
+                const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
+                const data = await response.json();
+                const icon = document.getElementById('statusIcon');
+                const text = document.getElementById('statusText');
+                const players = document.getElementById('playerCount');
+                if(data.online === true) {
+                    icon.className = 'status-dot online-dot'; text.innerText = 'ONLINE'; text.style.color = '#2ecc71';
+                    players.innerText = `${data.players.online} / ${data.players.max}`;
+                } else {
+                    icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
+                    players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
+                }
+            } catch (e) { document.getElementById('statusText').innerText = 'OFFLINE'; }
         }
 
-        // Lógica de FAQ y Llaves... (se mantiene igual que tu original)
-        function renderLlaves() {
-            const grid = document.getElementById('llavesGrid');
-            const lang = localStorage.getItem('prefLang') || 'es';
-            const btnText = lang === 'es' ? 'COMPRAR' : 'BUY NOW';
-            const items = [
-                { name: 'LLAVE COMÚN', price: '1.50', color: 'var(--comun)' },
-                { name: 'LLAVE RARA', price: '3.00', color: 'var(--raro)' },
-                { name: 'LLAVE ÉPICA', price: '5.00', color: 'var(--epico)' },
-                { name: 'LLAVE LEGENDARIA', price: '10.00', color: 'var(--legendary)' }
-            ];
-            grid.innerHTML = items.map(i => `
-                <div class="card" style="border-bottom: 4px solid ${i.color}">
-                    <i class="fas fa-key" style="font-size: 2.5rem; color: ${i.color}; margin-bottom: 20px;"></i>
-                    <h3 style="color: ${i.color}">${i.name}</h3>
-                    <p style="font-size: 1.2rem; font-weight: 900; margin: 15px 0;">${i.price} USD</p>
-                    <button class="btn-action" style="width: 100%">${btnText}</button>
-                </div>
-            `).join('');
+        function togglePassView() {
+            const passInput = document.getElementById('authPass');
+            const icon = document.querySelector('.toggle-pass');
+            passInput.type = passInput.type === "password" ? "text" : "password";
+            icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
         }
 
-        // Auth y Profile (mantener funciones vacías o lógicas de tu archivo anterior)
-        function openAuth(mode) {
-            authMode = mode;
-            document.getElementById('modalTitle').innerText = mode === 'login' ? 'INICIAR SESIÓN' : 'REGISTRARSE';
-            document.getElementById('authModal').style.display = 'flex';
+        function openAuth(type) { 
+            currentAuthType = type;
+            document.getElementById('modalTitle').innerText = type; 
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
+            document.getElementById('authModal').style.display = 'flex'; 
         }
+
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
-        function logout() { firebase.auth().signOut(); }
+
+        function handleAuth() { 
+            const user = document.getElementById('authUser').value; 
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+            if (currentAuthType === 'REGISTRARSE') {
+                firebase.auth().createUserWithEmailAndPassword(email, pass)
+                    .then((userCredential) => { return userCredential.user.updateProfile({ displayName: user }); })
+                    .then(() => { localStorage.setItem('u', user); location.reload(); })
+                    .catch((error) => { showCustomAlert("ERROR", error.message, "error"); });
+            } else {
+                firebase.auth().signInWithEmailAndPassword(email, pass)
+                    .then((userCredential) => { localStorage.setItem('u', userCredential.user.displayName); location.reload(); })
+                    .catch((error) => { document.getElementById('authError').style.display = 'block'; });
+            }
+        }
+
+        function logout() { firebase.auth().signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
+
+        function openProfile() {
+            const u = localStorage.getItem('u');
+            if(!u) return;
+            document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
+            document.getElementById('profileNameLabel').innerText = u;
+            document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
+            const user = firebase.auth().currentUser;
+            if(user) document.getElementById('displayEmail').value = user.email;
+            document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
+            document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
+            document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
+            updateCharCount(); toggleOtherGender();
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
+
+        function toggleOtherGender() {
+            const select = document.getElementById('editGender');
+            const otherInput = document.getElementById('editGenderOther');
+            if(select.value === 'OTRO') { otherInput.style.display = 'block'; otherInput.value = localStorage.getItem('pGenderOther') || ''; }
+            else { otherInput.style.display = 'none'; }
+        }
+
+        function updateCharCount() {
+            const bio = document.getElementById('editBio');
+            document.getElementById('charCount').innerText = bio.value.length;
+        }
+
+        function saveProfile(skipConfirm = false) {
+            const performSave = () => {
+                localStorage.setItem('pNickname', document.getElementById('editNickname').value);
+                localStorage.setItem('pBio', document.getElementById('editBio').value);
+                localStorage.setItem('pGender', document.getElementById('editGender').value);
+                if(document.getElementById('editGender').value === 'OTRO') localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+                showCustomAlert("ÉXITO", "Cambios guardados", "success", () => { location.reload(); });
+            };
+            if(skipConfirm) performSave();
+            else showCustomAlert("ADVERTENCIA", "¿Guardar cambios?", "warning", performSave);
+        }
+
+        function confirmDeleteAccount() {
+            showCustomAlert("ATENCIÓN", "¿Eliminar cuenta permanentemente?", "error", () => {
+                const user = firebase.auth().currentUser;
+                if(user) user.delete().then(() => { localStorage.clear(); location.reload(); });
+            }, () => {});
+        }
+
+        function postFaq() {
+            const user = localStorage.getItem('u');
+            const txt = document.getElementById('faqTxt').value;
+            if(!user || !txt.trim()) return;
+            posts.unshift({ id: Date.now(), author: user, content: txt });
+            localStorage.setItem('faqPosts', JSON.stringify(posts));
+            document.getElementById('faqTxt').value = '';
+            renderFaq();
+        }
+
+        function renderFaq() {
+            const list = document.getElementById('faqList');
+            const currentUser = localStorage.getItem('u');
+            if(!list) return;
+            list.innerHTML = '';
+            posts.forEach(p => {
+                list.innerHTML += `
+                    <div class="faq-card">
+                        <span class="faq-author">${p.author}</span>
+                        <div class="faq-text">${p.content}</div>
+                        ${currentUser === p.author ? `<div class="faq-actions"><button class="btn-mini" onclick="openEdit(${p.id})">EDITAR</button><button class="btn-mini btn-delete" onclick="deletePost(${p.id})">ELIMINAR</button></div>` : ''}
+                    </div>`;
+            });
+        }
+
+        function openEdit(id) {
+            editingId = id;
+            document.getElementById('editFaqTxt').value = posts.find(p => p.id === id).content;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
+        function saveEdit() {
+            posts.find(p => p.id === editingId).content = document.getElementById('editFaqTxt').value;
+            localStorage.setItem('faqPosts', JSON.stringify(posts));
+            closeEdit(); renderFaq();
+        }
+        function deletePost(id) {
+            showCustomAlert("ELIMINAR", "¿Borrar publicación?", "warning", () => {
+                posts = posts.filter(p => p.id !== id);
+                localStorage.setItem('faqPosts', JSON.stringify(posts));
+                renderFaq();
+            }, () => {});
+        }
 
         window.onload = () => {
             const savedLang = localStorage.getItem('prefLang') || 'es';
+            // Actualizar visual del botón al cargar
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${savedLang}`).classList.add('active');
+
             updateUITranslations(savedLang);
             updateServerStatus(); setInterval(updateServerStatus, 30000);
             renderLlaves();
-            
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     const u = user.displayName;
@@ -812,6 +964,7 @@
                     document.getElementById('btnEditProfile').style.display = 'none';
                 }
             });
+            renderFaq();
         };
 
         document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
