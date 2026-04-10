@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
+        // Configuración recibida de tu proyecto aterniamc-web
         const firebaseConfig = {
             apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
             authDomain: "aterniamc-web.firebaseapp.com",
@@ -32,6 +33,7 @@
             appId: "1:748766671298:web:bd934aa81b246b9e0ba65b",
             measurementId: "G-LFB2EN182E"
         };
+        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
     </script>
 
@@ -50,6 +52,7 @@
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
 
+        /* AJUSTE SIDEBAR */
         .sidebar { 
             width: 280px; 
             background-color: var(--sidebar-bg); 
@@ -73,6 +76,7 @@
         .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
 
+        /* SERVER STATUS CARD & COPY IP */
         .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
         
@@ -92,6 +96,7 @@
         .ip-copy-box i { color: #555; font-size: 0.8rem; transition: 0.3s; }
         .ip-copy-box:hover i { color: var(--accent); }
         
+        /* Tooltip de Copiado */
         .copy-tooltip {
             position: absolute;
             top: -30px;
@@ -118,6 +123,7 @@
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         
+        /* MODAL DE ALERTAS ESPECÍFICO (MAYOR Z-INDEX) */
         #customAlert { z-index: 4000; }
         #passChangeModal, #cooldownModal { z-index: 3500; }
 
@@ -150,6 +156,7 @@
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
+        /* ESTILOS ALERTAS PERSONALIZADAS */
         .custom-alert-content { border-width: 2px; border-style: solid; }
         .alert-error { border-color: var(--error); box-shadow: 0 0 20px var(--error-glow); }
         .alert-error h2 { color: var(--error); }
@@ -158,7 +165,19 @@
         .alert-success { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
         .alert-success h2 { color: var(--accent); }
 
-        .danger-banner { background: rgba(255, 71, 87, 0.15); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; margin-top: 15px; text-transform: none; line-height: 1.4; }
+        /* BANNER ROJO ADVERTENCIA */
+        .danger-banner {
+            background: rgba(255, 71, 87, 0.15);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            margin-top: 15px;
+            text-transform: none;
+            line-height: 1.4;
+        }
 
         .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
         .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
@@ -182,8 +201,24 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
         
-        .news-cell { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: flex-start; }
-        .version-tag { background: rgba(0, 229, 229, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; border: 1px solid var(--accent); }
+        .news-cell { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            border-left: 4px solid var(--accent); 
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .version-tag {
+            background: rgba(0, 229, 229, 0.1);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            border: 1px solid var(--accent);
+        }
 
         .category-section { display: none; }
         .category-section.active { display: block; animation: fadeIn 0.5s; }
@@ -192,13 +227,43 @@
         .social-link { display: flex; align-items: center; gap: 12px; padding: 10px; color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
         .social-link:hover { color: var(--accent); transform: translateX(5px); }
 
-        .btn-topbar-edit { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent); color: var(--text); padding: 8px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 900; cursor: pointer; transition: 0.3s; display: none; align-items: center; gap: 8px; }
-        .btn-topbar-edit:hover { background: var(--accent); color: #000; }
+        /* ESTILO BOTÓN EDITAR PERFIL EN TOPBAR */
+        .btn-topbar-edit {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            display: none; /* Se muestra solo si hay login */
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-topbar-edit:hover {
+            background: var(--accent);
+            color: #000;
+        }
 
-        .lang-select-topbar { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent); color: var(--text); padding: 8px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 900; cursor: pointer; outline: none; transition: 0.3s; }
+        /* ESTILO SELECTOR IDIOMAS TOPBAR */
+        .lang-select-topbar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
         .lang-select-topbar:hover { background: rgba(0, 229, 229, 0.1); }
         .lang-select-topbar option { background: var(--card-bg); color: white; }
 
+        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
         .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
         .profile-left { width: 150px; text-align: center; }
         .profile-right { flex: 1; }
@@ -224,136 +289,188 @@
 
     <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
-    <!-- MODAL DE ALERTAS PERSONALIZADAS -->
+    <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 4000) -->
     <div id="customAlert" class="modal">
         <div id="alertBox" class="modal-content custom-alert-content">
-            <h2 id="alertTitle" data-lang="alert_title">AVISO</h2>
+            <h2 id="alertTitle">AVISO</h2>
             <p id="alertMsg" style="text-transform: none; font-size: 0.9rem; margin-bottom: 25px; color: #bbb;"></p>
             <div id="alertActions" style="display: flex; gap: 10px; justify-content: center;">
-                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;" data-lang="alert_accept">ACEPTAR</button>
+                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;">ACEPTAR</button>
                 <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;">CANCELAR</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE COOLDOWN -->
+    <!-- MODAL DE COOLDOWN (BLOQUEO) -->
     <div id="cooldownModal" class="modal">
         <div class="modal-content alert-error">
             <h2>ACCESO DENEGADO</h2>
-            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;">No podrás cambiar tu contraseña todavía.</p>
+            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;">No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:</p>
             <div id="timerDisplay" style="font-size: 1.2rem; font-weight: 900; color: var(--error); margin-bottom: 30px; letter-spacing: 2px;">00d 00h 00m 00s</div>
             <button class="btn-action" style="width: 100%;" onclick="closeCooldown()">ENTENDIDO</button>
         </div>
     </div>
 
-    <!-- MODAL DE CAMBIO DE CONTRASEÑA -->
+    <!-- MODAL DE CAMBIO DE CONTRASEÑA (FORMULARIO) -->
     <div id="passChangeModal" class="modal">
         <div class="modal-content alert-success" style="border-color: var(--accent);">
             <h2>CAMBIAR CONTRASEÑA</h2>
+            
             <label class="profile-label" style="text-align: left;">CONTRASEÑA ANTERIOR</label>
-            <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL">
-            <label class="profile-label" style="text-align: left;">NUEVA CONTRASEÑA</label>
-            <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE">
-            <div class="danger-banner">
-                <i class="fas fa-exclamation-triangle"></i> ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA.
+            <div class="pass-wrapper">
+                <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL">
             </div>
+
+            <label class="profile-label" style="text-align: left;">NUEVA CONTRASEÑA</label>
+            <div class="pass-wrapper">
+                <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE">
+            </div>
+
+            <div class="danger-banner">
+                <i class="fas fa-exclamation-triangle"></i> ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.
+            </div>
+
             <div style="display: flex; gap: 12px; margin-top: 25px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()" data-lang="btn_cancel">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="executePassUpdate()" data-lang="btn_continue">CONTINUAR</button>
+                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="executePassUpdate()">CONFIRMAR</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE AUTENTICACIÓN -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
             <div id="authError" class="auth-error-msg">CORREO O CONTRASEÑA INCORRECTOS</div>
             <div id="authInputs">
-                <input type="text" id="authUser" data-lang-placeholder="input_user" placeholder="USUARIO DE MINECRAFT">
-                <input type="email" id="authEmail" data-lang-placeholder="input_email" placeholder="CORREO ELECTRÓNICO">
+                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT">
+                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
                 <div class="pass-wrapper">
-                    <input type="password" id="authPass" data-lang-placeholder="input_pass" placeholder="CONTRASEÑA">
+                    <input type="password" id="authPass" placeholder="CONTRASEÑA">
                     <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
                 </div>
             </div>
-            <button class="btn-action" style="width: 100%;" onclick="handleAuth()" data-lang="btn_continue">CONTINUAR</button>
-            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;" data-lang="btn_cancel">CANCELAR</p>
+            <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
+            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL -->
+    <!-- MODAL DE PERFIL (Z-INDEX 2000) -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
-            <h2 data-lang="edit_profile_title">EDITAR PERFIL</h2>
+            <h2>EDITAR PERFIL</h2>
+            
             <div class="profile-container">
                 <div class="profile-left">
-                    <div class="skin-container"><img id="profileSkinImg" src="" alt="Skin"></div>
-                    <span id="profileNameLabel" style="font-weight:900; font-size:0.9rem; color:var(--accent); display:block;">NOMBRE</span>
+                    <div class="skin-container">
+                        <img id="profileSkinImg" src="" alt="Skin">
+                    </div>
+                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem; color: var(--accent); display: block;">NOMBRE</span>
+                    <span id="profileTagLabel" style="font-size: 0.65rem; color: #555; font-weight: 900;">@ORIGINAL</span>
                 </div>
+
                 <div class="profile-right">
-                    <label class="profile-label" data-lang="profile_nick">APODO EN FORO</label>
-                    <input type="text" id="editNickname">
-                    <label class="profile-label" data-lang="profile_gender">GÉNERO</label>
+                    <label class="profile-label">APODO EN FORO</label>
+                    <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO">
+
+                    <label class="profile-label">GÉNERO</label>
                     <select id="editGender" onchange="toggleOtherGender()">
-                        <option value="" disabled selected data-lang="gender_placeholder">SELECCIONA GÉNERO</option>
-                        <option value="MASCULINO" data-lang="gender_m">MASCULINO</option>
-                        <option value="FEMENINO" data-lang="gender_f">FEMENINO</option>
-                        <option value="PREFIERO NO DECIRLO" data-lang="gender_n">PREFIERO NO DECIRLO</option>
-                        <option value="OTRO" data-lang="gender_o">OTRO...</option>
+                        <option value="" disabled selected>SELECCIONA GÉNERO</option>
+                        <option value="MASCULINO">MASCULINO</option>
+                        <option value="FEMENINO">FEMENINO</option>
+                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
+                        <option value="OTRO">OTRO...</option>
                     </select>
-                    <input type="text" id="editGenderOther" style="display:none;">
-                    <label class="profile-label" data-lang="profile_bio">DESCRIPCIÓN BREVE</label>
-                    <textarea id="editBio" rows="4" maxlength="500" data-lang-placeholder="bio_placeholder"></textarea>
+                    <input type="text" id="editGenderOther" placeholder="¿CUÁL?" style="display:none;">
+
+                    <label class="profile-label">DESCRIPCIÓN BREVE</label>
+                    <textarea id="editBio" rows="4" maxlength="500" placeholder="CUÉNTANOS SOBRE TI..." oninput="updateCharCount()" style="font-size: 0.8rem; text-transform: none;"></textarea>
+                    <div style="text-align: right; font-size: 0.55rem; margin-top: -10px; font-weight: 900; color: #444;"><span id="charCount" style="color:var(--accent)">0</span> / 500</div>
                 </div>
             </div>
+
+            <div class="security-section">
+                <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;">SEGURIDAD Y CUENTA</h3>
+                
+                <div class="security-row">
+                    <label class="profile-label">CONTRASEÑA</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="password" value="*************************" disabled style="opacity: 0.3; cursor: not-allowed; flex: 1; margin-bottom: 0;">
+                        <button class="btn-action" style="padding: 0 15px; background: #f1c40f; white-space: nowrap;" onclick="startPassChangeFlow()">CAMBIAR CONTRASEÑA</button>
+                    </div>
+                </div>
+
+                <div class="security-row">
+                    <label class="profile-label">CORREO</label>
+                    <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed; width: 100%;">
+                </div>
+            </div>
+
             <div style="display: flex; gap: 12px; margin-top: 30px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()" data-lang="btn_cancel">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveProfile()" data-lang="btn_save">GUARDAR CAMBIOS</button>
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
+            </div>
+
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>EDITAR PREGUNTA</h2>
+            <textarea id="editFaqTxt" rows="5" placeholder="EDITA TU MENSAJE..."></textarea>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeEdit()">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveEdit()">GUARDAR</button>
             </div>
         </div>
     </div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="logo-box" onclick="showCategory('inicio')">
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
             <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
         </div>
-        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')" data-lang="nav_inicio"><i class="fas fa-home"></i> INICIO</div>
-        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')" data-lang="nav_rangos"><i class="fas fa-crown"></i> RANGOS EXCLUSIVOS</div>
-        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')" data-lang="nav_llaves"><i class="fas fa-key"></i> LLAVES/CRATES</div>
-        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')" data-lang="nav_donaciones"><i class="fas fa-heart"></i> DONACIONES</div>
-        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')" data-lang="nav_sobre"><i class="fas fa-info-circle"></i> SOBRE EL SERVIDOR</div>
-        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')" data-lang="nav_otros"><i class="fas fa-ellipsis-h"></i> OTROS</div>
-
-        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;" data-lang="comunidad_label">COMUNIDAD</p>
-        <div class="nav-item" id="nav-staff" onclick="showCategory('staff')" data-lang="nav_staff"><i class="fas fa-shield-alt"></i> STAFF</div>
-        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')" data-lang="nav_faq"><i class="fas fa-comments"></i> FORO</div>
+        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> INICIO</div>
+        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> RANGOS EXCLUSIVOS</div>
+        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> LLAVES/CRATES</div>
+        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> DONACIONES</div>
+        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> SOBRE EL SERVIDOR</div>
         
-        <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;" data-lang="social_label">REDES SOCIALES</p>
-        <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
-        <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> OTROS</div>
+
+        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;">COMUNIDAD</p>
+        <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
+        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> FORO</div>
+        
+        <div style="margin-top: 30px;">
+            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;">REDES SOCIALES</p>
+            <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
+            <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+            <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
+        </div>
 
         <div class="server-status-card">
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
+            
             <div class="ip-copy-box" onclick="copyIP()">
-                <div id="copyTooltip" class="copy-tooltip" data-lang="ip_copied">¡COPIADO!</div>
+                <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
                 <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
                 <i class="fas fa-copy"></i>
             </div>
+
             <div style="margin-top: 10px; font-size: 0.75rem; font-weight: 900;">
                 <span id="statusIcon" class="status-dot offline-dot"></span>
-                <span id="statusText" data-lang="server_offline">OFFLINE</span>
+                <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
             </div>
             <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
-                <span data-lang="players_label">JUGADORES</span>: <span id="playerCount">0 / --</span>
+                JUGADORES: <span id="playerCount">0 / --</span>
             </div>
         </div>
     </div>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content">
         <div class="top-bar">
+            <!-- 1. CUENTA -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
@@ -361,67 +478,124 @@
             </div>
 
             <div id="authButtons" style="display: flex; gap: 10px;">
-                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')" data-lang="btn_register">REGISTRARSE</button>
-                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')" data-lang="btn_login">INICIAR SESIÓN</button>
+                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
+                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
-            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()" data-lang="btn_edit_profile">
+            <!-- 2. EDITAR PERFIL -->
+            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
 
+            <!-- 3. IDIOMAS -->
             <select id="langSelect" class="lang-select-topbar">
                 <option value="es">🇪🇸 ES</option>
                 <option value="en">🇺🇸 EN</option>
             </select>
 
+            <!-- 4. TEMA -->
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
         <div id="inicio" class="category-section active">
-            <h1 data-lang="news_title">NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
+            <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
             <div class="news-cell">
                 <div>
-                    <h3 style="margin:0" data-lang="news_subtitle">TIENDA OFICIAL LANZADA</h3>
-                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;" data-lang="news_desc">Bienvenido a la plataforma de compras de Aternia MC.</p>
+                    <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
+                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
                 </div>
                 <span class="version-tag">V1.0</span>
             </div>
         </div>
 
-        <!-- Secciones de rangos, llaves, etc., se cargan dinámicamente o permanecen estáticas -->
         <div id="rangos" class="category-section">
-            <h1 data-lang="nav_rangos">RANGOS <span style="color:var(--accent)">EXCLUSIVOS</span></h1>
+            <h1>RANGOS <span style="color:var(--accent)">EXCLUSIVOS</span></h1>
             <div class="grid">
-                <div class="card"><h2>VIP</h2><div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ADQUIRIR</a></div>
+                <div class="card">
+                    <h2>VIP</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ADQUIRIR</a>
+                </div>
+                <div class="card" style="border-color:gold;">
+                    <h2 style="color:gold;">VIP+</h2>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%">ADQUIRIR</a>
+                </div>
             </div>
         </div>
 
         <div id="llaves" class="category-section">
-            <h1 data-lang="nav_llaves">LLAVES DE <span style="color:var(--accent)">CRATES</span></h1>
+            <h1>LLAVES DE <span style="color:var(--accent)">CRATES</span></h1>
             <div class="grid" id="llavesContainer"></div>
         </div>
 
         <div id="donaciones" class="category-section">
-            <h1 data-lang="nav_donaciones"><span style="color:var(--accent)">DONACIONES</span></h1>
+            <h1><span style="color:var(--accent)">DONACIONES</span></h1>
             <div class="grid">
-                 <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3>MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3>GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card" style="border: 2px solid var(--accent);">
+                    <h3>DONACIÓN LIBRE</h3>
+                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;">MONTO ABIERTO</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ELEGIR MONTO</a>
+                </div>
             </div>
         </div>
 
         <div id="sobre" class="category-section">
-            <h1 data-lang="nav_sobre">SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
-            <div class="card" style="text-align: left;">
-                <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">AterniaMC se originó con el objetivo del aprendizaje y diversión...</p>
+            <h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
+            <div class="grid">
+                <div class="card" style="text-align: left; grid-column: span 2;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                        AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
+                    </p>
+                    
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+                    
+                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> ENFOQUE DEL SERVIDOR</h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                        Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
+                    </p>
+
+                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
+
+                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
+                    <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
+                        <li><b style="color:var(--lore-color)">1.</b> Se prohíbe el uso de hacks, cheats, o clientes modificados.</li>
+                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador, de manera que se eviten palabrotas, chistes fuera de lugar, entre otros.</li>
+                        <li><b style="color:var(--lore-color)">3.</b> Evita el spam en el chat.</li>
+                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord, el aprovechamiento de estos será sancionado.</li>
+                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL, este será severamente sancionado.</li>
+                        <li><b style="color:var(--lore-color)">6.</b> No se permite el pvp aunque esté activo.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
+                    <div style="text-align: left; margin-top:20px;">
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> TODAS LAS VERSIONES</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL VANILLA</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">FECHA DE CREACIÓN:</span> DICIEMBRE 2025</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">COMPATIBILIDAD:</span> MC JAVA & BEDROCK</p>
+                    </div>
+                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
+                </div>
             </div>
         </div>
 
-        <div id="faq" class="category-section">
-            <h1 data-lang="nav_faq">PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
-            <div id="faqList"></div>
+        <div id="otros" class="category-section">
+            <h1><span style="color:var(--accent)">OTROS</span></h1>
+            <div id="otrosContent">
+                <!-- Espacio reservado para registro de versiones -->
+            </div>
         </div>
-        
+
         <div id="staff" class="category-section">
-            <h1 data-lang="nav_staff">EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
+            <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
             <div class="grid">
                 <div class="card" style="border-color: gold;">
                     <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
@@ -430,148 +604,388 @@
                 </div>
             </div>
         </div>
-        
-        <div id="otros" class="category-section">
-            <h1 data-lang="nav_otros"><span style="color:var(--accent)">OTROS</span></h1>
+
+        <div id="faq" class="category-section">
+            <h1>PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
+            <div style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
+                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..."></textarea>
+                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()">PUBLICAR</button>
+            </div>
+            <div id="faqList"></div>
         </div>
     </div>
 
     <script>
         const RAREZAS = [
             {n:'COMÚN', c:'var(--comun)', p:1.00}, {n:'RARO', c:'var(--raro)', p:2.50},
-            {n:'ÉPICO', c:'var(--epico)', p:5.00}, {n:'LEGENDARIO', c:'var(--legendary)', p:10.00}, 
-            {n:'MÍTICO', c:'var(--mitico)', p:20.00}, {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
+            {n:'ÉPICO', c:'var(--epico)', p:5.00}, 
+            {n:'LEGENDARIO', c:'var(--legendary)', p:10.00}, {n:'MÍTICO', c:'var(--mitico)', p:20.00}, 
+            {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
         ];
 
-        // DICCIONARIO DE TRADUCCIONES
-        const translations = {
-            "en": {
-                "nav_inicio": "HOME", "nav_rangos": "EXCLUSIVE RANKS", "nav_llaves": "KEYS/CRATES", "nav_donaciones": "DONATIONS",
-                "nav_sobre": "ABOUT THE SERVER", "nav_otros": "OTHERS", "nav_staff": "STAFF", "nav_faq": "FORUM",
-                "comunidad_label": "COMMUNITY", "social_label": "SOCIAL MEDIA", "btn_register": "REGISTER", "btn_login": "LOG IN",
-                "btn_edit_profile": "EDIT PROFILE", "news_title": "RECENT NEWS", "news_subtitle": "OFFICIAL STORE LAUNCHED",
-                "news_desc": "Welcome to the Aternia MC shopping platform.", "server_offline": "OFFLINE", "server_online": "ONLINE",
-                "players_label": "PLAYERS", "ip_copied": "COPIED!", "modal_login_title": "LOG IN", "modal_register_title": "REGISTER",
-                "input_user": "MINECRAFT USER", "input_email": "EMAIL ADDRESS", "input_pass": "PASSWORD", "btn_continue": "CONTINUE",
-                "btn_cancel": "CANCEL", "edit_profile_title": "EDIT PROFILE", "profile_nick": "FORUM NICKNAME", "profile_gender": "GENDER",
-                "gender_placeholder": "SELECT GENDER", "gender_m": "MALE", "gender_f": "FEMALE", "gender_n": "PREFER NOT TO SAY",
-                "gender_o": "OTHER...", "profile_bio": "SHORT DESCRIPTION", "bio_placeholder": "TELL US ABOUT YOURSELF...", "btn_save": "SAVE CHANGES",
-                "alert_title": "NOTICE", "alert_accept": "ACCEPT"
-            },
-            "es": {
-                "nav_inicio": "INICIO", "nav_rangos": "RANGOS EXCLUSIVOS", "nav_llaves": "LLAVES/CRATES", "nav_donaciones": "DONACIONES",
-                "nav_sobre": "SOBRE EL SERVIDOR", "nav_otros": "OTROS", "nav_staff": "STAFF", "nav_faq": "FORO",
-                "comunidad_label": "COMUNIDAD", "social_label": "REDES SOCIALES", "btn_register": "REGISTRARSE", "btn_login": "INICIAR SESIÓN",
-                "btn_edit_profile": "EDITAR PERFIL", "news_title": "NOTICIAS RECIENTES", "news_subtitle": "TIENDA OFICIAL LANZADA",
-                "news_desc": "Bienvenido a la plataforma de compras de Aternia MC.", "server_offline": "DESCONECTADO", "server_online": "EN LÍNEA",
-                "players_label": "JUGADORES", "ip_copied": "¡COPIADO!", "modal_login_title": "INICIAR SESIÓN", "modal_register_title": "REGISTRARSE",
-                "input_user": "USUARIO DE MINECRAFT", "input_email": "CORREO ELECTRÓNICO", "input_pass": "CONTRASEÑA", "btn_continue": "CONTINUAR",
-                "btn_cancel": "CANCELAR", "edit_profile_title": "EDITAR PERFIL", "profile_nick": "APODO EN FORO", "profile_gender": "GÉNERO",
-                "gender_placeholder": "SELECCIONA GÉNERO", "gender_m": "MASCULINO", "gender_f": "FEMENINO", "gender_n": "PREFIERO NO DECIRLO",
-                "gender_o": "OTRO...", "profile_bio": "DESCRIPCIÓN BREVE", "bio_placeholder": "CUÉNTANOS SOBRE TI...", "btn_save": "GUARDAR CAMBIOS",
-                "alert_title": "AVISO", "alert_accept": "ACEPTAR"
-            }
-        };
-
-        function applyLanguage(lang) {
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.getAttribute('data-lang');
-                if(translations[lang][key]) {
-                    if (el.tagName === 'I') { el.nextSibling.textContent = " " + translations[lang][key]; }
-                    else { el.innerText = translations[lang][key]; }
-                }
-            });
-            document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-lang-placeholder');
-                if(translations[lang][key]) el.placeholder = translations[lang][key];
-            });
-            localStorage.setItem('selectedLang', lang);
-        }
-
-        document.getElementById('langSelect').addEventListener('change', (e) => applyLanguage(e.target.value));
-
-        // LÓGICA DE FIREBASE Y PERFIL (IDÉNTICA A LA TUYA)
         let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
-        function showCustomAlert(title, msg, type = 'success', onConfirm = null) {
+        let editingId = null;
+        let currentAuthType = 'INICIAR SESIÓN';
+        let cooldownInterval = null;
+
+        // LÓGICA DE ALERTA PERSONALIZADA
+        function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
             const modal = document.getElementById('customAlert');
-            document.getElementById('alertTitle').innerText = title;
-            document.getElementById('alertMsg').innerText = msg;
-            document.getElementById('alertConfirmBtn').onclick = () => { modal.style.display = 'none'; if(onConfirm) onConfirm(); };
+            const box = document.getElementById('alertBox');
+            const titleEl = document.getElementById('alertTitle');
+            const msgEl = document.getElementById('alertMsg');
+            const confirmBtn = document.getElementById('alertConfirmBtn');
+            const cancelBtn = document.getElementById('alertCancelBtn');
+
+            titleEl.innerText = title;
+            msgEl.innerText = msg;
+            box.className = 'modal-content custom-alert-content alert-' + type;
+
+            cancelBtn.style.display = onCancel ? 'block' : 'none';
+            
+            confirmBtn.onclick = () => {
+                modal.style.display = 'none';
+                if(onConfirm) onConfirm();
+            };
+
+            cancelBtn.onclick = () => {
+                modal.style.display = 'none';
+                if(onCancel) onCancel();
+            };
+
             modal.style.display = 'flex';
         }
 
+        // --- SISTEMA DE CAMBIO DE CONTRASEÑA ---
+
+        function startPassChangeFlow() {
+            const lastChange = localStorage.getItem('lastPassChange');
+            const now = Date.now();
+            const weekInMs = 7 * 24 * 60 * 60 * 1000;
+
+            if(lastChange && (now - lastChange < weekInMs)) {
+                openCooldown(weekInMs - (now - lastChange));
+            } else {
+                // PASO 1: ADVERTENCIA PREVIA (BORDE AMARILLO)
+                showCustomAlert(
+                    "¿Estás seguro de realizar este cambio?", 
+                    "Solo puedes cambiar tu contraseña una vez cada 7 días. Si estás seguro de tu acción presiona CONFIRMAR para proceder.", 
+                    "warning", 
+                    () => {
+                        // PASO 2: SOLO SI CONFIRMA, SE ABRE EL FORMULARIO
+                        openPassChangeModal();
+                    },
+                    () => { /* Opción de cancelar */ }
+                );
+            }
+        }
+
+        function openCooldown(timeLeft) {
+            const modal = document.getElementById('cooldownModal');
+            const display = document.getElementById('timerDisplay');
+            
+            if(cooldownInterval) clearInterval(cooldownInterval);
+
+            const updateTimer = () => {
+                if(timeLeft <= 0) {
+                    clearInterval(cooldownInterval);
+                    modal.style.display = 'none';
+                    return;
+                }
+                const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                display.innerText = `${d}d ${h}h ${m}s ${s}s`;
+                timeLeft -= 1000;
+            };
+
+            updateTimer();
+            cooldownInterval = setInterval(updateTimer, 1000);
+            modal.style.display = 'flex';
+        }
+
+        function closeCooldown() {
+            clearInterval(cooldownInterval);
+            document.getElementById('cooldownModal').style.display = 'none';
+        }
+
+        function openPassChangeModal() {
+            document.getElementById('passChangeModal').style.display = 'flex';
+        }
+
+        function closePassChange() {
+            document.getElementById('passChangeModal').style.display = 'none';
+        }
+
+        function executePassUpdate() {
+            const oldPass = document.getElementById('oldPassInput').value;
+            const newPass = document.getElementById('newPassInput').value;
+            const user = firebase.auth().currentUser;
+
+            if(!oldPass || !newPass) {
+                showCustomAlert("ERROR", "Debes completar ambos campos", "error");
+                return;
+            }
+
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+
+            user.reauthenticateWithCredential(credential).then(() => {
+                user.updatePassword(newPass).then(() => {
+                    localStorage.setItem('lastPassChange', Date.now());
+                    closePassChange();
+                    saveProfile(true); 
+                }).catch(e => showCustomAlert("ERROR", "La nueva contraseña no es válida.", "error"));
+            }).catch(e => showCustomAlert("ERROR", "Contraseña anterior incorrecta.", "error"));
+        }
+
+        // --- FIN SISTEMA CONTRASEÑA ---
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
         function showCategory(id) {
             document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
+            if(window.innerWidth <= 992) {
+                 document.getElementById('sidebar').classList.remove('open');
+            }
+            if(id === 'faq') renderFaq();
         }
 
         function copyIP() {
-            navigator.clipboard.writeText("ATERNIAMC.ATERNOS.ME").then(() => {
-                const tooltip = document.getElementById('copyTooltip');
-                tooltip.classList.add('show'); setTimeout(() => tooltip.classList.remove('show'), 2000);
+            const ipText = document.getElementById('serverIP').innerText;
+            const tooltip = document.getElementById('copyTooltip');
+            navigator.clipboard.writeText(ipText).then(() => {
+                tooltip.classList.add('show');
+                setTimeout(() => tooltip.classList.remove('show'), 2000);
             });
         }
 
         async function updateServerStatus() {
             try {
-                const res = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
-                const data = await res.json();
-                const statusText = document.getElementById('statusText');
-                const lang = localStorage.getItem('selectedLang') || 'es';
-                if(data.online) {
-                    document.getElementById('statusIcon').className = 'status-dot online-dot';
-                    statusText.innerText = translations[lang].server_online;
-                    document.getElementById('playerCount').innerText = `${data.players.online} / ${data.players.max}`;
+                const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
+                const data = await response.json();
+                const icon = document.getElementById('statusIcon');
+                const text = document.getElementById('statusText');
+                const players = document.getElementById('playerCount');
+                if(data.online === true) {
+                    icon.className = 'status-dot online-dot'; text.innerText = 'ONLINE'; text.style.color = '#2ecc71';
+                    players.innerText = `${data.players.online} / ${data.players.max}`;
+                } else {
+                    icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
+                    players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
                 }
-            } catch (e) {}
-        }
-
-        function openAuth(type) { 
-            document.getElementById('modalTitle').innerText = type; 
-            document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
-            document.getElementById('authModal').style.display = 'flex'; 
-        }
-        function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
-
-        function handleAuth() {
-            const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPass').value;
-            if(document.getElementById('authUser').style.display === 'block') {
-                firebase.auth().createUserWithEmailAndPassword(email, pass).then(u => {
-                    u.user.updateProfile({displayName: document.getElementById('authUser').value}).then(() => location.reload());
-                });
-            } else {
-                firebase.auth().signInWithEmailAndPassword(email, pass).then(() => location.reload());
+            } catch (e) {
+                document.getElementById('statusText').innerText = 'OFFLINE';
             }
         }
 
-        function logout() { firebase.auth().signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
+        function togglePassView() {
+            const passInput = document.getElementById('authPass');
+            const icon = document.querySelector('.toggle-pass');
+            passInput.type = passInput.type === "password" ? "text" : "password";
+            icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
+        }
+
+        function openAuth(type) { 
+            currentAuthType = type;
+            document.getElementById('modalTitle').innerText = type; 
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
+            document.getElementById('authModal').style.display = 'flex'; 
+        }
+
+        function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+        function handleAuth() { 
+            const user = document.getElementById('authUser').value; 
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+
+            if (currentAuthType === 'REGISTRARSE') {
+                firebase.auth().createUserWithEmailAndPassword(email, pass)
+                    .then((userCredential) => {
+                        return userCredential.user.updateProfile({ displayName: user });
+                    })
+                    .then(() => {
+                        localStorage.setItem('u', user);
+                        location.reload();
+                    })
+                    .catch((error) => { 
+                        showCustomAlert("ERROR", error.message, "error");
+                    });
+            } else {
+                firebase.auth().signInWithEmailAndPassword(email, pass)
+                    .then((userCredential) => {
+                        localStorage.setItem('u', userCredential.user.displayName);
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        document.getElementById('authError').style.display = 'block';
+                    });
+            }
+        }
+
+        function logout() { 
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('u'); 
+                location.reload(); 
+            });
+        }
+
+        function openProfile() {
+            const u = localStorage.getItem('u');
+            if(!u) return;
+            document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
+            document.getElementById('profileNameLabel').innerText = u;
+            document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
+            
+            const user = firebase.auth().currentUser;
+            if(user) {
+                document.getElementById('displayEmail').value = user.email;
+            }
+
+            document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
+            document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
+            document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
+            updateCharCount();
+            toggleOtherGender();
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
+
+        function toggleOtherGender() {
+            const select = document.getElementById('editGender');
+            const otherInput = document.getElementById('editGenderOther');
+            if(select.value === 'OTRO') {
+                otherInput.style.display = 'block';
+                otherInput.value = localStorage.getItem('pGenderOther') || '';
+            } else {
+                otherInput.style.display = 'none';
+            }
+        }
+
+        function updateCharCount() {
+            const bio = document.getElementById('editBio');
+            document.getElementById('charCount').innerText = bio.value.length;
+        }
+
+        function saveProfile(skipConfirm = false) {
+            const performSave = () => {
+                localStorage.setItem('pNickname', document.getElementById('editNickname').value);
+                localStorage.setItem('pBio', document.getElementById('editBio').value);
+                localStorage.setItem('pGender', document.getElementById('editGender').value);
+                
+                if(document.getElementById('editGender').value === 'OTRO') {
+                    localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
+                }
+
+                showCustomAlert("ÉXITO", "Cambios guardados correctamente", "success", () => {
+                    location.reload();
+                });
+            };
+
+            if(skipConfirm) {
+                performSave();
+            } else {
+                showCustomAlert(
+                    "ADVERTENCIA", 
+                    "¿Estás seguro de que quieres guardar estos cambios en tu perfil?", 
+                    "warning", 
+                    performSave
+                );
+            }
+        }
+
+        function confirmDeleteAccount() {
+            showCustomAlert(
+                "ATENCIÓN", 
+                "¿Estás completamente seguro de eliminar tu cuenta? Esta acción borrará todos tus datos de Firebase y no se puede deshacer.", 
+                "error", 
+                () => {
+                    const user = firebase.auth().currentUser;
+                    if(user) {
+                        user.delete().then(() => {
+                            localStorage.clear();
+                            showCustomAlert("CUENTA ELIMINADA", "Tu cuenta ha sido borrada.", "success", () => location.reload());
+                        }).catch(err => showCustomAlert("ERROR", "Re-autenticación necesaria para eliminar cuenta.", "error"));
+                    }
+                },
+                () => { /* No hacer nada si cancela */ }
+            );
+        }
+
+        function postFaq() {
+            const user = localStorage.getItem('u');
+            const txt = document.getElementById('faqTxt').value;
+            if(!user || !txt.trim()) return;
+            posts.unshift({ id: Date.now(), author: user, content: txt });
+            localStorage.setItem('faqPosts', JSON.stringify(posts));
+            document.getElementById('faqTxt').value = '';
+            renderFaq();
+        }
+
+        function renderFaq() {
+            const list = document.getElementById('faqList');
+            const currentUser = localStorage.getItem('u');
+            if(!list) return;
+            list.innerHTML = '';
+            posts.forEach(p => {
+                list.innerHTML += `
+                    <div class="faq-card">
+                        <span class="faq-author">${p.author}</span>
+                        <div class="faq-text">${p.content}</div>
+                        ${currentUser === p.author ? `<div class="faq-actions"><button class="btn-mini" onclick="openEdit(${p.id})">EDITAR</button><button class="btn-mini btn-delete" onclick="deletePost(${p.id})">ELIMINAR</button></div>` : ''}
+                    </div>`;
+            });
+        }
+
+        function openEdit(id) {
+            editingId = id;
+            document.getElementById('editFaqTxt').value = posts.find(p => p.id === id).content;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
+        function saveEdit() {
+            posts.find(p => p.id === editingId).content = document.getElementById('editFaqTxt').value;
+            localStorage.setItem('faqPosts', JSON.stringify(posts));
+            closeEdit(); renderFaq();
+        }
+        function deletePost(id) {
+            showCustomAlert("ELIMINAR", "¿Quieres borrar esta publicación?", "warning", () => {
+                posts = posts.filter(p => p.id !== id);
+                localStorage.setItem('faqPosts', JSON.stringify(posts));
+                renderFaq();
+            }, () => {});
+        }
 
         window.onload = () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'es';
-            document.getElementById('langSelect').value = savedLang;
-            applyLanguage(savedLang);
-            updateServerStatus();
-            
+            updateServerStatus(); setInterval(updateServerStatus, 30000);
             const container = document.getElementById('llavesContainer');
             RAREZAS.forEach(r => {
                 container.innerHTML += `<div class="card" style="border-top: 4px solid ${r.c}"><i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i><h2 style="color:${r.c}">${r.n} x5</h2><div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">COMPRAR</a></div>`;
             });
 
-            firebase.auth().onAuthStateChanged(user => {
-                if(user) {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    const u = user.displayName;
+                    localStorage.setItem('u', u);
                     document.getElementById('authButtons').style.display = 'none';
                     document.getElementById('userLogged').style.display = 'flex';
                     document.getElementById('btnEditProfile').style.display = 'flex';
-                    document.getElementById('userTag').innerText = user.displayName;
-                    document.getElementById('headImg').src = `https://mc-heads.net/avatar/${user.displayName}`;
-                    localStorage.setItem('u', user.displayName);
+                    document.getElementById('userTag').innerText = u;
+                    document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
+                } else {
+                    localStorage.removeItem('u');
+                    document.getElementById('authButtons').style.display = 'flex';
+                    document.getElementById('userLogged').style.display = 'none';
+                    document.getElementById('btnEditProfile').style.display = 'none';
                 }
             });
+            renderFaq();
         };
 
         document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
