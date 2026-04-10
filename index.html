@@ -292,11 +292,11 @@
     <!-- MODAL DE ALERTAS PERSONALIZADAS (Z-INDEX 4000) -->
     <div id="customAlert" class="modal">
         <div id="alertBox" class="modal-content custom-alert-content">
-            <h2 id="alertTitle">AVISO</h2>
+            <h2 id="alertTitle" data-tr="alert_notice">AVISO</h2>
             <p id="alertMsg" style="text-transform: none; font-size: 0.9rem; margin-bottom: 25px; color: #bbb;"></p>
             <div id="alertActions" style="display: flex; gap: 10px; justify-content: center;">
-                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;">ACEPTAR</button>
-                <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;">CANCELAR</button>
+                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;" data-tr="btn_accept">ACEPTAR</button>
+                <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;" data-tr="btn_cancel">CANCELAR</button>
             </div>
         </div>
     </div>
@@ -304,35 +304,35 @@
     <!-- MODAL DE COOLDOWN (BLOQUEO) -->
     <div id="cooldownModal" class="modal">
         <div class="modal-content alert-error">
-            <h2>ACCESO DENEGADO</h2>
-            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;">No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:</p>
+            <h2 data-tr="denied_access">ACCESO DENEGADO</h2>
+            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;" data-tr="cooldown_msg">No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:</p>
             <div id="timerDisplay" style="font-size: 1.2rem; font-weight: 900; color: var(--error); margin-bottom: 30px; letter-spacing: 2px;">00d 00h 00m 00s</div>
-            <button class="btn-action" style="width: 100%;" onclick="closeCooldown()">ENTENDIDO</button>
+            <button class="btn-action" style="width: 100%;" onclick="closeCooldown()" data-tr="btn_understood">ENTENDIDO</button>
         </div>
     </div>
 
     <!-- MODAL DE CAMBIO DE CONTRASEÑA (FORMULARIO) -->
     <div id="passChangeModal" class="modal">
         <div class="modal-content alert-success" style="border-color: var(--accent);">
-            <h2>CAMBIAR CONTRASEÑA</h2>
+            <h2 data-tr="change_pass_title">CAMBIAR CONTRASEÑA</h2>
             
-            <label class="profile-label" style="text-align: left;">CONTRASEÑA ANTERIOR</label>
+            <label class="profile-label" style="text-align: left;" data-tr="old_pass_label">CONTRASEÑA ANTERIOR</label>
             <div class="pass-wrapper">
-                <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL">
+                <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL" data-tr-placeholder="placeholder_old_pass">
             </div>
 
-            <label class="profile-label" style="text-align: left;">NUEVA CONTRASEÑA</label>
+            <label class="profile-label" style="text-align: left;" data-tr="new_pass_label">NUEVA CONTRASEÑA</label>
             <div class="pass-wrapper">
-                <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE">
+                <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE" data-tr-placeholder="placeholder_new_pass">
             </div>
 
             <div class="danger-banner">
-                <i class="fas fa-exclamation-triangle"></i> ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.
+                <i class="fas fa-exclamation-triangle"></i> <span data-tr="pass_warning_banner">ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.</span>
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="executePassUpdate()">CONFIRMAR</button>
+                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()" data-tr="btn_cancel">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="executePassUpdate()" data-tr="btn_confirm">CONFIRMAR</button>
             </div>
         </div>
     </div>
@@ -340,24 +340,24 @@
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">INICIAR SESIÓN</h2>
-            <div id="authError" class="auth-error-msg">CORREO O CONTRASEÑA INCORRECTOS</div>
+            <div id="authError" class="auth-error-msg" data-tr="auth_error">CORREO O CONTRASEÑA INCORRECTOS</div>
             <div id="authInputs">
-                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT">
-                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO">
+                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT" data-tr-placeholder="placeholder_mc_user">
+                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO" data-tr-placeholder="placeholder_email">
                 <div class="pass-wrapper">
-                    <input type="password" id="authPass" placeholder="CONTRASEÑA">
+                    <input type="password" id="authPass" placeholder="CONTRASEÑA" data-tr-placeholder="placeholder_pass">
                     <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
                 </div>
             </div>
-            <button class="btn-action" style="width: 100%;" onclick="handleAuth()">CONTINUAR</button>
-            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;">CANCELAR</p>
+            <button class="btn-action" style="width: 100%;" onclick="handleAuth()" data-tr="btn_continue">CONTINUAR</button>
+            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;" data-tr="btn_cancel">CANCELAR</p>
         </div>
     </div>
 
     <!-- MODAL DE PERFIL (Z-INDEX 2000) -->
     <div id="profileModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
-            <h2>EDITAR PERFIL</h2>
+            <h2 data-tr="edit_profile_title">EDITAR PERFIL</h2>
             
             <div class="profile-container">
                 <div class="profile-left">
@@ -369,58 +369,58 @@
                 </div>
 
                 <div class="profile-right">
-                    <label class="profile-label">APODO EN FORO</label>
-                    <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO">
+                    <label class="profile-label" data-tr="label_nickname">APODO EN FORO</label>
+                    <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO" data-tr-placeholder="placeholder_nickname">
 
-                    <label class="profile-label">GÉNERO</label>
+                    <label class="profile-label" data-tr="label_gender">GÉNERO</label>
                     <select id="editGender" onchange="toggleOtherGender()">
-                        <option value="" disabled selected>SELECCIONA GÉNERO</option>
-                        <option value="MASCULINO">MASCULINO</option>
-                        <option value="FEMENINO">FEMENINO</option>
-                        <option value="PREFIERO NO DECIRLO">PREFIERO NO DECIRLO</option>
-                        <option value="OTRO">OTRO...</option>
+                        <option value="" disabled selected data-tr="opt_select_gender">SELECCIONA GÉNERO</option>
+                        <option value="MASCULINO" data-tr="opt_male">MASCULINO</option>
+                        <option value="FEMENINO" data-tr="opt_female">FEMENINO</option>
+                        <option value="PREFIERO NO DECIRLO" data-tr="opt_nodecl">PREFIERO NO DECIRLO</option>
+                        <option value="OTRO" data-tr="opt_other">OTRO...</option>
                     </select>
-                    <input type="text" id="editGenderOther" placeholder="¿CUÁL?" style="display:none;">
+                    <input type="text" id="editGenderOther" placeholder="¿CUÁL?" data-tr-placeholder="placeholder_which" style="display:none;">
 
-                    <label class="profile-label">DESCRIPCIÓN BREVE</label>
-                    <textarea id="editBio" rows="4" maxlength="500" placeholder="CUÉNTANOS SOBRE TI..." oninput="updateCharCount()" style="font-size: 0.8rem; text-transform: none;"></textarea>
+                    <label class="profile-label" data-tr="label_bio">DESCRIPCIÓN BREVE</label>
+                    <textarea id="editBio" rows="4" maxlength="500" placeholder="CUÉNTANOS SOBRE TI..." data-tr-placeholder="placeholder_bio" oninput="updateCharCount()" style="font-size: 0.8rem; text-transform: none;"></textarea>
                     <div style="text-align: right; font-size: 0.55rem; margin-top: -10px; font-weight: 900; color: #444;"><span id="charCount" style="color:var(--accent)">0</span> / 500</div>
                 </div>
             </div>
 
             <div class="security-section">
-                <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;">SEGURIDAD Y CUENTA</h3>
+                <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;" data-tr="security_title">SEGURIDAD Y CUENTA</h3>
                 
                 <div class="security-row">
-                    <label class="profile-label">CONTRASEÑA</label>
+                    <label class="profile-label" data-tr="new_pass_label">CONTRASEÑA</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="password" value="*************************" disabled style="opacity: 0.3; cursor: not-allowed; flex: 1; margin-bottom: 0;">
-                        <button class="btn-action" style="padding: 0 15px; background: #f1c40f; white-space: nowrap;" onclick="startPassChangeFlow()">CAMBIAR CONTRASEÑA</button>
+                        <button class="btn-action" style="padding: 0 15px; background: #f1c40f; white-space: nowrap;" onclick="startPassChangeFlow()" data-tr="btn_change_pass">CAMBIAR CONTRASEÑA</button>
                     </div>
                 </div>
 
                 <div class="security-row">
-                    <label class="profile-label">CORREO</label>
+                    <label class="profile-label" data-tr="placeholder_email">CORREO</label>
                     <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed; width: 100%;">
                 </div>
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 30px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveProfile()">GUARDAR CAMBIOS</button>
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()" data-tr="btn_cancel">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveProfile()" data-tr="btn_save">GUARDAR CAMBIOS</button>
             </div>
 
-            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
+            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;" data-tr="btn_delete_account">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
         </div>
     </div>
 
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h2>EDITAR PREGUNTA</h2>
-            <textarea id="editFaqTxt" rows="5" placeholder="EDITA TU MENSAJE..."></textarea>
+            <h2 data-tr="edit_question">EDITAR PREGUNTA</h2>
+            <textarea id="editFaqTxt" rows="5" placeholder="EDITA TU MENSAJE..." data-tr-placeholder="placeholder_faq_edit"></textarea>
             <div style="display: flex; gap: 10px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeEdit()">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveEdit()">GUARDAR</button>
+                <button class="btn-action btn-outline" style="flex:1" onclick="closeEdit()" data-tr="btn_cancel">CANCELAR</button>
+                <button class="btn-action" style="flex:1" onclick="saveEdit()" data-tr="btn_save">GUARDAR</button>
             </div>
         </div>
     </div>
@@ -430,20 +430,20 @@
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
             <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
         </div>
-        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> INICIO</div>
-        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> RANGOS EXCLUSIVOS</div>
-        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> LLAVES/CRATES</div>
-        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> DONACIONES</div>
-        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> SOBRE EL SERVIDOR</div>
+        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> <span data-tr="nav_home">INICIO</span></div>
+        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS EXCLUSIVOS</span></div>
+        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES/CRATES</span></div>
+        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> <span data-tr="nav_donations">DONACIONES</span></div>
+        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> <span data-tr="nav_about">SOBRE EL SERVIDOR</span></div>
         
-        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> OTROS</div>
+        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> <span data-tr="nav_others">OTROS</span></div>
 
-        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;">COMUNIDAD</p>
+        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;" data-tr="side_community">COMUNIDAD</p>
         <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
-        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> FORO</div>
+        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> <span data-tr="nav_forum">FORO</span></div>
         
         <div style="margin-top: 30px;">
-            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;">REDES SOCIALES</p>
+            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;" data-tr="side_social">REDES SOCIALES</p>
             <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
             <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
             <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
@@ -453,7 +453,7 @@
             <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
             
             <div class="ip-copy-box" onclick="copyIP()">
-                <div id="copyTooltip" class="copy-tooltip">¡COPIADO!</div>
+                <div id="copyTooltip" class="copy-tooltip" data-tr="tooltip_copied">¡COPIADO!</div>
                 <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
                 <i class="fas fa-copy"></i>
             </div>
@@ -463,7 +463,7 @@
                 <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
             </div>
             <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
-                JUGADORES: <span id="playerCount">0 / --</span>
+                <span data-tr="status_players">JUGADORES</span>: <span id="playerCount">0 / --</span>
             </div>
         </div>
     </div>
@@ -478,17 +478,17 @@
             </div>
 
             <div id="authButtons" style="display: flex; gap: 10px;">
-                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')">REGISTRARSE</button>
-                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
+                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')" data-tr="btn_register">REGISTRARSE</button>
+                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')" data-tr="btn_login">INICIAR SESIÓN</button>
             </div>
 
             <!-- 2. EDITAR PERFIL -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
-                <i class="fas fa-user-edit"></i> EDITAR PERFIL
+                <i class="fas fa-user-edit"></i> <span data-tr="btn_edit_profile">EDITAR PERFIL</span>
             </button>
 
             <!-- 3. IDIOMAS -->
-            <select id="langSelect" class="lang-select-topbar">
+            <select id="langSelect" class="lang-select-topbar" onchange="changeLanguage()">
                 <option value="es">🇪🇸 ES</option>
                 <option value="en">🇺🇸 EN</option>
             </select>
@@ -498,89 +498,89 @@
         </div>
 
         <div id="inicio" class="category-section active">
-            <h1>NOTICIAS <span style="color:var(--accent)">RECIENTES</span></h1>
+            <h1><span data-tr="news_title">NOTICIAS</span> <span style="color:var(--accent)" data-tr="recent_title">RECIENTES</span></h1>
             <div class="news-cell">
                 <div>
-                    <h3 style="margin:0">TIENDA OFICIAL LANZADA</h3>
-                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;">Bienvenido a la plataforma de compras de Aternia MC.</p>
+                    <h3 style="margin:0" data-tr="news_1_title">TIENDA OFICIAL LANZADA</h3>
+                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;" data-tr="news_1_desc">Bienvenido a la plataforma de compras de Aternia MC.</p>
                 </div>
                 <span class="version-tag">V1.0</span>
             </div>
         </div>
 
         <div id="rangos" class="category-section">
-            <h1>RANGOS <span style="color:var(--accent)">EXCLUSIVOS</span></h1>
+            <h1><span data-tr="nav_ranks">RANGOS</span> <span style="color:var(--accent)" data-tr="exclusive_title">EXCLUSIVOS</span></h1>
             <div class="grid">
                 <div class="card">
                     <h2>VIP</h2>
-                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
                     <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ADQUIRIR</a>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_acquire">ADQUIRIR</a>
                 </div>
                 <div class="card" style="border-color:gold;">
                     <h2 style="color:gold;">VIP+</h2>
-                    <p style="color:#777; font-size: 0.8rem; text-transform: none;">No existe beneficios actualmente. Proximamente...</p>
+                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
                     <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%">ADQUIRIR</a>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%" data-tr="btn_acquire">ADQUIRIR</a>
                 </div>
             </div>
         </div>
 
         <div id="llaves" class="category-section">
-            <h1>LLAVES DE <span style="color:var(--accent)">CRATES</span></h1>
+            <h1><span data-tr="nav_keys">LLAVES DE</span> <span style="color:var(--accent)">CRATES</span></h1>
             <div class="grid" id="llavesContainer"></div>
         </div>
 
         <div id="donaciones" class="category-section">
-            <h1><span style="color:var(--accent)">DONACIONES</span></h1>
+            <h1><span style="color:var(--accent)" data-tr="nav_donations">DONACIONES</span></h1>
             <div class="grid">
-                <div class="card"><h3>PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
-                <div class="card"><h3>MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
-                <div class="card"><h3>GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">DONAR</a></div>
+                <div class="card"><h3 data-tr="don_small">PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
+                <div class="card"><h3 data-tr="don_med">MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
+                <div class="card"><h3 data-tr="don_big">GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
                 <div class="card" style="border: 2px solid var(--accent);">
-                    <h3>DONACIÓN LIBRE</h3>
-                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;">MONTO ABIERTO</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%">ELEGIR MONTO</a>
+                    <h3 data-tr="don_free">DONACIÓN LIBRE</h3>
+                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;" data-tr="don_open">MONTO ABIERTO</div>
+                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_choose_amt">ELEGIR MONTO</a>
                 </div>
             </div>
         </div>
 
         <div id="sobre" class="category-section">
-            <h1>SOBRE EL <span style="color:var(--accent)">SERVIDOR</span></h1>
+            <h1><span data-tr="nav_about">SOBRE EL</span> <span style="color:var(--accent)" data-tr="server_title">SERVIDOR</span></h1>
             <div class="grid">
                 <div class="card" style="text-align: left; grid-column: span 2;">
-                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> NUESTRA HISTORIA</h3>
-                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> <span data-tr="about_history_title">NUESTRA HISTORIA</span></h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_history_text">
                         AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
                     </p>
                     
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
                     
-                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> ENFOQUE DEL SERVIDOR</h3>
-                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;">
+                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> <span data-tr="about_focus_title">ENFOQUE DEL SERVIDOR</span></h3>
+                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_focus_text">
                         Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
                     </p>
 
                     <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
 
-                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> REGLAS GENERALES</h3>
+                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> <span data-tr="about_rules_title">REGLAS GENERALES</span></h3>
                     <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
-                        <li><b style="color:var(--lore-color)">1.</b> Se prohíbe el uso de hacks, cheats, o clientes modificados.</li>
-                        <li><b style="color:var(--lore-color)">2.</b> Mantén en todo momento respeto con otros jugadores, staff y creador, de manera que se eviten palabrotas, chistes fuera de lugar, entre otros.</li>
-                        <li><b style="color:var(--lore-color)">3.</b> Evita el spam en el chat.</li>
-                        <li><b style="color:var(--lore-color)">4.</b> Todo bug se reporta en la página web o discord, el aprovechamiento de estos será sancionado.</li>
-                        <li><b style="color:var(--lore-color)">5.</b> No se permite el TPA KILL, este será severamente sancionado.</li>
-                        <li><b style="color:var(--lore-color)">6.</b> No se permite el pvp aunque esté activo.</li>
+                        <li><b style="color:var(--lore-color)">1.</b> <span data-tr="rule_1">Se prohíbe el uso de hacks, cheats, o clientes modificados.</span></li>
+                        <li><b style="color:var(--lore-color)">2.</b> <span data-tr="rule_2">Mantén en todo momento respeto con otros jugadores, staff y creador...</span></li>
+                        <li><b style="color:var(--lore-color)">3.</b> <span data-tr="rule_3">Evita el spam en el chat.</span></li>
+                        <li><b style="color:var(--lore-color)">4.</b> <span data-tr="rule_4">Todo bug se reporta en la página web o discord...</span></li>
+                        <li><b style="color:var(--lore-color)">5.</b> <span data-tr="rule_5">No se permite el TPA KILL, este será severamente sancionado.</span></li>
+                        <li><b style="color:var(--lore-color)">6.</b> <span data-tr="rule_6">No se permite el pvp aunque esté activo.</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3 style="color:var(--accent);">INFORMACIÓN TÉCNICA</h3>
+                    <h3 style="color:var(--accent);" data-tr="about_tech_title">INFORMACIÓN TÉCNICA</h3>
                     <div style="text-align: left; margin-top:20px;">
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">VERSIÓN:</span> TODAS LAS VERSIONES</p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">MODALIDAD:</span> SURVIVAL VANILLA</p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">FECHA DE CREACIÓN:</span> DICIEMBRE 2025</p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)">COMPATIBILIDAD:</span> MC JAVA & BEDROCK</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_version">VERSIÓN:</span> <span data-tr="tech_v_val">TODAS LAS VERSIONES</span></p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_mode">MODALIDAD:</span> SURVIVAL VANILLA</p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_date">FECHA DE CREACIÓN:</span> <span data-tr="tech_d_val">DICIEMBRE 2025</span></p>
+                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_comp">COMPATIBILIDAD:</span> MC JAVA & BEDROCK</p>
                     </div>
                     <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
                 </div>
@@ -588,14 +588,14 @@
         </div>
 
         <div id="otros" class="category-section">
-            <h1><span style="color:var(--accent)">OTROS</span></h1>
+            <h1><span style="color:var(--accent)" data-tr="nav_others">OTROS</span></h1>
             <div id="otrosContent">
                 <!-- Espacio reservado para registro de versiones -->
             </div>
         </div>
 
         <div id="staff" class="category-section">
-            <h1>EQUIPO DE <span style="color:var(--accent)">STAFF</span></h1>
+            <h1><span data-tr="staff_team">EQUIPO DE</span> <span style="color:var(--accent)">STAFF</span></h1>
             <div class="grid">
                 <div class="card" style="border-color: gold;">
                     <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
@@ -606,16 +606,70 @@
         </div>
 
         <div id="faq" class="category-section">
-            <h1>PREGUNTAS / <span style="color:var(--accent)">FAQ</span></h1>
+            <h1><span data-tr="faq_q">PREGUNTAS</span> / <span style="color:var(--accent)">FAQ</span></h1>
             <div style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
-                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..."></textarea>
-                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()">PUBLICAR</button>
+                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..." data-tr-placeholder="placeholder_faq"></textarea>
+                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()" data-tr="btn_publish">PUBLICAR</button>
             </div>
             <div id="faqList"></div>
         </div>
     </div>
 
     <script>
+        // --- SISTEMA DE IDIOMAS ---
+        const translations = {
+            es: {
+                nav_home: "INICIO", nav_ranks: "RANGOS EXCLUSIVOS", nav_keys: "LLAVES/CRATES", nav_donations: "DONACIONES", nav_about: "SOBRE EL SERVIDOR", nav_others: "OTROS", nav_forum: "FORO",
+                side_community: "COMUNIDAD", side_social: "REDES SOCIALES", status_players: "JUGADORES", tooltip_copied: "¡COPIADO!",
+                btn_register: "REGISTRARSE", btn_login: "INICIAR SESIÓN", btn_edit_profile: "EDITAR PERFIL", btn_acquire: "ADQUIRIR", btn_donate: "DONAR", btn_choose_amt: "ELEGIR MONTO", btn_publish: "PUBLICAR", btn_cancel: "CANCELAR", btn_save: "GUARDAR CAMBIOS", btn_confirm: "CONFIRMAR", btn_accept: "ACEPTAR", btn_understood: "ENTENDIDO", btn_change_pass: "CAMBIAR CONTRASEÑA", btn_delete_account: "ELIMINAR MI CUENTA PERMANENTEMENTE",
+                news_title: "NOTICIAS", recent_title: "RECIENTES", news_1_title: "TIENDA OFICIAL LANZADA", news_1_desc: "Bienvenido a la plataforma de compras de Aternia MC.",
+                exclusive_title: "EXCLUSIVOS", ranks_no_benefits: "No existe beneficios actualmente. Proximamente...",
+                don_small: "PEQUEÑA", don_med: "MEDIANA", don_big: "GRANDE", don_free: "DONACIÓN LIBRE", don_open: "MONTO ABIERTO",
+                server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
+                staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
+                edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
+                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
+                alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
+                placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
+                auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA"
+            },
+            en: {
+                nav_home: "HOME", nav_ranks: "EXCLUSIVE RANKS", nav_keys: "KEYS/CRATES", nav_donations: "DONATIONS", nav_about: "ABOUT SERVER", nav_others: "OTHERS", nav_forum: "FORUM",
+                side_community: "COMMUNITY", side_social: "SOCIAL MEDIA", status_players: "PLAYERS", tooltip_copied: "COPIED!",
+                btn_register: "REGISTER", btn_login: "LOGIN", btn_edit_profile: "EDIT PROFILE", btn_acquire: "ACQUIRE", btn_donate: "DONATE", btn_choose_amt: "CHOOSE AMOUNT", btn_publish: "PUBLISH", btn_cancel: "CANCEL", btn_save: "SAVE CHANGES", btn_confirm: "CONFIRM", btn_accept: "ACCEPT", btn_understood: "UNDERSTOOD", btn_change_pass: "CHANGE PASSWORD", btn_delete_account: "DELETE ACCOUNT PERMANENTLY",
+                news_title: "RECENT", recent_title: "NEWS", news_1_title: "OFFICIAL STORE LAUNCHED", news_1_desc: "Welcome to the Aternia MC shopping platform.",
+                exclusive_title: "EXCLUSIVE", ranks_no_benefits: "No benefits currently. Coming soon...",
+                don_small: "SMALL", don_med: "MEDIUM", don_big: "LARGE", don_free: "FREE DONATION", don_open: "OPEN AMOUNT",
+                server_title: "SERVER", about_history_title: "OUR HISTORY", about_history_text: "AterniaMC originated for the creator's learning and fun, but then an idea emerged to create a venture.", about_focus_title: "SERVER FOCUS", about_focus_text: "Our server focuses mainly on Survival Vanilla, where players can collect resources and progress. The focus is to maintain a healthy and competitive environment.", about_rules_title: "GENERAL RULES", about_tech_title: "TECHNICAL INFO", tech_version: "VERSION:", tech_v_val: "ALL VERSIONS", tech_mode: "MODE:", tech_date: "CREATION DATE:", tech_d_val: "DECEMBER 2025", tech_comp: "COMPATIBILITY:", rule_1: "Hacks, cheats, or modified clients are prohibited.", rule_2: "Respect players, staff and creator at all times...", rule_3: "Avoid spam in chat.", rule_4: "Report bugs on web or discord...", rule_5: "TPA KILL is strictly prohibited.", rule_6: "PVP is not allowed even if active.",
+                staff_team: "STAFF", faq_q: "QUESTIONS",
+                edit_profile_title: "EDIT PROFILE", label_nickname: "FORUM NICKNAME", label_gender: "GENDER", opt_select_gender: "SELECT GENDER", opt_male: "MALE", opt_female: "FEMALE", opt_nodecl: "PREFER NOT TO SAY", opt_other: "OTHER...", label_bio: "SHORT BIO", security_title: "SECURITY & ACCOUNT",
+                change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD", new_pass_label: "NEW PASSWORD", pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE SET, RECORD THIS PASSWORD.",
+                alert_notice: "NOTICE", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
+                placeholder_mc_user: "MINECRAFT USERNAME", placeholder_email: "EMAIL ADDRESS", placeholder_pass: "PASSWORD", placeholder_nickname: "YOUR PUBLIC NAME", placeholder_bio: "TELL US ABOUT YOURSELF...", placeholder_old_pass: "ENTER CURRENT KEY", placeholder_new_pass: "ENTER NEW KEY", placeholder_faq: "TYPE YOUR QUESTION...", placeholder_which: "WHICH ONE?", placeholder_faq_edit: "EDIT YOUR MESSAGE...",
+                auth_error: "INCORRECT EMAIL OR PASSWORD", edit_question: "EDIT QUESTION"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('langSelect').value;
+            localStorage.setItem('prefLang', lang);
+            updateUITranslations(lang);
+        }
+
+        function updateUITranslations(lang) {
+            // Traducir textos directos
+            document.querySelectorAll('[data-tr]').forEach(el => {
+                const key = el.getAttribute('data-tr');
+                if(translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            // Traducir placeholders
+            document.querySelectorAll('[data-tr-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-tr-placeholder');
+                if(translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+        }
+        // --- FIN SISTEMA IDIOMAS ---
+
         const RAREZAS = [
             {n:'COMÚN', c:'var(--comun)', p:1.00}, {n:'RARO', c:'var(--raro)', p:2.50},
             {n:'ÉPICO', c:'var(--epico)', p:5.00}, 
@@ -963,6 +1017,11 @@
         }
 
         window.onload = () => {
+            // Cargar idioma preferido
+            const savedLang = localStorage.getItem('prefLang') || 'es';
+            document.getElementById('langSelect').value = savedLang;
+            updateUITranslations(savedLang);
+
             updateServerStatus(); setInterval(updateServerStatus, 30000);
             const container = document.getElementById('llavesContainer');
             RAREZAS.forEach(r => {
