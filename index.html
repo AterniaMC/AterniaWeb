@@ -254,11 +254,7 @@
             color: var(--text);
             padding: 8px 12px;
             border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 900;
-            cursor: pointer;
-            outline: none;
-            transition: 0.3s;
+            font-size: 0.7rem; font-weight: 900; cursor: pointer; outline: none; transition: 0.3s;
         }
         .lang-select-topbar:hover { background: rgba(0, 229, 229, 0.1); }
         .lang-select-topbar option { background: var(--card-bg); color: white; }
@@ -628,10 +624,11 @@
                 server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
                 staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
                 edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
-                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
+                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
                 alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
                 placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
-                auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA"
+                auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA",
+                key_comun: "COMÚN", key_raro: "RARO", key_epico: "ÉPICO", key_legendario: "LEGENDARIO", key_mitico: "MÍTICO", key_exotico: "EXÓTICO"
             },
             en: {
                 nav_home: "HOME", nav_ranks: "RANKS", nav_keys: "KEYS", nav_donations: "DONATIONS", nav_about: "ABOUT", nav_others: "OTHERS", nav_forum: "FORUM",
@@ -646,7 +643,8 @@
                 change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD", new_pass_label: "NEW PASSWORD", pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE SET, RECORD THIS PASSWORD.",
                 alert_notice: "NOTICE", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
                 placeholder_mc_user: "MINECRAFT USERNAME", placeholder_email: "EMAIL ADDRESS", placeholder_pass: "PASSWORD", placeholder_nickname: "YOUR PUBLIC NAME", placeholder_bio: "TELL US ABOUT YOURSELF...", placeholder_old_pass: "ENTER CURRENT KEY", placeholder_new_pass: "ENTER NEW KEY", placeholder_faq: "TYPE YOUR QUESTION...", placeholder_which: "WHICH ONE?", placeholder_faq_edit: "EDIT YOUR MESSAGE...",
-                auth_error: "INCORRECT EMAIL OR PASSWORD", edit_question: "EDIT QUESTION"
+                auth_error: "INCORRECT EMAIL OR PASSWORD", edit_question: "EDIT QUESTION",
+                key_comun: "COMMON", key_raro: "RARE", key_epico: "EPIC", key_legendario: "LEGENDARY", key_mitico: "MYTHICAL", key_exotico: "EXOTIC"
             }
         };
 
@@ -668,25 +666,29 @@
             });
         }
 
+        // --- RAREZAS CON LLAVES DE TRADUCCIÓN ---
         const RAREZAS = [
-            {n:'COMÚN', c:'var(--comun)', p:1.00}, {n:'RARO', c:'var(--raro)', p:2.50},
-            {n:'ÉPICO', c:'var(--epico)', p:5.00}, 
-            {n:'LEGENDARIO', c:'var(--legendary)', p:10.00}, {n:'MÍTICO', c:'var(--mitico)', p:20.00}, 
-            {n:'EXÓTICO', c:'var(--exotico)', p:40.00}
+            {id:'key_comun', c:'var(--comun)', p:1.00}, 
+            {id:'key_raro', c:'var(--raro)', p:2.50},
+            {id:'key_epico', c:'var(--epico)', p:5.00}, 
+            {id:'key_legendario', c:'var(--legendary)', p:10.00}, 
+            {id:'key_mitico', c:'var(--mitico)', p:20.00}, 
+            {id:'key_exotico', c:'var(--exotico)', p:40.00}
         ];
 
         function renderLlaves() {
             const container = document.getElementById('llavesContainer');
             const lang = localStorage.getItem('prefLang') || 'es';
-            const buyText = translations[lang].btn_acquire || (lang === 'es' ? 'COMPRAR' : 'BUY');
+            const buyText = translations[lang].btn_acquire;
             
             if(!container) return;
             container.innerHTML = '';
             RAREZAS.forEach(r => {
+                const nombreTraducido = translations[lang][r.id];
                 container.innerHTML += `
                     <div class="card" style="border-top: 4px solid ${r.c}">
                         <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
-                        <h2 style="color:${r.c}">${r.n} x5</h2>
+                        <h2 style="color:${r.c}">${nombreTraducido} x5</h2>
                         <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
                         <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">${buyText}</a>
                     </div>`;
