@@ -246,46 +246,32 @@
             color: #000;
         }
 
-        /* --- NUEVOS ESTILOS BOTÓN IDIOMAS CAPSULA (BLOQUE CORREGIDO) --- */
+        /* --- NUEVO ESTILO BOTÓN IDIOMAS (CAPSULA SEGUN IMAGEN) --- */
         .lang-capsule {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            background: #000;
             border: 2px solid var(--accent);
-            color: var(--text);
-            padding: 8px 15px;
+            padding: 6px 15px;
             border-radius: 50px;
-            font-size: 0.75rem; font-weight: 900;
-            cursor: pointer; transition: 0.3s;
-            position: relative;
+            box-shadow: 0 0 10px var(--accent-glow);
+            gap: 10px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
-        .lang-capsule:hover {
-            background: rgba(0, 229, 229, 0.1);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-        .lang-dropdown {
-            position: absolute; top: calc(100% + 10px); right: 0;
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            width: 130px;
-            opacity: 0; visibility: hidden;
-            transform: translateY(-10px);
-            transition: 0.3s; z-index: 500;
-            overflow: hidden;
-        }
-        .lang-dropdown.open {
-            opacity: 1; visibility: visible;
-            transform: translateY(0);
-        }
-        .lang-option {
-            display: flex; align-items: center; gap: 10px;
-            padding: 12px 15px;
-            color: #888; font-size: 0.7rem; font-weight: 700;
+        .lang-btn {
+            color: #555;
             transition: 0.3s;
+            user-select: none;
         }
-        .lang-option:hover {
-            background: rgba(0, 229, 229, 0.1);
+        .lang-btn.active {
             color: var(--accent);
+            text-shadow: 0 0 5px var(--accent-glow);
+        }
+        .lang-divider {
+            color: #333;
+            font-weight: 400;
         }
 
         /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
@@ -506,15 +492,10 @@
                 <i class="fas fa-user-edit"></i> <span data-tr="btn_edit_profile">EDITAR PERFIL</span>
             </button>
 
-            <div class="lang-capsule" onclick="toggleLangDropdown()">
-                <i class="fas fa-globe"></i>
-                <span id="currentLangText">🇪🇸 ES</span>
-                <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i>
-                
-                <div class="lang-dropdown" id="langDropdown">
-                    <div class="lang-option" onclick="selectLang('es')">🇪🇸 ES</div>
-                    <div class="lang-option" onclick="selectLang('en')">🇺🇸 EN</div>
-                </div>
+            <div class="lang-capsule">
+                <span id="lang-es" class="lang-btn active" onclick="selectLang('es')">ES</span>
+                <span class="lang-divider">|</span>
+                <span id="lang-en" class="lang-btn" onclick="selectLang('en')">EN</span>
             </div>
 
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
@@ -650,7 +631,7 @@
                 server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
                 staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
                 edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
-                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
+                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
                 alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
                 placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
                 auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA",
@@ -674,8 +655,15 @@
             }
         };
 
-        function changeLanguage() {
-            // Se mantiene por compatibilidad, pero la lógica ahora está en selectLang()
+        // --- LÓGICA DE CAMBIO DE IDIOMA ACTUALIZADA ---
+        function selectLang(lang) {
+            localStorage.setItem('prefLang', lang);
+            updateUITranslations(lang);
+            
+            // Actualizar visual del botón
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
             renderLlaves();
         }
 
@@ -951,34 +939,12 @@
             }, () => {});
         }
 
-        // --- FUNCIONES LÓGICA BOTÓN IDIOMAS (BLOQUE CORREGIDO) ---
-        function toggleLangDropdown() {
-            document.getElementById('langDropdown').classList.toggle('open');
-        }
-
-        function selectLang(lang) {
-            localStorage.setItem('prefLang', lang);
-            updateUITranslations(lang);
-            // Actualizar el texto del botón principal
-            const textEl = document.getElementById('currentLangText');
-            textEl.innerText = lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
-            // Cerrar menú y refrescar llaves
-            toggleLangDropdown();
-            renderLlaves();
-        }
-
-        // Cerrar menú si se hace clic fuera
-        window.addEventListener('click', function(e) {
-            if (!document.querySelector('.lang-capsule').contains(e.target)) {
-                document.getElementById('langDropdown').classList.remove('open');
-            }
-        });
-
         window.onload = () => {
             const savedLang = localStorage.getItem('prefLang') || 'es';
-            // Actualizar texto botón inicial
-            document.getElementById('currentLangText').innerText = savedLang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
-            
+            // Actualizar visual del botón al cargar
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${savedLang}`).classList.add('active');
+
             updateUITranslations(savedLang);
             updateServerStatus(); setInterval(updateServerStatus, 30000);
             renderLlaves();
