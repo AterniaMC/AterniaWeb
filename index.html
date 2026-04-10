@@ -247,6 +247,22 @@
             color: #000;
         }
 
+        /* ESTILO SELECTOR IDIOMAS TOPBAR */
+        .lang-select-topbar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+        .lang-select-topbar:hover { background: rgba(0, 229, 229, 0.1); }
+        .lang-select-topbar option { background: var(--card-bg); color: white; }
+
         /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
         .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
         .profile-left { width: 150px; text-align: center; }
@@ -454,6 +470,7 @@
 
     <div class="main-content">
         <div class="top-bar">
+            <!-- 1. CUENTA -->
             <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
                 <img id="headImg" src="" style="width:25px; border-radius:3px;">
                 <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
@@ -465,10 +482,18 @@
                 <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')">INICIAR SESIÓN</button>
             </div>
 
+            <!-- 2. EDITAR PERFIL -->
             <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
                 <i class="fas fa-user-edit"></i> EDITAR PERFIL
             </button>
 
+            <!-- 3. IDIOMAS -->
+            <select id="langSelect" class="lang-select-topbar">
+                <option value="es">🇪🇸 ES</option>
+                <option value="en">🇺🇸 EN</option>
+            </select>
+
+            <!-- 4. TEMA -->
             <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
         </div>
 
