@@ -64,8 +64,8 @@
 
         .nav-actions { display: flex; align-items: center; gap: 15px; }
 
-        /* --- ESTILOS DEL NUEVO BOTÓN Y MODAL DE IDIOMAS --- */
-        .btn-ethernet {
+        /* --- MODIFICACIÓN: BOTÓN ETHERNET Y MODAL --- */
+        .btn-lang-toggle {
             background: transparent;
             border: none;
             color: var(--text-main);
@@ -74,17 +74,17 @@
             padding: 8px;
             display: flex;
             align-items: center;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .btn-ethernet:hover { color: var(--accent); transform: scale(1.1); }
+        .btn-lang-toggle:hover { color: var(--accent); }
 
-        .modal-lang {
+        .modal-lang-container {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -93,68 +93,67 @@
             background: #0d0d0d;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            width: 90%;
-            max-width: 420px;
-            padding: 25px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            width: 380px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .modal-lang-header {
+        .modal-lang-title {
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 25px;
-            text-align: left;
+            margin-bottom: 20px;
         }
-        .lang-options {
+        .lang-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
         }
-        .lang-card {
+        .lang-item {
             background: #1a1a1a;
             border: 2px solid transparent;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 12px;
             cursor: pointer;
             transition: 0.2s;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
-        .lang-card:hover { background: #252525; border-color: rgba(255,255,255,0.1); }
-        .lang-card.active { border-color: var(--accent); background: rgba(0, 229, 229, 0.05); }
+        .lang-item:hover { background: #222; }
+        .lang-item.active { border-color: var(--accent); background: rgba(0, 229, 229, 0.05); }
         
-        .lang-flag-row {
+        .lang-flag-box {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .lang-flag-row img {
-            width: 28px;
-            height: 18px;
+        .lang-flag-box img {
+            width: 24px;
+            height: 16px;
             object-fit: cover;
             border-radius: 2px;
         }
-        .lang-code-small {
-            font-size: 0.7rem;
+        .lang-tag-small {
+            font-size: 0.65rem;
+            font-weight: 800;
             color: var(--text-dim);
-            font-weight: 700;
+            text-transform: uppercase;
         }
-        .lang-info {
+        .lang-name-box {
             display: flex;
             flex-direction: column;
-            text-align: left;
+            line-height: 1.2;
         }
-        .lang-main-name {
-            font-size: 0.95rem;
-            font-weight: 600;
+        .lang-name-main {
             color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
-        .lang-sub-name {
-            font-size: 0.75rem;
+        .lang-name-sub {
             color: var(--text-dim);
+            font-size: 0.75rem;
         }
-        /* --- FIN ESTILOS NUEVOS --- */
+        /* --- FIN MODIFICACIÓN --- */
 
         .theme-btn {
             background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; padding: 5px;
@@ -245,7 +244,7 @@
         </div>
         
         <div class="nav-actions">
-            <button class="btn-ethernet" onclick="openLangModal()" title="Ethernet / Idiomas">
+            <button class="btn-lang-toggle" onclick="toggleLangModal()">
                 <i class="fas fa-network-wired"></i>
             </button>
 
@@ -262,28 +261,28 @@
         </div>
     </div>
 
-    <div id="modalLang" class="modal-lang" onclick="closeLangModal(event)">
+    <div id="langModal" class="modal-lang-container" onclick="toggleLangModal()">
         <div class="modal-lang-content" onclick="event.stopPropagation()">
-            <div class="modal-lang-header" data-tr="select_language">Seleccionar idioma</div>
-            <div class="lang-options">
-                <div id="lang-es" class="lang-card" onclick="changeLang('es')">
-                    <div class="lang-flag-row">
-                        <img src="https://flagcdn.com/w80/es.png" alt="ES">
-                        <span class="lang-code-small">ES</span>
+            <div class="modal-lang-title" data-tr="select_language">Seleccionar idioma</div>
+            <div class="lang-list">
+                <div id="lang-es" class="lang-item" onclick="selectLang('es')">
+                    <div class="lang-flag-box">
+                        <img src="https://flagcdn.com/w80/es.png" alt="España">
+                        <span class="lang-tag-small">ES</span>
                     </div>
-                    <div class="lang-info">
-                        <span class="lang-main-name">Español</span>
-                        <span class="lang-sub-name">(ES)</span>
+                    <div class="lang-name-box">
+                        <span class="lang-name-main">Español</span>
+                        <span class="lang-name-sub">(ES)</span>
                     </div>
                 </div>
-                <div id="lang-en" class="lang-card" onclick="changeLang('en')">
-                    <div class="lang-flag-row">
-                        <img src="https://flagcdn.com/w80/us.png" alt="US">
-                        <span class="lang-code-small">US</span>
+                <div id="lang-en" class="lang-item" onclick="selectLang('en')">
+                    <div class="lang-flag-box">
+                        <img src="https://flagcdn.com/w80/us.png" alt="USA">
+                        <span class="lang-tag-small">US</span>
                     </div>
-                    <div class="lang-info">
-                        <span class="lang-main-name">English</span>
-                        <span class="lang-sub-name">(US)</span>
+                    <div class="lang-name-box">
+                        <span class="lang-name-main">English</span>
+                        <span class="lang-name-sub">(US)</span>
                     </div>
                 </div>
             </div>
@@ -324,7 +323,6 @@
     </footer>
 
     <script>
-        // CONFIGURACIÓN FIREBASE (Original intacta)
         const firebaseConfig = {
             apiKey: "AIzaSyAs-DEMO",
             authDomain: "aternia-mc.firebaseapp.com",
@@ -359,32 +357,24 @@
             }
         };
 
-        // FUNCIONES DEL MODAL DE IDIOMAS
-        function openLangModal() {
-            document.getElementById('modalLang').style.display = 'flex';
-            const current = localStorage.getItem('prefLang') || 'es';
-            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
-            document.getElementById(`lang-${current}`).classList.add('active');
+        // FUNCIONES DEL MODAL
+        function toggleLangModal() {
+            const modal = document.getElementById('langModal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function closeLangModal(e) {
-            document.getElementById('modalLang').style.display = 'none';
-        }
-
-        function changeLang(lang) {
+        function selectLang(lang) {
             localStorage.setItem('prefLang', lang);
             updateUITranslations(lang);
-            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.lang-item').forEach(item => item.classList.remove('active'));
             document.getElementById(`lang-${lang}`).classList.add('active');
-            setTimeout(closeLangModal, 200);
+            setTimeout(toggleLangModal, 150);
         }
 
         function updateUITranslations(lang) {
             document.querySelectorAll('[data-tr]').forEach(el => {
                 const key = el.getAttribute('data-tr');
-                if (translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
+                el.innerText = translations[lang][key];
             });
             renderLlaves();
             renderFaq();
@@ -470,6 +460,13 @@
 
         window.onload = () => {
             const savedLang = localStorage.getItem('prefLang') || 'es';
+            
+            // Marcar idioma activo en el modal al cargar
+            document.querySelectorAll('.lang-item').forEach(item => item.classList.remove('active'));
+            if(document.getElementById(`lang-${savedLang}`)) {
+                document.getElementById(`lang-${savedLang}`).classList.add('active');
+            }
+            
             updateUITranslations(savedLang);
             updateServerStatus(); setInterval(updateServerStatus, 30000);
             renderLlaves();
@@ -492,9 +489,10 @@
 
         document.getElementById('theme-toggle').onclick = () => { 
             const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            document.getElementById('theme-toggle').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('theme-toggle').innerHTML = newTheme === 'light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         };
     </script>
 </body>
