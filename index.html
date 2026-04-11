@@ -64,94 +64,97 @@
 
         .nav-actions { display: flex; align-items: center; gap: 15px; }
 
-        /* ESTILOS DEL BOTÓN ETHERNET Y MODAL DE IDIOMAS */
-        .btn-net-lang {
+        /* --- ESTILOS DEL NUEVO BOTÓN Y MODAL DE IDIOMAS --- */
+        .btn-ethernet {
             background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
             transition: 0.3s;
-            font-size: 1.1rem;
         }
-        .btn-net-lang:hover {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
+        .btn-ethernet:hover { color: var(--accent); transform: scale(1.1); }
 
-        .modal {
+        .modal-lang {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
         }
         .modal-lang-content {
-            background: #0a0a0a;
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 30px;
-            width: 340px;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 420px;
+            padding: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
-        .modal-lang-title {
-            color: var(--accent);
-            font-size: 0.85rem;
-            font-weight: 900;
+        .modal-lang-header {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 25px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            text-align: left;
         }
-        .lang-grid {
+        .lang-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
         .lang-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 20px 10px;
+            background: #1a1a1a;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 10px;
         }
-        .lang-card:hover {
-            background: rgba(0, 229, 229, 0.1);
-            border-color: var(--accent);
-            transform: translateY(-5px);
+        .lang-card:hover { background: #252525; border-color: rgba(255,255,255,0.1); }
+        .lang-card.active { border-color: var(--accent); background: rgba(0, 229, 229, 0.05); }
+        
+        .lang-flag-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .lang-card.active {
-            border-color: var(--accent);
-            background: rgba(0, 229, 229, 0.08);
-            box-shadow: 0 0 15px rgba(0, 229, 229, 0.1);
-        }
-        .lang-card img {
-            width: 40px;
-            height: 28px;
+        .lang-flag-row img {
+            width: 28px;
+            height: 18px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 2px;
         }
-        .lang-card span {
+        .lang-code-small {
             font-size: 0.7rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 1px;
+            color: var(--text-dim);
+            font-weight: 700;
         }
+        .lang-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .lang-main-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .lang-sub-name {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        /* --- FIN ESTILOS NUEVOS --- */
 
         .theme-btn {
             background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; padding: 5px;
@@ -242,9 +245,9 @@
         </div>
         
         <div class="nav-actions">
-            <div class="btn-net-lang" onclick="openLangModal()" title="Seleccionar Idioma">
+            <button class="btn-ethernet" onclick="openLangModal()" title="Ethernet / Idiomas">
                 <i class="fas fa-network-wired"></i>
-            </div>
+            </button>
 
             <button class="theme-btn" id="theme-toggle"><i class="fas fa-moon"></i></button>
             
@@ -259,17 +262,29 @@
         </div>
     </div>
 
-    <div id="modalLang" class="modal" onclick="closeLangModal(event)">
+    <div id="modalLang" class="modal-lang" onclick="closeLangModal(event)">
         <div class="modal-lang-content" onclick="event.stopPropagation()">
-            <div class="modal-lang-title" data-tr="select_language">Seleccionar Idioma</div>
-            <div class="lang-grid">
+            <div class="modal-lang-header" data-tr="select_language">Seleccionar idioma</div>
+            <div class="lang-options">
                 <div id="lang-es" class="lang-card" onclick="changeLang('es')">
-                    <img src="https://flagcdn.com/w80/es.png" alt="ES">
-                    <span>ESPAÑOL</span>
+                    <div class="lang-flag-row">
+                        <img src="https://flagcdn.com/w80/es.png" alt="ES">
+                        <span class="lang-code-small">ES</span>
+                    </div>
+                    <div class="lang-info">
+                        <span class="lang-main-name">Español</span>
+                        <span class="lang-sub-name">(ES)</span>
+                    </div>
                 </div>
                 <div id="lang-en" class="lang-card" onclick="changeLang('en')">
-                    <img src="https://flagcdn.com/w80/us.png" alt="EN">
-                    <span>ENGLISH</span>
+                    <div class="lang-flag-row">
+                        <img src="https://flagcdn.com/w80/us.png" alt="US">
+                        <span class="lang-code-small">US</span>
+                    </div>
+                    <div class="lang-info">
+                        <span class="lang-main-name">English</span>
+                        <span class="lang-sub-name">(US)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -309,6 +324,7 @@
     </footer>
 
     <script>
+        // CONFIGURACIÓN FIREBASE (Original intacta)
         const firebaseConfig = {
             apiKey: "AIzaSyAs-DEMO",
             authDomain: "aternia-mc.firebaseapp.com",
@@ -328,7 +344,7 @@
                 loading: "Cargando estado...",
                 faq_title: "PREGUNTAS FRECUENTES",
                 footer_rights: "Todos los derechos reservados.",
-                select_language: "Seleccionar Idioma",
+                select_language: "Seleccionar idioma",
                 buy_now: "ADQUIRIR AHORA"
             },
             en: {
@@ -338,14 +354,14 @@
                 loading: "Loading status...",
                 faq_title: "FREQUENTLY ASKED QUESTIONS",
                 footer_rights: "All rights reserved.",
-                select_language: "Select Language",
+                select_language: "Select language",
                 buy_now: "BUY NOW"
             }
         };
 
+        // FUNCIONES DEL MODAL DE IDIOMAS
         function openLangModal() {
-            const modal = document.getElementById('modalLang');
-            modal.style.display = 'flex';
+            document.getElementById('modalLang').style.display = 'flex';
             const current = localStorage.getItem('prefLang') || 'es';
             document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
             document.getElementById(`lang-${current}`).classList.add('active');
@@ -360,13 +376,15 @@
             updateUITranslations(lang);
             document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
             document.getElementById(`lang-${lang}`).classList.add('active');
-            setTimeout(closeLangModal, 300);
+            setTimeout(closeLangModal, 200);
         }
 
         function updateUITranslations(lang) {
             document.querySelectorAll('[data-tr]').forEach(el => {
                 const key = el.getAttribute('data-tr');
-                el.innerText = translations[lang][key];
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
             });
             renderLlaves();
             renderFaq();
