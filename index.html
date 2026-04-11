@@ -19,969 +19,439 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
-    <script>
-        // Configuración recibida de tu proyecto aterniamc-web
-        const firebaseConfig = {
-            apiKey: "AIzaSyCCQ_VYtiZB88PzpbOfA98wGqrG7k4qzSE",
-            authDomain: "aterniamc-web.firebaseapp.com",
-            projectId: "aterniamc-web",
-            storageBucket: "aterniamc-web.firebasestorage.app",
-            messagingSenderId: "748766671298",
-            appId: "1:748766671298:web:bd934aa81b246b9e0ba65b",
-            measurementId: "G-LFB2EN182E"
-        };
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
-            --bg: #0f0f0f; --card-bg: #1a1a1a; --sidebar-bg: #121212; --text: #ffffff;
-            --accent: #00e5e5; --accent-dark: #008b8b; --accent-glow: rgba(0, 229, 229, 0.4);
-            --lore-color: #ff7f27; 
-            --comun: #95a5a6; --raro: #00d2d3; --epico: #8e44ad; 
-            --legendary: #f1c40f; --mitico: #c0392b; --exotico: #ad244f;
-            --error: #ff4757; --error-glow: rgba(255, 71, 87, 0.4);
-            --warning: #f1c40f; --warning-glow: rgba(241, 196, 15, 0.4);
+            --primary: #000;
+            --accent: #00e5e5;
+            --accent-glow: rgba(0, 229, 229, 0.4);
+            --bg-dark: #050505;
+            --card-bg: #0a0a0a;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
         }
 
-        [data-theme="light"] { --bg: #f4f4f4; --card-bg: #ffffff; --sidebar-bg: #e0e0e0; --text: #333; }
-
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; text-transform: uppercase; transition: 0.3s; min-height: 100vh; overflow-x: hidden; }
-
-        /* AJUSTE SIDEBAR */
-        .sidebar { 
-            width: 280px; 
-            background-color: var(--sidebar-bg); 
-            padding: 40px 20px 80px 20px; 
-            position: fixed; 
-            height: 100dvh; 
-            border-right: 1px solid rgba(255,255,255,0.05); 
-            z-index: 100; 
-            transition: 0.4s; 
-            overflow-y: auto; 
-            box-sizing: border-box;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) transparent;
-        }
-        
-        .logo-box { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 40px; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .logo-box img { width: 45px; height: auto; filter: drop-shadow(0 0 5px var(--accent-glow)); }
-        
-        .nav-item { padding: 15px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; transition: 0.4s; color: #888; font-weight: 600; }
-        .nav-item:hover { background: rgba(0, 225, 225, 0.1); color: var(--accent); transform: translateX(8px); }
-        .nav-item.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
-        .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
-
-        /* SERVER STATUS CARD & COPY IP */
-        .server-status-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .server-status-card img { width: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--accent-glow)); }
-        
-        .ip-copy-box { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            background: rgba(0,0,0,0.2); 
-            padding: 8px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: 0.3s;
-            position: relative;
-        }
-        .ip-copy-box:hover { background: rgba(255,255,255,0.05); }
-        .ip-copy-box i { color: #555; font-size: 0.8rem; transition: 0.3s; }
-        .ip-copy-box:hover i { color: var(--accent); }
-        
-        /* Tooltip de Copiado */
-        .copy-tooltip {
-            position: absolute;
-            top: -30px;
-            background: var(--accent);
-            color: #000;
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 0.6rem;
-            font-weight: 900;
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
-        }
-        .copy-tooltip.show { opacity: 1; top: -35px; }
-
-        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-        .online-dot { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
-        .offline-dot { background: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
-
-        .main-content { margin-left: 320px; padding: 60px; width: calc(100% - 320px); transition: 0.4s; }
-        .top-bar { display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 50px; }
-
-        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--sidebar-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--accent); }
-
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        
-        /* MODAL DE ALERTAS ESPECÍFICO (MAYOR Z-INDEX) */
-        #customAlert { z-index: 4000; }
-        #passChangeModal, #cooldownModal { z-index: 3500; }
-
-        .modal-content { background: var(--card-bg); padding: 40px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); animation: modalIn 0.3s; position: relative; box-sizing: border-box; }
-        .modal-content h2 { margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; font-size: 1.2rem; }
-        
-        .modal-content input, .modal-content textarea, .modal-content select { 
-            width: 100%; 
-            max-width: 100%; 
-            padding: 12px; 
-            margin-bottom: 15px; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid #333; 
-            border-radius: 10px; 
-            color: white; 
-            outline: none; 
-            box-sizing: border-box; 
-            font-family: inherit; 
-            resize: vertical;
+        [data-theme="light"] {
+            --primary: #f0f0f0;
+            --accent: #008080;
+            --accent-glow: rgba(0, 128, 128, 0.2);
+            --bg-dark: #ffffff;
+            --card-bg: #f9f9f9;
+            --text-main: #1a1a1a;
+            --text-dim: #444444;
         }
 
-        .modal-content select option { background: var(--card-bg); color: white; }
-        
-        .pass-wrapper { position: relative; width: 100%; }
-        .toggle-pass { position: absolute; right: 15px; top: 12px; color: #555; cursor: pointer; transition: 0.3s; }
-        .toggle-pass:hover { color: var(--accent); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; transition: 0.3s; overflow-x: hidden; }
 
-        .auth-error-msg { display: none; background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: var(--error); padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; box-shadow: 0 0 10px var(--error-glow); animation: shake 0.4s; }
-
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        /* ESTILOS ALERTAS PERSONALIZADAS */
-        .custom-alert-content { border-width: 2px; border-style: solid; }
-        .alert-error { border-color: var(--error); box-shadow: 0 0 20px var(--error-glow); }
-        .alert-error h2 { color: var(--error); }
-        .alert-warning { border-color: var(--warning); box-shadow: 0 0 20px var(--warning-glow); }
-        .alert-warning h2 { color: var(--warning); }
-        .alert-success { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
-        .alert-success h2 { color: var(--accent); }
-
-        /* BANNER ROJO ADVERTENCIA */
-        .danger-banner {
-            background: rgba(255, 71, 87, 0.15);
-            border: 1px solid var(--error);
-            color: var(--error);
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            margin-top: 15px;
-            text-transform: none;
-            line-height: 1.4;
-        }
-
-        .faq-card { background: var(--card-bg); padding: 25px; border-radius: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px; }
-        .faq-author { color: var(--accent); font-weight: 900; font-size: 0.8rem; margin-bottom: 8px; display: block; }
-        .faq-text { text-transform: none; color: var(--lore-color); line-height: 1.5; font-size: 0.9rem; font-weight: 600; }
-        .faq-actions { margin-top: 12px; display: flex; gap: 15px; }
-        .btn-mini { background: none; border: none; color: #555; font-size: 0.65rem; font-weight: 900; cursor: pointer; transition: 0.3s; padding: 0; letter-spacing: 1px; }
-        .btn-mini:hover { color: var(--accent); }
-        .btn-delete:hover { color: #ff4757; }
-
-        .theme-switch { position: relative; width: 55px; height: 28px; cursor: pointer; }
-        .theme-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; z-index: 2; }
-        input:checked + .slider { background-color: var(--accent); }
-        input:checked + .slider:before { transform: translateX(27px); }
-
-        .btn-action { background: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; }
-        .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
-        .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: var(--card-bg); padding: 35px; border-radius: 20px; text-align: center; transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
-        
-        .news-cell { 
-            background: var(--card-bg); 
-            padding: 25px; 
-            border-radius: 15px; 
-            border-left: 4px solid var(--accent); 
+        .top-bar {
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(15px);
+            padding: 12px 5%;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-        }
-        .version-tag {
-            background: rgba(0, 229, 229, 0.1);
-            color: var(--accent);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            border: 1px solid var(--accent);
-        }
-
-        .category-section { display: none; }
-        .category-section.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .social-link { display: flex; align-items: center; gap: 12px; padding: 10px; color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
-        .social-link:hover { color: var(--accent); transform: translateX(5px); }
-
-        /* ESTILO BOTÓN EDITAR PERFIL EN TOPBAR */
-        .btn-topbar-edit {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--accent);
-            color: var(--text);
-            padding: 8px 15px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-            display: none; /* Se muestra solo si hay login */
             align-items: center;
-            gap: 8px;
-        }
-        .btn-topbar-edit:hover {
-            background: var(--accent);
-            color: #000;
-        }
-
-        /* ESTILOS ESPECÍFICOS PERFIL - DISEÑO PDF */
-        .profile-container { display: flex; gap: 20px; text-align: left; margin-bottom: 25px; }
-        .profile-left { width: 150px; text-align: center; }
-        .profile-right { flex: 1; }
-        .skin-container { width: 120px; height: 180px; margin: 0 auto 10px auto; position: relative; background: rgba(255,255,255,0.03); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .skin-container img { height: 90%; width: auto; object-fit: contain; }
-        
-        .profile-label { font-size: 0.7rem; font-weight: 900; margin-bottom: 5px; display: block; color: var(--accent); }
-        .security-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
-        .security-row { margin-bottom: 15px; }
-
-        @media (max-width: 992px) {
-            .sidebar { left: -320px; }
-            .sidebar.open { left: 0; }
-            .main-content { margin-left: 0; width: 100%; padding: 80px 20px 40px 20px; box-sizing: border-box; }
-            .menu-toggle { display: block; }
-            .top-bar { justify-content: center; flex-wrap: wrap; }
-            .modal-content { padding: 30px 20px; width: 95%; }
-            .profile-container { flex-direction: column; align-items: center; }
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 229, 229, 0.1);
         }
 
-        /* --- NUEVOS ESTILOS SELECTOR IDIOMAS (BLOQUE CORREGIDO) --- */
-        .lang-capsule {
-            display: flex; align-items: center; gap: 8px;
-            background: #000; /* Fondo negro según imagen 1 */
+        .server-brand { display: flex; align-items: center; gap: 12px; }
+        .server-brand img { width: 42px; height: 42px; border-radius: 8px; box-shadow: 0 0 15px var(--accent-glow); }
+        .server-title { font-weight: 900; letter-spacing: 2px; font-size: 1.3rem; color: var(--accent); }
+
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+
+        /* ESTILOS DEL BOTÓN ETHERNET Y MODAL DE IDIOMAS */
+        .btn-net-lang {
+            background: transparent;
             border: 2px solid var(--accent);
             color: var(--accent);
-            padding: 8px 15px;
-            border-radius: 50px;
-            font-size: 0.75rem; font-weight: 900;
-            cursor: pointer; transition: 0.3s;
-            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
         }
-        .lang-capsule:hover, .lang-capsule.open {
-            background: rgba(0, 229, 229, 0.1);
-            box-shadow: 0 0 15px var(--accent-glow); /* Resplandor al hover o abierto */
+        .btn-net-lang:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
-        .lang-dropdown {
-            position: absolute; top: calc(100% + 10px); right: 0;
-            background: var(--card-bg);
-            border: 2px solid var(--accent); /* Borde cian según imagen 2 */
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .modal-lang-content {
+            background: #0a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 30px;
+            width: 340px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+        .modal-lang-title {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .lang-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .lang-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            width: 130px;
-            opacity: 0; visibility: hidden;
-            transform: translateY(-10px);
-            transition: 0.3s; z-index: 500;
-            overflow: hidden;
-            box-shadow: 0 0 20px var(--accent-glow);
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .lang-dropdown.open {
-            opacity: 1; visibility: visible;
-            transform: translateY(0);
+        .lang-card:hover {
+            background: rgba(0, 229, 229, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-5px);
         }
-        .lang-option {
-            display: flex; align-items: center; gap: 10px;
-            padding: 12px 15px;
-            color: #888; font-size: 0.7rem; font-weight: 700;
+        .lang-card.active {
+            border-color: var(--accent);
+            background: rgba(0, 229, 229, 0.08);
+            box-shadow: 0 0 15px rgba(0, 229, 229, 0.1);
+        }
+        .lang-card img {
+            width: 40px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .lang-card span {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .theme-btn {
+            background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; padding: 5px;
+        }
+
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(5,5,5,1)), url('https://i.imgur.com/3fE8pYm.png');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+        .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--accent-glow); }
+        .hero p { color: var(--text-dim); max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
+
+        .ip-box {
+            background: rgba(0, 229, 229, 0.1);
+            border: 1px solid var(--accent);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
             transition: 0.3s;
         }
-        .lang-option:hover {
-            background: rgba(0, 229, 229, 0.1);
-            color: var(--accent);
+        .ip-box:hover { transform: scale(1.05); background: rgba(0, 229, 229, 0.2); }
+        #serverIP { font-weight: 900; letter-spacing: 1px; }
+
+        .container { max-width: 1100px; margin: -50px auto 50px; padding: 0 20px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s;
+            position: relative;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .card-img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 25px; }
+        .card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: var(--accent); }
+        .card-text { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 20px; height: 50px; overflow: hidden; }
+
+        .btn-buy {
+            display: block; width: 100%; text-align: center; background: var(--accent); color: #000;
+            padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 900; transition: 0.3s;
+        }
+        .btn-buy:hover { box-shadow: 0 0 20px var(--accent-glow); filter: brightness(1.1); }
+
+        .faq-section { margin-top: 80px; }
+        .faq-item { background: var(--card-bg); margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
+        .faq-question { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .faq-answer { padding: 20px; color: var(--text-dim); display: none; background: rgba(255,255,255,0.02); }
+
+        footer { text-align: center; padding: 50px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-dim); font-size: 0.9rem; }
+        .social-links { margin-bottom: 20px; display: flex; justify-content: center; gap: 20px; }
+        .social-links a { color: var(--accent); font-size: 1.5rem; transition: 0.3s; }
+        .social-links a:hover { transform: scale(1.2); filter: drop-shadow(0 0 10px var(--accent-glow)); }
+
+        .auth-container { display: flex; align-items: center; gap: 10px; }
+        .btn-login { background: #111; color: #fff; border: 1px solid #333; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .user-pill { display: flex; align-items: center; gap: 10px; background: rgba(0, 229, 229, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--accent); }
+        .user-pill img { width: 24px; height: 24px; border-radius: 4px; }
+        .user-pill span { font-weight: 800; font-size: 0.85rem; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .top-bar { padding: 10px 15px; }
+            .server-title { font-size: 1rem; }
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-
-    <div id="customAlert" class="modal">
-        <div id="alertBox" class="modal-content custom-alert-content">
-            <h2 id="alertTitle" data-tr="alert_notice">AVISO</h2>
-            <p id="alertMsg" style="text-transform: none; font-size: 0.9rem; margin-bottom: 25px; color: #bbb;"></p>
-            <div id="alertActions" style="display: flex; gap: 10px; justify-content: center;">
-                <button id="alertConfirmBtn" class="btn-action" style="min-width: 100px;" data-tr="btn_accept">ACEPTAR</button>
-                <button id="alertCancelBtn" class="btn-action btn-outline" style="min-width: 100px; display: none;" data-tr="btn_cancel">CANCELAR</button>
-            </div>
+    <div class="top-bar">
+        <div class="server-brand">
+            <img src="https://i.imgur.com/EpxuqFO.png" alt="Aternia Logo">
+            <span class="server-title">ATERNIA MC</span>
         </div>
-    </div>
-
-    <div id="cooldownModal" class="modal">
-        <div class="modal-content alert-error">
-            <h2 data-tr="denied_access">ACCESO DENEGADO</h2>
-            <p style="text-transform: none; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;" data-tr="cooldown_msg">No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:</p>
-            <div id="timerDisplay" style="font-size: 1.2rem; font-weight: 900; color: var(--error); margin-bottom: 30px; letter-spacing: 2px;">00d 00h 00m 00s</div>
-            <button class="btn-action" style="width: 100%;" onclick="closeCooldown()" data-tr="btn_understood">ENTENDIDO</button>
-        </div>
-    </div>
-
-    <div id="passChangeModal" class="modal">
-        <div class="modal-content alert-success" style="border-color: var(--accent);">
-            <h2 data-tr="change_pass_title">CAMBIAR CONTRASEÑA</h2>
-            
-            <label class="profile-label" style="text-align: left;" data-tr="old_pass_label">CONTRASEÑA ANTERIOR</label>
-            <div class="pass-wrapper">
-                <input type="password" id="oldPassInput" placeholder="ESCRIBE TU CLAVE ACTUAL" data-tr-placeholder="placeholder_old_pass">
-            </div>
-
-            <label class="profile-label" style="text-align: left;" data-tr="new_pass_label">NUEVA CONTRASEÑA</label>
-            <div class="pass-wrapper">
-                <input type="password" id="newPassInput" placeholder="ESCRIBE TU NUEVA CLAVE" data-tr-placeholder="placeholder_new_pass">
-            </div>
-
-            <div class="danger-banner">
-                <i class="fas fa-exclamation-triangle"></i> <span data-tr="pass_warning_banner">ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.</span>
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-top: 25px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closePassChange()" data-tr="btn_cancel">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="executePassUpdate()" data-tr="btn_confirm">CONFIRMAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalTitle">INICIAR SESIÓN</h2>
-            <div id="authError" class="auth-error-msg" data-tr="auth_error">CORREO O CONTRASEÑA INCORRECTOS</div>
-            <div id="authInputs">
-                <input type="text" id="authUser" placeholder="USUARIO DE MINECRAFT" data-tr-placeholder="placeholder_mc_user">
-                <input type="email" id="authEmail" placeholder="CORREO ELECTRÓNICO" data-tr-placeholder="placeholder_email">
-                <div class="pass-wrapper">
-                    <input type="password" id="authPass" placeholder="CONTRASEÑA" data-tr-placeholder="placeholder_pass">
-                    <i class="fas fa-eye toggle-pass" onclick="togglePassView()"></i>
-                </div>
-            </div>
-            <button class="btn-action" style="width: 100%;" onclick="handleAuth()" data-tr="btn_continue">CONTINUAR</button>
-            <p onclick="closeAuth()" style="font-size: 0.7rem; color: #555; margin-top: 15px; cursor: pointer;" data-tr="btn_cancel">CANCELAR</p>
-        </div>
-    </div>
-
-    <div id="profileModal" class="modal">
-        <div class="modal-content" style="max-width: 650px;">
-            <h2 data-tr="edit_profile_title">EDITAR PERFIL</h2>
-            
-            <div class="profile-container">
-                <div class="profile-left">
-                    <div class="skin-container">
-                        <img id="profileSkinImg" src="" alt="Skin">
-                    </div>
-                    <span id="profileNameLabel" style="font-weight: 900; font-size: 0.9rem; color: var(--accent); display: block;">NOMBRE</span>
-                    <span id="profileTagLabel" style="font-size: 0.65rem; color: #555; font-weight: 900;">@ORIGINAL</span>
-                </div>
-
-                <div class="profile-right">
-                    <label class="profile-label" data-tr="label_nickname">APODO EN FORO</label>
-                    <input type="text" id="editNickname" placeholder="TU NOMBRE PÚBLICO" data-tr-placeholder="placeholder_nickname">
-
-                    <label class="profile-label" data-tr="label_gender">GÉNERO</label>
-                    <select id="editGender" onchange="toggleOtherGender()">
-                        <option value="" disabled selected data-tr="opt_select_gender">SELECCIONA GÉNERO</option>
-                        <option value="MASCULINO" data-tr="opt_male">MASCULINO</option>
-                        <option value="FEMENINO" data-tr="opt_female">FEMENINO</option>
-                        <option value="PREFIERO NO DECIRLO" data-tr="opt_nodecl">PREFIERO NO DECIRLO</option>
-                        <option value="OTRO" data-tr="opt_other">OTRO...</option>
-                    </select>
-                    <input type="text" id="editGenderOther" placeholder="¿CUÁL?" data-tr-placeholder="placeholder_which" style="display:none;">
-
-                    <label class="profile-label" data-tr="label_bio">DESCRIPCIÓN BREVE</label>
-                    <textarea id="editBio" rows="4" maxlength="500" placeholder="CUÉNTANOS SOBRE TI..." data-tr-placeholder="placeholder_bio" oninput="updateCharCount()" style="font-size: 0.8rem; text-transform: none;"></textarea>
-                    <div style="text-align: right; font-size: 0.55rem; margin-top: -10px; font-weight: 900; color: #444;"><span id="charCount" style="color:var(--accent)">0</span> / 500</div>
-                </div>
-            </div>
-
-            <div class="security-section">
-                <h3 style="font-size: 0.75rem; letter-spacing: 2px; color: #555; margin-bottom: 15px;" data-tr="security_title">SEGURIDAD Y CUENTA</h3>
-                
-                <div class="security-row">
-                    <label class="profile-label" data-tr="new_pass_label">CONTRASEÑA</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="password" value="*************************" disabled style="opacity: 0.3; cursor: not-allowed; flex: 1; margin-bottom: 0;">
-                        <button class="btn-action" style="padding: 0 15px; background: #f1c40f; white-space: nowrap;" onclick="startPassChangeFlow()" data-tr="btn_change_pass">CAMBIAR CONTRASEÑA</button>
-                    </div>
-                </div>
-
-                <div class="security-row">
-                    <label class="profile-label" data-tr="placeholder_email">CORREO</label>
-                    <input type="email" id="displayEmail" disabled style="opacity: 0.3; cursor: not-allowed; width: 100%;">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-top: 30px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeProfile()" data-tr="btn_cancel">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveProfile()" data-tr="btn_save">GUARDAR CAMBIOS</button>
-            </div>
-
-            <button class="btn-mini btn-delete" onclick="confirmDeleteAccount()" style="margin-top: 25px; width: 100%; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; padding: 10px; border-radius: 8px; font-size: 0.6rem;" data-tr="btn_delete_account">ELIMINAR MI CUENTA PERMANENTEMENTE</button>
-        </div>
-    </div>
-
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h2 data-tr="edit_question">EDITAR PREGUNTA</h2>
-            <textarea id="editFaqTxt" rows="5" placeholder="EDITA TU MENSAJE..." data-tr-placeholder="placeholder_faq_edit"></textarea>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-action btn-outline" style="flex:1" onclick="closeEdit()" data-tr="btn_cancel">CANCELAR</button>
-                <button class="btn-action" style="flex:1" onclick="saveEdit()" data-tr="btn_save">GUARDAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="sidebar" id="sidebar">
-        <div class="logo-box" onclick="showCategory('inicio')">
-            <img src="https://i.imgur.com/EpxuqFO.png" alt="Logo">
-            <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
-        </div>
-        <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> <span data-tr="nav_home">INICIO</span></div>
-        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS EXCLUSIVOS</span></div>
-        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES/CRATES</span></div>
-        <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> <span data-tr="nav_donations">DONACIONES</span></div>
-        <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> <span data-tr="nav_about">SOBRE EL SERVIDOR</span></div>
         
-        <div class="nav-item" id="nav-otros" onclick="showCategory('otros')"><i class="fas fa-ellipsis-h"></i> <span data-tr="nav_others">OTROS</span></div>
+        <div class="nav-actions">
+            <div class="btn-net-lang" onclick="openLangModal()" title="Seleccionar Idioma">
+                <i class="fas fa-network-wired"></i>
+            </div>
 
-        <p style="font-size:0.6rem; color:#444; margin:30px 0 10px 10px; letter-spacing:2px;" data-tr="side_community">COMUNIDAD</p>
-        <div class="nav-item" id="nav-staff" onclick="showCategory('staff')"><i class="fas fa-shield-alt"></i> STAFF</div>
-        <div class="nav-item" id="nav-faq" onclick="showCategory('faq')"><i class="fas fa-comments"></i> <span data-tr="nav_forum">FORO</span></div>
-        
-        <div style="margin-top: 30px;">
-            <p style="font-size:0.6rem; color:#444; margin:10px; letter-spacing:2px;" data-tr="side_social">REDES SOCIALES</p>
-            <a href="https://discord.gg/wQuTCZ4Y" target="_blank" class="social-link"><i class="fab fa-discord"></i> DISCORD</a>
-            <a href="https://www.instagram.com/aterniamc_oficial/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> INSTAGRAM</a>
-            <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TIKTOK</a>
-        </div>
-
-        <div class="server-status-card">
-            <img src="https://i.imgur.com/EpxuqFO.png" alt="Server Icon">
+            <button class="theme-btn" id="theme-toggle"><i class="fas fa-moon"></i></button>
             
-            <div class="ip-copy-box" onclick="copyIP()">
-                <div id="copyTooltip" class="copy-tooltip" data-tr="tooltip_copied">¡COPIADO!</div>
-                <p id="serverIP" style="font-size: 0.65rem; color: #888; margin: 0; font-weight: 900;">ATERNIAMC.ATERNOS.ME</p>
-                <i class="fas fa-copy"></i>
+            <div class="auth-container" id="authButtons">
+                <button class="btn-login" onclick="login()"><i class="fab fa-google"></i> <span data-tr="login">Ingresar</span></button>
             </div>
-
-            <div style="margin-top: 10px; font-size: 0.75rem; font-weight: 900;">
-                <span id="statusIcon" class="status-dot offline-dot"></span>
-                <span id="statusText" style="color: #e74c3c;">OFFLINE</span>
-            </div>
-            <div style="margin-top: 5px; font-size: 0.7rem; color: var(--accent); font-weight: 900;">
-                <span data-tr="status_players">JUGADORES</span>: <span id="playerCount">0 / --</span>
+            <div class="user-pill" id="userLogged" style="display: none;">
+                <img id="headImg" src="" alt="">
+                <span id="userTag"></span>
+                <i class="fas fa-sign-out-alt" style="cursor: pointer; margin-left: 5px;" onclick="logout()"></i>
             </div>
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="top-bar">
-            <div id="userLogged" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.05); padding:8px 20px; border-radius:50px; border:1px solid var(--accent);">
-                <img id="headImg" src="" style="width:25px; border-radius:3px;">
-                <span id="userTag" style="font-weight:900; font-size:0.8rem;"></span>
-                <i class="fas fa-power-off" onclick="logout()" style="color:#ff4757; cursor:pointer; font-size:0.9rem;"></i>
-            </div>
-
-            <div id="authButtons" style="display: flex; gap: 10px;">
-                <button id="btnRegister" class="btn-action btn-outline" onclick="openAuth('REGISTRARSE')" data-tr="btn_register">REGISTRARSE</button>
-                <button id="btnLogin" class="btn-action" onclick="openAuth('INICIAR SESIÓN')" data-tr="btn_login">INICIAR SESIÓN</button>
-            </div>
-
-            <button id="btnEditProfile" class="btn-topbar-edit" onclick="openProfile()">
-                <i class="fas fa-user-edit"></i> <span data-tr="btn_edit_profile">EDITAR PERFIL</span>
-            </button>
-
-            <div class="lang-capsule" onclick="toggleLangDropdown()">
-                <i class="fas fa-globe"></i>
-                <span id="currentLangText">🇪🇸 ES</span>
-                <div class="lang-dropdown" id="langDropdown">
-                    <div class="lang-option" onclick="selectLang('es')">🇪🇸 ES</div>
-                    <div class="lang-option" onclick="selectLang('en')">🇺🇸 EN</div>
+    <div id="modalLang" class="modal" onclick="closeLangModal(event)">
+        <div class="modal-lang-content" onclick="event.stopPropagation()">
+            <div class="modal-lang-title" data-tr="select_language">Seleccionar Idioma</div>
+            <div class="lang-grid">
+                <div id="lang-es" class="lang-card" onclick="changeLang('es')">
+                    <img src="https://flagcdn.com/w80/es.png" alt="ES">
+                    <span>ESPAÑOL</span>
+                </div>
+                <div id="lang-en" class="lang-card" onclick="changeLang('en')">
+                    <img src="https://flagcdn.com/w80/us.png" alt="EN">
+                    <span>ENGLISH</span>
                 </div>
             </div>
-
-            <label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"><i class="fas fa-sun" style="font-size:0.7rem; color:#f1c40f;"></i><i class="fas fa-moon" style="font-size:0.7rem; color:#f1c40f; margin-left:auto;"></i></span></label>
-        </div>
-
-        <div id="inicio" class="category-section active">
-            <h1><span data-tr="news_title">NOTICIAS</span> <span style="color:var(--accent)" data-tr="recent_title">RECIENTES</span></h1>
-            <div class="news-cell">
-                <div>
-                    <h3 style="margin:0" data-tr="news_1_title">TIENDA OFICIAL LANZADA</h3>
-                    <p style="color:#777; margin:10px 0 0 0; text-transform: none;" data-tr="news_1_desc">Bienvenido a la plataforma de compras de Aternia MC.</p>
-                </div>
-                <span class="version-tag">V1.0</span>
-            </div>
-        </div>
-
-        <div id="rangos" class="category-section">
-            <h1><span data-tr="nav_ranks">RANGOS</span> <span style="color:var(--accent)" data-tr="exclusive_title">EXCLUSIVOS</span></h1>
-            <div class="grid">
-                <div class="card">
-                    <h2>VIP</h2>
-                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
-                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); margin:15px 0;">$3.00 USD</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_acquire">ADQUIRIR</a>
-                </div>
-                <div class="card" style="border-color:gold;">
-                    <h2 style="color:gold;">VIP+</h2>
-                    <p style="color:#777; font-size: 0.8rem; text-transform: none;" data-tr="ranks_no_benefits">No existe beneficios actualmente. Proximamente...</p>
-                    <div style="font-size:1.5rem; font-weight:900; color:gold; margin:15px 0;">$5.00 USD</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:gold; width:90%" data-tr="btn_acquire">ADQUIRIR</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="llaves" class="category-section">
-            <h1><span data-tr="nav_keys">LLAVES DE</span> <span style="color:var(--accent)">CRATES</span></h1>
-            <div class="grid" id="llavesContainer"></div>
-        </div>
-
-        <div id="donaciones" class="category-section">
-            <h1><span style="color:var(--accent)" data-tr="nav_donations">DONACIONES</span></h1>
-            <div class="grid">
-                <div class="card"><h3 data-tr="don_small">PEQUEÑA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$1.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
-                <div class="card"><h3 data-tr="don_med">MEDIANA</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$5.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
-                <div class="card"><h3 data-tr="don_big">GRANDE</h3><div style="color:var(--accent); font-weight:900; margin: 15px 0;">$20.00 USD</div><a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_donate">DONAR</a></div>
-                <div class="card" style="border: 2px solid var(--accent);">
-                    <h3 data-tr="don_free">DONACIÓN LIBRE</h3>
-                    <div style="color:var(--accent); font-weight:900; margin: 15px 0;" data-tr="don_open">MONTO ABIERTO</div>
-                    <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="width:90%" data-tr="btn_choose_amt">ELEGIR MONTO</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="sobre" class="category-section">
-            <h1><span data-tr="nav_about">SOBRE EL</span> <span style="color:var(--accent)" data-tr="server_title">SERVIDOR</span></h1>
-            <div class="grid">
-                <div class="card" style="text-align: left; grid-column: span 2;">
-                    <h3 style="color:var(--accent);"><i class="fas fa-book"></i> <span data-tr="about_history_title">NUESTRA HISTORIA</span></h3>
-                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_history_text">
-                        AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.
-                    </p>
-                    
-                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-                    
-                    <h3 style="color:var(--accent);"><i class="fas fa-bullseye"></i> <span data-tr="about_focus_title">ENFOQUE DEL SERVIDOR</span></h3>
-                    <p style="text-transform: none; color:#aaa; font-size:0.9rem; line-height: 1.6;" data-tr="about_focus_text">
-                        Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.
-                    </p>
-
-                    <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin:20px 0;">
-
-                    <h3 style="color:var(--accent);"><i class="fas fa-gavel"></i> <span data-tr="about_rules_title">REGLAS GENERALES</span></h3>
-                    <ul style="text-transform: none; color:#aaa; font-size:0.85rem; line-height: 2; list-style: none; padding-left: 0;">
-                        <li><b style="color:var(--lore-color)">1.</b> <span data-tr="rule_1">Se prohíbe el uso de hacks, cheats, o clientes modificados.</span></li>
-                        <li><b style="color:var(--lore-color)">2.</b> <span data-tr="rule_2">Mantén en todo momento respeto con otros jugadores, staff y creador...</span></li>
-                        <li><b style="color:var(--lore-color)">3.</b> <span data-tr="rule_3">Evita el spam en el chat.</span></li>
-                        <li><b style="color:var(--lore-color)">4.</b> <span data-tr="rule_4">Todo bug se reporta en la página web o discord...</span></li>
-                        <li><b style="color:var(--lore-color)">5.</b> <span data-tr="rule_5">No se permite el TPA KILL, este será severamente sancionado.</span></li>
-                        <li><b style="color:var(--lore-color)">6.</b> <span data-tr="rule_6">No se permite el pvp aunque esté activo.</span></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3 style="color:var(--accent);" data-tr="about_tech_title">INFORMACIÓN TÉCNICA</h3>
-                    <div style="text-align: left; margin-top:20px;">
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_version">VERSIÓN:</span> <span data-tr="tech_v_val">TODAS LAS VERSIONES</span></p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_mode">MODALIDAD:</span> SURVIVAL VANILLA</p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_date">FECHA DE CREACIÓN:</span> <span data-tr="tech_d_val">DICIEMBRE 2025</span></p>
-                        <p style="font-size:0.7rem;"><span style="color:var(--lore-color)" data-tr="tech_comp">COMPATIBILIDAD:</span> MC JAVA & BEDROCK</p>
-                    </div>
-                    <i class="fas fa-server" style="font-size: 3rem; color:rgba(255,255,255,0.05); margin-top:20px;"></i>
-                </div>
-            </div>
-        </div>
-
-        <div id="otros" class="category-section">
-            <h1><span style="color:var(--accent)" data-tr="nav_others">OTROS</span></h1>
-            <div id="otrosContent">
-                </div>
-        </div>
-
-        <div id="staff" class="category-section">
-            <h1><span data-tr="staff_team">EQUIPO DE</span> <span style="color:var(--accent)">STAFF</span></h1>
-            <div class="grid">
-                <div class="card" style="border-color: gold;">
-                    <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
-                    <h3 style="color:gold;">PERROLOLXD</h3>
-                    <p style="font-size: 0.7rem; letter-spacing: 2px;">OWNER & DEVELOPER</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="faq" class="category-section">
-            <h1><span data-tr="faq_q">PREGUNTAS</span> / <span style="color:var(--accent)">FAQ</span></h1>
-            <div style="background:var(--card-bg); padding:25px; border-radius:15px; margin-bottom:30px; border: 1px solid rgba(255,255,255,0.05);">
-                <textarea id="faqTxt" style="width:100%; background:transparent; border:none; color:white; outline:none; font-family:inherit; resize:none;" rows="3" placeholder="ESCRIBE TU DUDA..." data-tr-placeholder="placeholder_faq"></textarea>
-                <button class="btn-action" style="margin-top: 10px;" onclick="postFaq()" data-tr="btn_publish">PUBLICAR</button>
-            </div>
-            <div id="faqList"></div>
         </div>
     </div>
+
+    <section class="hero">
+        <h1 data-tr="hero_title">ATERNIA MC</h1>
+        <p data-tr="hero_desc">El servidor Survival Técnico más avanzado. Únete a una comunidad única y forja tu propio destino.</p>
+        <div class="ip-box" onclick="copyIP()">
+            <i class="fas fa-play"></i>
+            <span id="serverIP">PLAY.ATERNIAMC.COM</span>
+            <i class="fas fa-copy" style="opacity: 0.5;"></i>
+        </div>
+        <div style="margin-top: 15px; font-size: 0.9rem;">
+            <span id="statusText" data-tr="loading">Cargando estado...</span>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="grid" id="llavesGrid">
+            </div>
+
+        <div class="faq-section">
+            <h2 style="margin-bottom: 30px; text-align: center; letter-spacing: 2px;" data-tr="faq_title">PREGUNTAS FRECUENTES</h2>
+            <div id="faqGrid"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p>&copy; 2024 ATERNIA MC. <span data-tr="footer_rights">Todos los derechos reservados.</span></p>
+        <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">Not an official Minecraft product. We are not affiliated with Mojang AB.</p>
+    </footer>
 
     <script>
-        // --- SISTEMA DE IDIOMAS ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAs-DEMO",
+            authDomain: "aternia-mc.firebaseapp.com",
+            projectId: "aternia-mc",
+            storageBucket: "aternia-mc.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         const translations = {
             es: {
-                nav_home: "INICIO", nav_ranks: "RANGOS", nav_keys: "LLAVES DE", nav_donations: "DONACIONES", nav_about: "SOBRE EL", nav_others: "OTROS", nav_forum: "FORO",
-                side_community: "COMUNIDAD", side_social: "REDES SOCIALES", status_players: "JUGADORES", tooltip_copied: "¡COPIADO!",
-                btn_register: "REGISTRARSE", btn_login: "INICIAR SESIÓN", btn_edit_profile: "EDITAR PERFIL", btn_acquire: "ADQUIRIR", btn_donate: "DONAR", btn_choose_amt: "ELEGIR MONTO", btn_publish: "PUBLICAR", btn_cancel: "CANCELAR", btn_save: "GUARDAR CAMBIOS", btn_confirm: "CONFIRMAR", btn_accept: "ACEPTAR", btn_understood: "ENTENDIDO", btn_change_pass: "CAMBIAR CONTRASEÑA", btn_delete_account: "ELIMINAR MI CUENTA PERMANENTEMENTE",
-                news_title: "NOTICIAS", recent_title: "RECIENTES", news_1_title: "TIENDA OFICIAL LANZADA", news_1_desc: "Bienvenido a la plataforma de compras de Aternia MC.",
-                exclusive_title: "EXCLUSIVOS", ranks_no_benefits: "No existe beneficios actualmente. Proximamente...",
-                don_small: "PEQUEÑA", don_med: "MEDIANA", don_big: "GRANDE", don_free: "DONACIÓN LIBRE", don_open: "MONTO ABIERTO",
-                server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
-                staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
-                edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
-                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
-                alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
-                placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
-                auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA",
-                key_comun: "COMÚN", key_raro: "RARO", key_epico: "ÉPICO", key_legendario: "LEGENDARIO", key_mitico: "MÍTICO", key_exotico: "EXÓTICO"
+                login: "Ingresar",
+                hero_title: "ATERNIA MC",
+                hero_desc: "El servidor Survival Técnico más avanzado. Únete a una comunidad única y forja tu propio destino.",
+                loading: "Cargando estado...",
+                faq_title: "PREGUNTAS FRECUENTES",
+                footer_rights: "Todos los derechos reservados.",
+                select_language: "Seleccionar Idioma",
+                buy_now: "ADQUIRIR AHORA"
             },
             en: {
-                nav_home: "HOME", nav_ranks: "RANKS", nav_keys: "KEYS", nav_donations: "DONATIONS", nav_about: "ABOUT", nav_others: "OTHERS", nav_forum: "FORUM",
-                side_community: "COMMUNITY", side_social: "SOCIAL MEDIA", status_players: "PLAYERS", tooltip_copied: "COPIED!",
-                btn_register: "REGISTER", btn_login: "LOGIN", btn_edit_profile: "EDIT PROFILE", btn_acquire: "ACQUIRE", btn_donate: "DONATE", btn_choose_amt: "CHOOSE AMOUNT", btn_publish: "PUBLISH", btn_cancel: "CANCEL", btn_save: "SAVE CHANGES", btn_confirm: "CONFIRM", btn_accept: "ACCEPT", btn_understood: "UNDERSTOOD", btn_change_pass: "CHANGE PASSWORD", btn_delete_account: "DELETE ACCOUNT PERMANENTLY",
-                news_title: "RECENT", recent_title: "NEWS", news_1_title: "OFFICIAL STORE LAUNCHED", news_1_desc: "Welcome to the Aternia MC shopping platform.",
-                exclusive_title: "EXCLUSIVE", ranks_no_benefits: "No benefits currently. Coming soon...",
-                don_small: "SMALL", don_med: "MEDIUM", don_big: "LARGE", don_free: "FREE DONATION", don_open: "OPEN AMOUNT",
-                server_title: "SERVER", about_history_title: "OUR HISTORY", about_history_text: "AterniaMC originated for the creator's learning and fun, but then an idea emerged to create a venture.", about_focus_title: "SERVER FOCUS", about_focus_text: "Our server focuses mainly on Survival Vanilla, where players can collect resources and progress. The focus is to maintain a healthy and competitive environment.", about_rules_title: "GENERAL RULES", about_tech_title: "TECHNICAL INFO", tech_version: "VERSION:", tech_v_val: "ALL VERSIONS", tech_mode: "MODE:", tech_date: "CREATION DATE:", tech_d_val: "DECEMBER 2025", tech_comp: "COMPATIBILITY:", rule_1: "Hacks, cheats, or modified clients are prohibited.", rule_2: "Respect players, staff and creator at all times...", rule_3: "Avoid spam in chat.", rule_4: "Report bugs on web or discord...", rule_5: "TPA KILL is strictly prohibited.", rule_6: "PVP is not allowed even if active.",
-                staff_team: "STAFF", faq_q: "QUESTIONS",
-                edit_profile_title: "EDIT PROFILE", label_nickname: "FORUM NICKNAME", label_gender: "GENDER", opt_select_gender: "SELECT GENDER", opt_male: "MALE", opt_female: "FEMALE", opt_nodecl: "PREFER NOT TO SAY", opt_other: "OTHER...", label_bio: "SHORT BIO", security_title: "SECURITY & ACCOUNT",
-                change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD", new_pass_label: "NEW PASSWORD", pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE SET, RECORD THIS PASSWORD.",
-                alert_notice: "NOTICE", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
-                placeholder_mc_user: "MINECRAFT USERNAME", placeholder_email: "EMAIL ADDRESS", placeholder_pass: "PASSWORD", placeholder_nickname: "YOUR PUBLIC NAME", placeholder_bio: "TELL US ABOUT YOURSELF...", placeholder_old_pass: "ENTER CURRENT KEY", placeholder_new_pass: "ENTER NEW KEY", placeholder_faq: "TYPE YOUR QUESTION...", placeholder_which: "WHICH ONE?", placeholder_faq_edit: "EDIT YOUR MESSAGE...",
-                auth_error: "INCORRECT EMAIL OR PASSWORD", edit_question: "EDIT QUESTION",
-                key_comun: "COMMON", key_raro: "RARE", key_epico: "EPIC", key_legendario: "LEGENDARY", key_mitico: "MYTHICAL", key_exotico: "EXOTIC"
+                login: "Login",
+                hero_title: "ATERNIA MC",
+                hero_desc: "The most advanced Technical Survival server. Join a unique community and forge your own destiny.",
+                loading: "Loading status...",
+                faq_title: "FREQUENTLY ASKED QUESTIONS",
+                footer_rights: "All rights reserved.",
+                select_language: "Select Language",
+                buy_now: "BUY NOW"
             }
         };
 
-        // --- FUNCIONES LÓGICA BOTÓN IDIOMAS (BLOQUE CORREGIDO) ---
-        function toggleLangDropdown() {
-            const dropdown = document.getElementById('langDropdown');
-            const capsule = document.querySelector('.lang-capsule');
-            dropdown.classList.toggle('open');
-            capsule.classList.toggle('open');
+        function openLangModal() {
+            const modal = document.getElementById('modalLang');
+            modal.style.display = 'flex';
+            const current = localStorage.getItem('prefLang') || 'es';
+            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`lang-${current}`).classList.add('active');
         }
 
-        // Cerrar menú si se hace clic fuera
-        window.addEventListener('click', function(e) {
-            if (!document.querySelector('.lang-capsule').contains(e.target)) {
-                document.getElementById('langDropdown').classList.remove('open');
-                document.querySelector('.lang-capsule').classList.remove('open');
-            }
-        });
+        function closeLangModal(e) {
+            document.getElementById('modalLang').style.display = 'none';
+        }
 
-        function selectLang(lang) {
+        function changeLang(lang) {
             localStorage.setItem('prefLang', lang);
             updateUITranslations(lang);
-            // Actualizar el texto del botón principal
-            const textEl = document.getElementById('currentLangText');
-            textEl.innerText = lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
-            // Cerrar menú
-            document.getElementById('langDropdown').classList.remove('open');
-            document.querySelector('.lang-capsule').classList.remove('open');
-            // Refrescar llaves (para el nombre traducido)
-            renderLlaves();
+            document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            setTimeout(closeLangModal, 300);
         }
 
         function updateUITranslations(lang) {
             document.querySelectorAll('[data-tr]').forEach(el => {
                 const key = el.getAttribute('data-tr');
-                if(translations[lang][key]) el.innerText = translations[lang][key];
+                el.innerText = translations[lang][key];
             });
-            document.querySelectorAll('[data-tr-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-tr-placeholder');
-                if(translations[lang][key]) el.placeholder = translations[lang][key];
-            });
+            renderLlaves();
             renderFaq();
         }
 
-        // --- RAREZAS CON LLAVES DE TRADUCCIÓN ---
-        const RAREZAS = [
-            {id:'key_comun', c:'var(--comun)', p:1.00}, 
-            {id:'key_raro', c:'var(--raro)', p:2.50},
-            {id:'key_epico', c:'var(--epico)', p:5.00}, 
-            {id:'key_legendario', c:'var(--legendary)', p:10.00}, 
-            {id:'key_mitico', c:'var(--mitico)', p:20.00}, 
-            {id:'key_exotico', c:'var(--exotico)', p:40.00}
-        ];
-
-        function renderLlaves() {
-            const container = document.getElementById('llavesContainer');
-            const lang = localStorage.getItem('prefLang') || 'es';
-            const buyText = translations[lang].btn_acquire;
-            
-            if(!container) return;
-            container.innerHTML = '';
-            RAREZAS.forEach(r => {
-                const nombreTraducido = translations[lang][r.id];
-                container.innerHTML += `
-                    <div class="card" style="border-top: 4px solid ${r.c}">
-                        <i class="fas fa-key" style="font-size:2.5rem; color:${r.c}; margin-bottom:15px;"></i>
-                        <h2 style="color:${r.c}">${nombreTraducido} x5</h2>
-                        <div style="font-size:1.5rem; font-weight:900; color:${r.c}; margin:15px 0;">$${r.p.toFixed(2)} USD</div>
-                        <a href="https://aterniamc.tebex.io" target="_blank" class="btn-action" style="background:${r.c}; color:#000; width:90%;">${buyText}</a>
-                    </div>`;
-            });
-        }
-
-        // --- RESTO DEL CÓDIGO FUNCIONAL ---
-        let posts = JSON.parse(localStorage.getItem('faqPosts')) || [];
-        let editingId = null;
-        let currentAuthType = 'INICIAR SESIÓN';
-        let cooldownInterval = null;
-
-        function showCustomAlert(title, msg, type = 'success', onConfirm = null, onCancel = null) {
-            const modal = document.getElementById('customAlert');
-            const box = document.getElementById('alertBox');
-            const titleEl = document.getElementById('alertTitle');
-            const msgEl = document.getElementById('alertMsg');
-            const confirmBtn = document.getElementById('alertConfirmBtn');
-            const cancelBtn = document.getElementById('alertCancelBtn');
-            titleEl.innerText = title;
-            msgEl.innerText = msg;
-            box.className = 'modal-content custom-alert-content alert-' + type;
-            cancelBtn.style.display = onCancel ? 'block' : 'none';
-            confirmBtn.onclick = () => { modal.style.display = 'none'; if(onConfirm) onConfirm(); };
-            cancelBtn.onclick = () => { modal.style.display = 'none'; if(onCancel) onCancel(); };
-            modal.style.display = 'flex';
-        }
-
-        function startPassChangeFlow() {
-            const lastChange = localStorage.getItem('lastPassChange');
-            const now = Date.now();
-            const weekInMs = 7 * 24 * 60 * 60 * 1000;
-            if(lastChange && (now - lastChange < weekInMs)) {
-                openCooldown(weekInMs - (now - lastChange));
-            } else {
-                showCustomAlert("¿Estás seguro?", "Solo puedes cambiar tu contraseña una vez cada 7 días.", "warning", () => { openPassChangeModal(); }, () => {});
-            }
-        }
-
-        function openCooldown(timeLeft) {
-            const modal = document.getElementById('cooldownModal');
-            const display = document.getElementById('timerDisplay');
-            if(cooldownInterval) clearInterval(cooldownInterval);
-            const updateTimer = () => {
-                if(timeLeft <= 0) { clearInterval(cooldownInterval); modal.style.display = 'none'; return; }
-                const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const h = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                display.innerText = `${d}d ${h}h ${m}m ${s}s`;
-                timeLeft -= 1000;
-            };
-            updateTimer();
-            cooldownInterval = setInterval(updateTimer, 1000);
-            modal.style.display = 'flex';
-        }
-
-        function closeCooldown() { clearInterval(cooldownInterval); document.getElementById('cooldownModal').style.display = 'none'; }
-        function openPassChangeModal() { document.getElementById('passChangeModal').style.display = 'flex'; }
-        function closePassChange() { document.getElementById('passChangeModal').style.display = 'none'; }
-
-        function executePassUpdate() {
-            const oldPass = document.getElementById('oldPassInput').value;
-            const newPass = document.getElementById('newPassInput').value;
-            const user = firebase.auth().currentUser;
-            if(!oldPass || !newPass) { showCustomAlert("ERROR", "Debes completar ambos campos", "error"); return; }
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
-            user.reauthenticateWithCredential(credential).then(() => {
-                user.updatePassword(newPass).then(() => {
-                    localStorage.setItem('lastPassChange', Date.now());
-                    closePassChange();
-                    saveProfile(true); 
-                }).catch(e => showCustomAlert("ERROR", "Nueva contraseña no válida.", "error"));
-            }).catch(e => showCustomAlert("ERROR", "Contraseña anterior incorrecta.", "error"));
-        }
-
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-
-        function showCategory(id) {
-            document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
-            if(window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
-            if(id === 'faq') renderFaq();
-        }
-
         function copyIP() {
-            const ipText = document.getElementById('serverIP').innerText;
-            const tooltip = document.getElementById('copyTooltip');
-            navigator.clipboard.writeText(ipText).then(() => {
-                tooltip.classList.add('show');
-                setTimeout(() => tooltip.classList.remove('show'), 2000);
-            });
+            const ip = "PLAY.ATERNIAMC.COM";
+            navigator.clipboard.writeText(ip);
+            const box = document.querySelector('.ip-box');
+            const original = box.innerHTML;
+            box.innerHTML = `<i class="fas fa-check"></i> <span style="font-weight:900">¡COPIADO!</span>`;
+            setTimeout(() => { box.innerHTML = original; }, 2000);
         }
 
         async function updateServerStatus() {
             try {
-                const response = await fetch('https://api.mcsrvstat.us/2/aterniamc.aternos.me');
-                const data = await response.json();
-                const icon = document.getElementById('statusIcon');
-                const text = document.getElementById('statusText');
-                const players = document.getElementById('playerCount');
-                if(data.online === true) {
-                    icon.className = 'status-dot online-dot'; text.innerText = 'ONLINE'; text.style.color = '#2ecc71';
-                    players.innerText = `${data.players.online} / ${data.players.max}`;
+                const res = await fetch('https://api.mcsrvstat.us/2/play.aterniamc.com');
+                const data = await res.json();
+                const statusText = document.getElementById('statusText');
+                if(data.online) {
+                    statusText.innerHTML = `<span style="color:var(--accent)">● ONLINE</span> — ${data.players.online} Jugadores`;
                 } else {
-                    icon.className = 'status-dot offline-dot'; text.innerText = 'OFFLINE'; text.style.color = '#e74c3c';
-                    players.innerText = `0 / ${data.players ? data.players.max : "--"}`;
+                    statusText.innerHTML = `<span style="color:#ff4444">● OFFLINE</span>`;
                 }
-            } catch (e) { document.getElementById('statusText').innerText = 'OFFLINE'; }
-        }
-
-        function togglePassView() {
-            const passInput = document.getElementById('authPass');
-            const icon = document.querySelector('.toggle-pass');
-            passInput.type = passInput.type === "password" ? "text" : "password";
-            icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
-        }
-
-        function openAuth(type) { 
-            currentAuthType = type;
-            document.getElementById('modalTitle').innerText = type; 
-            document.getElementById('authError').style.display = 'none';
-            document.getElementById('authUser').style.display = type === 'REGISTRARSE' ? 'block' : 'none';
-            document.getElementById('authModal').style.display = 'flex'; 
-        }
-
-        function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
-
-        function handleAuth() { 
-            const user = document.getElementById('authUser').value; 
-            const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPass').value;
-            if (currentAuthType === 'REGISTRARSE') {
-                firebase.auth().createUserWithEmailAndPassword(email, pass)
-                    .then((userCredential) => { return userCredential.user.updateProfile({ displayName: user }); })
-                    .then(() => { localStorage.setItem('u', user); location.reload(); })
-                    .catch((error) => { showCustomAlert("ERROR", error.message, "error"); });
-            } else {
-                firebase.auth().signInWithEmailAndPassword(email, pass)
-                    .then((userCredential) => { localStorage.setItem('u', userCredential.user.displayName); location.reload(); })
-                    .catch((error) => { document.getElementById('authError').style.display = 'block'; });
+            } catch {
+                document.getElementById('statusText').innerText = "Servidor en mantenimiento";
             }
         }
 
-        function logout() { firebase.auth().signOut().then(() => { localStorage.removeItem('u'); location.reload(); }); }
+        const llavesData = [
+            { id: 1, name: "LLAVE SUPREMA", price: "5.00", img: "https://i.imgur.com/vHqY7pC.png", icon: "fa-gem" },
+            { id: 2, name: "LLAVE MÍTICA", price: "3.50", img: "https://i.imgur.com/D8f7qF3.png", icon: "fa-dragon" },
+            { id: 3, name: "LLAVE ÉPICA", price: "2.00", img: "https://i.imgur.com/K5mP9yE.png", icon: "fa-bolt" }
+        ];
 
-        function openProfile() {
-            const u = localStorage.getItem('u');
-            if(!u) return;
-            document.getElementById('profileSkinImg').src = `https://mc-heads.net/body/${u}`;
-            document.getElementById('profileNameLabel').innerText = u;
-            document.getElementById('profileTagLabel').innerText = `@${u.toUpperCase()}`;
-            const user = firebase.auth().currentUser;
-            if(user) document.getElementById('displayEmail').value = user.email;
-            document.getElementById('editNickname').value = localStorage.getItem('pNickname') || '';
-            document.getElementById('editBio').value = localStorage.getItem('pBio') || '';
-            document.getElementById('editGender').value = localStorage.getItem('pGender') || '';
-            updateCharCount(); toggleOtherGender();
-            document.getElementById('profileModal').style.display = 'flex';
+        function renderLlaves() {
+            const lang = localStorage.getItem('prefLang') || 'es';
+            const grid = document.getElementById('llavesGrid');
+            grid.innerHTML = llavesData.map(item => `
+                <div class="card">
+                    <img src="${item.img}" class="card-img" alt="${item.name}">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas ${item.icon}"></i> ${item.name}</div>
+                        <p class="card-text">Contiene recompensas exclusivas y objetos legendarios para tu aventura.</p>
+                        <div style="font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; color: var(--accent);">$${item.price} USD</div>
+                        <a href="#" class="btn-buy">${translations[lang].buy_now}</a>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
-
-        function toggleOtherGender() {
-            const select = document.getElementById('editGender');
-            const otherInput = document.getElementById('editGenderOther');
-            if(select.value === 'OTRO') { otherInput.style.display = 'block'; otherInput.value = localStorage.getItem('pGenderOther') || ''; }
-            else { otherInput.style.display = 'none'; }
-        }
-
-        function updateCharCount() {
-            const bio = document.getElementById('editBio');
-            document.getElementById('charCount').innerText = bio.value.length;
-        }
-
-        function saveProfile(skipConfirm = false) {
-            const performSave = () => {
-                localStorage.setItem('pNickname', document.getElementById('editNickname').value);
-                localStorage.setItem('pBio', document.getElementById('editBio').value);
-                localStorage.setItem('pGender', document.getElementById('editGender').value);
-                if(document.getElementById('editGender').value === 'OTRO') localStorage.setItem('pGenderOther', document.getElementById('editGenderOther').value);
-                showCustomAlert("ÉXITO", "Cambios guardados", "success", () => { location.reload(); });
-            };
-            if(skipConfirm) performSave();
-            else showCustomAlert("ADVERTENCIA", "¿Guardar cambios?", "warning", performSave);
-        }
-
-        function confirmDeleteAccount() {
-            showCustomAlert("ATENCIÓN", "¿Eliminar cuenta permanentemente?", "error", () => {
-                const user = firebase.auth().currentUser;
-                if(user) user.delete().then(() => { localStorage.clear(); location.reload(); });
-            }, () => {});
-        }
-
-        function postFaq() {
-            const user = localStorage.getItem('u');
-            const txt = document.getElementById('faqTxt').value;
-            if(!user || !txt.trim()) return;
-            posts.unshift({ id: Date.now(), author: user, content: txt });
-            localStorage.setItem('faqPosts', JSON.stringify(posts));
-            document.getElementById('faqTxt').value = '';
-            renderFaq();
-        }
+        const faqData = [
+            { q: "¿Cómo recibo mi compra?", a: "Los objetos se entregan automáticamente en el servidor tras completar el pago (máximo 10 min)." },
+            { q: "¿Qué métodos de pago aceptan?", a: "Aceptamos PayPal, Tarjetas de Crédito/Débito y métodos locales según tu país." },
+            { q: "¿Hay reembolsos?", a: "Debido a la naturaleza de los productos digitales, no realizamos reembolsos una vez entregado el ítem." }
+        ];
 
         function renderFaq() {
-            const list = document.getElementById('faqList');
-            const currentUser = localStorage.getItem('u');
-            if(!list) return;
-            list.innerHTML = '';
-            posts.forEach(p => {
-                list.innerHTML += `
-                    <div class="faq-card">
-                        <span class="faq-author">${p.author}</span>
-                        <div class="faq-text">${p.content}</div>
-                        ${currentUser === p.author ? `<div class="faq-actions"><button class="btn-mini" onclick="openEdit(${p.id})">EDITAR</button><button class="btn-mini btn-delete" onclick="deletePost(${p.id})">ELIMINAR</button></div>` : ''}
-                    </div>`;
-            });
+            const grid = document.getElementById('faqGrid');
+            grid.innerHTML = faqData.map((item, i) => `
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(${i})">
+                        ${item.q} <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" id="faq-a-${i}">${item.a}</div>
+                </div>
+            `).join('');
         }
 
-        function openEdit(id) {
-            editingId = id;
-            document.getElementById('editFaqTxt').value = posts.find(p => p.id === id).content;
-            document.getElementById('editModal').style.display = 'flex';
+        function toggleFaq(i) {
+            const el = document.getElementById(`faq-a-${i}`);
+            const isVisible = el.style.display === 'block';
+            document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+            el.style.display = isVisible ? 'none' : 'block';
         }
-        function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
-        function saveEdit() {
-            posts.find(p => p.id === editingId).content = document.getElementById('editFaqTxt').value;
-            localStorage.setItem('faqPosts', JSON.stringify(posts));
-            closeEdit(); renderFaq();
+
+        function login() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider);
         }
-        function deletePost(id) {
-            showCustomAlert("ELIMINAR", "¿Borrar publicación?", "warning", () => {
-                posts = posts.filter(p => p.id !== id);
-                localStorage.setItem('faqPosts', JSON.stringify(posts));
-                renderFaq();
-            }, () => {});
-        }
+
+        function logout() { firebase.auth().signOut(); }
 
         window.onload = () => {
             const savedLang = localStorage.getItem('prefLang') || 'es';
-            // Actualizar texto botón inicial
-            document.getElementById('currentLangText').innerText = savedLang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN';
-            
             updateUITranslations(savedLang);
             updateServerStatus(); setInterval(updateServerStatus, 30000);
             renderLlaves();
@@ -991,20 +461,23 @@
                     localStorage.setItem('u', u);
                     document.getElementById('authButtons').style.display = 'none';
                     document.getElementById('userLogged').style.display = 'flex';
-                    document.getElementById('btnEditProfile').style.display = 'flex';
                     document.getElementById('userTag').innerText = u;
                     document.getElementById('headImg').src = `https://mc-heads.net/avatar/${u}`;
                 } else {
                     localStorage.removeItem('u');
                     document.getElementById('authButtons').style.display = 'flex';
                     document.getElementById('userLogged').style.display = 'none';
-                    document.getElementById('btnEditProfile').style.display = 'none';
                 }
             });
             renderFaq();
         };
 
-        document.getElementById('theme-toggle').onclick = () => { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); };
+        document.getElementById('theme-toggle').onclick = () => { 
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('theme-toggle').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        };
     </script>
 </body>
 </html>
