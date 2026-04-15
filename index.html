@@ -453,8 +453,8 @@
             <span style="color:var(--accent)">ATERNIA</span><span style="color:var(--accent-dark)">MC</span>
         </div>
         <div class="nav-item active" id="nav-inicio" onclick="showCategory('inicio')"><i class="fas fa-home"></i> <span data-tr="nav_home">INICIO</span></div>
-        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS EXCLUSIVOS</span></div>
-        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES/CRATES</span></div>
+        <div class="nav-item" id="nav-rangos" onclick="showCategory('rangos')"><i class="fas fa-crown"></i> <span data-tr="nav_ranks">RANGOS</span></div>
+        <div class="nav-item" id="nav-llaves" onclick="showCategory('llaves')"><i class="fas fa-key"></i> <span data-tr="nav_keys">LLAVES</span></div>
         <div class="nav-item" id="nav-donaciones" onclick="showCategory('donaciones')"><i class="fas fa-heart"></i> <span data-tr="nav_donations">DONACIONES</span></div>
         <div class="nav-item" id="nav-sobre" onclick="showCategory('sobre')"><i class="fas fa-info-circle"></i> <span data-tr="nav_about">SOBRE EL SERVIDOR</span></div>
         
@@ -520,7 +520,7 @@
         </div>
 
         <div id="inicio" class="category-section active">
-            <h1><span data-tr="news_title">NOTICIAS</span> <span style="color:var(--accent)" data-tr="recent_title">RECIENTES</span></h1>
+            <h1><span data-tr="home_title_1">NOTICIAS</span> <span style="color:var(--accent)" data-tr="home_title_2">RECIENTES</span></h1>
             <div class="news-cell">
                 <div>
                     <h3 style="margin:0" data-tr="news_1_title">TIENDA OFICIAL LANZADA</h3>
@@ -531,7 +531,7 @@
         </div>
 
         <div id="rangos" class="category-section">
-            <h1><span data-tr="nav_ranks">RANGOS</span> <span style="color:var(--accent)" data-tr="exclusive_title">EXCLUSIVOS</span></h1>
+            <h1><span data-tr="ranks_title_1">RANGOS</span> <span style="color:var(--accent)" data-tr="ranks_title_2">EXCLUSIVOS</span></h1>
             <div class="grid">
                 <div class="card">
                     <h2>VIP</h2>
@@ -549,7 +549,7 @@
         </div>
 
         <div id="llaves" class="category-section">
-            <h1><span data-tr="nav_keys">LLAVES DE</span> <span style="color:var(--accent)">CRATES</span></h1>
+            <h1><span data-tr="keys_title_1">LLAVES Y</span> <span style="color:var(--accent)" data-tr="keys_title_2">CRATES</span></h1>
             <div class="grid" id="llavesContainer"></div>
         </div>
 
@@ -616,7 +616,7 @@
         </div>
 
         <div id="staff" class="category-section">
-            <h1><span data-tr="staff_team">EQUIPO DE</span> <span style="color:var(--accent)">STAFF</span></h1>
+            <h1><span data-tr="staff_title_1">EQUIPO DE</span> <span style="color:var(--accent)" data-tr="staff_title_2">STAFF</span></h1>
             <div class="grid">
                 <div class="card" style="border-color: gold;">
                     <img src="https://mc-heads.net/avatar/PERROLOLXD" style="width:60px; margin-bottom:15px;">
@@ -640,16 +640,17 @@
         // --- SISTEMA DE IDIOMAS ---
         const translations = {
             es: {
-                nav_home: "INICIO", nav_ranks: "RANGOS", nav_keys: "LLAVES DE CRATES", nav_donations: "DONACIONES", nav_about: "SOBRE EL", nav_others: "OTROS", nav_forum: "FORO",
+                nav_home: "INICIO", nav_ranks: "RANGOS", nav_keys: "LLAVES", nav_donations: "DONACIONES", nav_about: "SOBRE EL", nav_others: "OTROS", nav_forum: "FORO",
                 side_community: "COMUNIDAD", side_social: "REDES SOCIALES", status_players: "JUGADORES", tooltip_copied: "¡COPIADO!",
                 btn_register: "REGISTRARSE", btn_login: "INICIAR SESIÓN", btn_edit_profile: "EDITAR PERFIL", btn_acquire: "ADQUIRIR", btn_donate: "DONAR", btn_choose_amt: "ELEGIR MONTO", btn_publish: "PUBLICAR", btn_cancel: "CANCELAR", btn_save: "GUARDAR CAMBIOS", btn_confirm: "CONFIRMAR", btn_accept: "ACEPTAR", btn_understood: "ENTENDIDO", btn_change_pass: "CAMBIAR CONTRASEÑA", btn_delete_account: "ELIMINAR MI CUENTA PERMANENTEMENTE",
-                news_title: "NOTICIAS", recent_title: "RECIENTES", news_1_title: "TIENDA OFICIAL LANZADA", news_1_desc: "Bienvenido a la plataforma de compras de Aternia MC.",
-                exclusive_title: "EXCLUSIVOS", ranks_no_benefits: "No existe beneficios actualmente. Proximamente...",
+                home_title_1: "NOTICIAS", home_title_2: "RECIENTES", news_1_title: "TIENDA OFICIAL LANZADA", news_1_desc: "Bienvenido a la plataforma de compras de Aternia MC.",
+                ranks_title_1: "RANGOS", ranks_title_2: "EXCLUSIVOS", ranks_no_benefits: "No existe beneficios actualmente. Proximamente...",
+                keys_title_1: "LLAVES Y", keys_title_2: "CRATES",
                 don_small: "PEQUEÑA", don_med: "MEDIANA", don_big: "GRANDE", don_free: "DONACIÓN LIBRE", don_open: "MONTO ABIERTO",
                 server_title: "SERVIDOR", about_history_title: "NUESTRA HISTORIA", about_history_text: "AterniaMC se originó con el objetivo del aprendizaje y diversión del creador, pero luego surgió una idea, crear un emprendimiento de este mismo.", about_focus_title: "ENFOQUE DEL SERVIDOR", about_focus_text: "Nuestro servidor se enfoca principalmente en Survival Vanilla, en donde los jugadores podrán recolectar recursos y progresar. El enfoque es mantener un entorno saludable, equilibrado y algo competitivo para los jugadores.", about_rules_title: "REGLAS GENERALES", about_tech_title: "INFORMACIÓN TÉCNICA", tech_version: "VERSIÓN:", tech_v_val: "TODAS LAS VERSIONES", tech_mode: "MODALIDAD:", tech_date: "FECHA DE CREACIÓN:", tech_d_val: "DICIEMBRE 2025", tech_comp: "COMPATIBILIDAD:", rule_1: "Se prohíbe el uso de hacks, cheats, o clientes modificados.", rule_2: "Mantén en todo momento respeto con otros jugadores, staff y creador...", rule_3: "Evita el spam en el chat.", rule_4: "Todo bug se reporta en la página web o discord...", rule_5: "No se permite el TPA KILL, este será severamente sancionado.", rule_6: "No se permite el pvp aunque esté activo.",
-                staff_team: "EQUIPO DE", faq_q: "PREGUNTAS",
+                staff_title_1: "EQUIPO DE", staff_title_2: "STAFF", faq_q: "PREGUNTAS",
                 edit_profile_title: "EDITAR PERFIL", label_nickname: "APODO EN FORO", label_gender: "GÉNERO", opt_select_gender: "SELECCIONA GÉNERO", opt_male: "MASCULINO", opt_female: "FEMENINO", opt_nodecl: "PREFIERO NO DECIRLO", opt_other: "OTRO...", label_bio: "DESCRIPCIÓN BREVE", security_title: "SEGURIDAD Y CUENTA",
-                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
+                change_pass_title: "CAMBIAR CONTRASEÑA", old_pass_label: "CONTRASEÑA ANTERIOR", new_pass_label: "NUEVA CONTRASEÑA", pass_warning_banner: "ESTA PÁGINA NO CUENTA CON UN SISTEMA DE RECUPERACIÓN DE CUENTA. UNA VEZ SE ESTABLEZCA ESTA CONTRASEÑA, DEBES APUNTARLA Y/O GRABARLA.",
                 alert_notice: "AVISO", denied_access: "ACCESO DENEGADO", cooldown_msg: "No podrás cambiar tu contraseña todavía. Inténtalo de nuevo en:",
                 placeholder_mc_user: "USUARIO DE MINECRAFT", placeholder_email: "CORREO ELECTRÓNICO", placeholder_pass: "CONTRASEÑA", placeholder_nickname: "TU NOMBRE PÚBLICO", placeholder_bio: "CUÉNTANOS SOBRE TI...", placeholder_old_pass: "ESCRIBE TU CLAVE ACTUAL", placeholder_new_pass: "ESCRIBE TU NUEVA CLAVE", placeholder_faq: "ESCRIBE TU DUDA...", placeholder_which: "¿CUÁL?", placeholder_faq_edit: "EDITA TU MENSAJE...",
                 auth_error: "CORREO O CONTRASEÑA INCORRECTOS", edit_question: "EDITAR PREGUNTA",
@@ -659,11 +660,12 @@
                 nav_home: "HOME", nav_ranks: "RANKS", nav_keys: "KEYS", nav_donations: "DONATIONS", nav_about: "ABOUT", nav_others: "OTHERS", nav_forum: "FORUM",
                 side_community: "COMMUNITY", side_social: "SOCIAL MEDIA", status_players: "PLAYERS", tooltip_copied: "COPIED!",
                 btn_register: "REGISTER", btn_login: "LOGIN", btn_edit_profile: "EDIT PROFILE", btn_acquire: "ACQUIRE", btn_donate: "DONATE", btn_choose_amt: "CHOOSE AMOUNT", btn_publish: "PUBLISH", btn_cancel: "CANCEL", btn_save: "SAVE CHANGES", btn_confirm: "CONFIRM", btn_accept: "ACCEPT", btn_understood: "UNDERSTOOD", btn_change_pass: "CHANGE PASSWORD", btn_delete_account: "DELETE ACCOUNT PERMANENTLY",
-                news_title: "RECENT", recent_title: "NEWS", news_1_title: "OFFICIAL STORE LAUNCHED", news_1_desc: "Welcome to the Aternia MC shopping platform.",
-                exclusive_title: "EXCLUSIVE", ranks_no_benefits: "No benefits currently. Coming soon...",
+                home_title_1: "RECENT", home_title_2: "NEWS", news_1_title: "OFFICIAL STORE LAUNCHED", news_1_desc: "Welcome to the Aternia MC shopping platform.",
+                ranks_title_1: "EXCLUSIVE", ranks_title_2: "RANKS", ranks_no_benefits: "No benefits currently. Coming soon...",
+                keys_title_1: "KEYS AND", keys_title_2: "CRATES",
                 don_small: "SMALL", don_med: "MEDIUM", don_big: "LARGE", don_free: "FREE DONATION", don_open: "OPEN AMOUNT",
                 server_title: "SERVER", about_history_title: "OUR HISTORY", about_history_text: "AterniaMC originated for the creator's learning and fun, but then an idea emerged to create a venture.", about_focus_title: "SERVER FOCUS", about_focus_text: "Our server focuses mainly on Survival Vanilla, where players can collect resources and progress. The focus is to maintain a healthy and competitive environment.", about_rules_title: "GENERAL RULES", about_tech_title: "TECHNICAL INFO", tech_version: "VERSION:", tech_v_val: "ALL VERSIONS", tech_mode: "MODE:", tech_date: "CREATION DATE:", tech_d_val: "DECEMBER 2025", tech_comp: "COMPATIBILITY:", rule_1: "Hacks, cheats, or modified clients are prohibited.", rule_2: "Respect players, staff and creator at all times...", rule_3: "Avoid spam in chat.", rule_4: "Report bugs on web or discord...", rule_5: "TPA KILL is strictly prohibited.", rule_6: "PVP is not allowed even if active.",
-                staff_team: "STAFF", faq_q: "QUESTIONS",
+                staff_title_1: "STAFF", staff_title_2: "TEAM", faq_q: "QUESTIONS",
                 edit_profile_title: "EDIT PROFILE", label_nickname: "FORUM NICKNAME", label_gender: "GENDER", opt_select_gender: "SELECT GENDER", opt_male: "MALE", opt_female: "FEMALE", opt_nodecl: "PREFER NOT TO SAY", opt_other: "OTHER...", label_bio: "SHORT BIO", security_title: "SECURITY & ACCOUNT",
                 change_pass_title: "CHANGE PASSWORD", old_pass_label: "OLD PASSWORD", new_pass_label: "NEW PASSWORD", pass_warning_banner: "THIS PAGE DOES NOT HAVE AN ACCOUNT RECOVERY SYSTEM. ONCE SET, RECORD THIS PASSWORD.",
                 alert_notice: "NOTICE", denied_access: "ACCESS DENIED", cooldown_msg: "You cannot change your password yet. Try again in:",
